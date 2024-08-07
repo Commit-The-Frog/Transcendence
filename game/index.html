@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Gamedev Canvas Workshop</title>
+    <title>PING PING PONG</title>
     <style>
       * {
         padding: 0;
@@ -25,75 +25,7 @@
     </style>
   </head>
   <body>
-    <canvas id="myCanvas" width="480" height="320"></canvas>
-		
-    <script>
-      	const canvas = document.getElementById("myCanvas");
-		const ctx = canvas.getContext("2d");
-		let x = canvas.width / 2;
-		let y = canvas.height - 30;
-		let speed = 2;
-		let dx = speed;
-		let dy = -speed;
-		const ballRadius = 15;
-		let r = g = b = 0;
-		const paddleHeight = 10;
-		const paddelWidth = 75;
-		let paddleX = (canvas.width - paddelWidth) / 2;
-		let paddleY = canvas.height - paddleHeight;
-		let rightPressed = leftPressed = false;
-
-		function drawPaddle() {
-			ctx.beginPath();
-			ctx.rect(paddleX, paddleY, paddelWidth, paddleHeight);
-			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`;
-			ctx.fill();
-			ctx.closePath();
-		}
-
-		function drawBall() {
-			ctx.beginPath();
-			ctx.arc(x, y, ballRadius, 0, Math.PI * 2, false);
-			ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`;
-			ctx.fill();
-			ctx.closePath();
-		}
-
-		function keyDownHandler(e) {
-			if (e.key === "Right" || e.key === "ArrowRight")
-				rightPressed = true;
-			else if (e.key === "Left" || e.key === "ArrowLeft")
-				leftPressed = true;
-		}
-
-		function keyUpHandler(e) {
-			if (e.key === "Right" || e.key === "ArrowRight")
-				rightPressed = false;
-			else if (e.key === "Left" || e.key === "ArrowLeft")
-				leftPressed = false;
-		}
-		
-		function draw() {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			drawBall();
-			drawPaddle();
-			if (leftPressed)
-				paddleX = Math.max(paddleX - 5, 0);
-			else if (rightPressed)
-				paddleX = Math.min(paddleX + 5, canvas.width);
-			x += dx;
-			y += dy;
-			r = (r + 3) % 255;
-			g = (g + 2) % 255;
-			b = (b + 1) % 255;
-			if (y + dy < ballRadius || y + dy > canvas.height - ballRadius)	dy = -dy;
-			if (x + dx < ballRadius || x + dx > canvas.width - ballRadius)	dx = -dx;
-		}
-
-		document.addEventListener("keydown", keyDownHandler, false);
-		document.addEventListener("keyup", keyUpHandler, false);
-
-		setInterval(draw, 10);
-    </script>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+	<script type="module" src="run.js"></script>
   </body>
 </html>
