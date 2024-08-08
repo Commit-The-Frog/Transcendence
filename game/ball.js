@@ -29,8 +29,8 @@ class Ball extends Obj {
 		if (this.y + this.dy < this.radius || this.y + this.dy > height - this.radius)
 			this.dy *= -1;
 		// 좌우 패들 튕기기
-		if (paddleL.checkCollision(this.x - this.radius, this.y, 'L') || paddleR.checkCollision(this.x + this.radius, this.y, 'R'))
-			this.dx *= -1;
+		paddleL.checkCollision(this, 'L');
+		paddleR.checkCollision(this, 'R');
 	}
 	reset = (x, y, dir) => {
 		this.x = x;
@@ -39,6 +39,10 @@ class Ball extends Obj {
 			this.dx = -this.speed;
 		else if (dir === 'R')
 			this.dx = this.speed;
+		if (Math.floor(Math.random() * 100) % 2 == 0)
+			this.dy = -this.speed;
+		else
+			this.dy = this.speed;
 	}
 }
 

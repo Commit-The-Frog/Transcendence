@@ -4,12 +4,13 @@ import { Ball } from './ball.js'
 import { Key } from './key.js';
 import { UserInterface } from './userInterface.js';
 
-let ballSpeed = 3;
-let lPaddleSpeed = 5;
-let rPaddleSpeed = 5;
-let paddleWidth = 10;
-let paddleHeight = 150;
-let ballRadius = 10;
+const ballSpeed = 3;
+const lPaddleSpeed = 5;
+const rPaddleSpeed = 5;
+const paddleWidth = 10;
+const paddleHeight = 150;
+const ballRadius = 15;
+const maxScore = 5;
 
 let Game = class {
 	constructor() {
@@ -23,7 +24,7 @@ let Game = class {
 		this.ball = new Ball((this.canvas.width - ballRadius) / 2, (this.canvas.height - ballRadius) / 2, ballRadius, ballSpeed);
 		this.ui = new UserInterface(this.canvas.ctx, this.canvas.width, this.canvas.height);
 	}
-	render = () => {
+	render = async () => {
 		console.log('rendering..');
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -38,6 +39,8 @@ let Game = class {
 		if (this.key.upPressed)		this.paddleR.moveUp();
 		if (this.key.downPressed)	this.paddleR.moveDown(this.canvas.height);
 
+		if (this.scoreL === maxScore || this.scoreR === maxScore)
+			this.end();
 		this.ball.move(this.canvas.height, this.paddleL, this.paddleR)
 		let loser = this.checkBallOut();
 		if (loser === 1) {
