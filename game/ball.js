@@ -32,6 +32,14 @@ class Ball extends Obj {
 		if (paddleL.checkCollision(this.x - this.radius, this.y, 'L') || paddleR.checkCollision(this.x + this.radius, this.y, 'R'))
 			this.dx *= -1;
 	}
+	reset = (x, y, dir) => {
+		this.x = x;
+		this.y = y;
+		if (dir === 'L')
+			this.dx = -this.speed;
+		else if (dir === 'R')
+			this.dx = this.speed;
+	}
 }
 
 export { Ball };

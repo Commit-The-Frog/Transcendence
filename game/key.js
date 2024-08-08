@@ -18,14 +18,13 @@ let Key = class {
 	set downPressed(status) { this._downPressed = status; }
 
 	keyDownHandler = (e) => {
-		console.log(e.key);
 		if (e.key === "Right" || e.key === "ArrowUp")
 			this.upPressed = true;
 		else if (e.key === "Left" || e.key === "ArrowDown")
 			this.downPressed = true;
-		else if (e.key === "w")
+		else if (e.code === "KeyW")
 			this.WPressed = true;
-		else if (e.key === "s")
+		else if (e.code === "KeyS")
 			this.SPressed = true;
 	}
 	keyUpHandler = (e) => {
@@ -33,9 +32,9 @@ let Key = class {
 			this.upPressed = false;
 		else if (e.key === "Down" || e.key === "ArrowDown")
 			this.downPressed = false;
-		else if (e.key === "w")
+		else if (e.code === "KeyW")
 			this.WPressed = false;
-		else if (e.key === "s")
+		else if (e.code === "KeyS")
 			this.SPressed = false;
 	}
 	setKeyEventHandler() {
