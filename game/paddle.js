@@ -20,13 +20,14 @@ class Paddle extends Obj {
 	moveDown = (height) => {
 		this.y = Math.min(this.y + this.speed, height - this.height);
 	}
-	checkCollision = (y, dir) => {
-		if (dir == 'L') {
+	checkCollision = (x, y, dir) => {
+		if (dir == 'L' && x <= this.x + this.width && x > this.x) {
 			if (y >= this.y && y <= this.y + this.height)
 				return true;
 			else
 				return false;
-		} else {
+		}
+		else if (dir == 'R' && x >= this.x && x < this.x + this.width) {
 			if (y >= this.y && y <= this.y + this.height)
 				return true;
 			else
