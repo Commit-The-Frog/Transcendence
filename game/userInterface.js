@@ -27,7 +27,7 @@ let UserInterface = class {
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 3, 1000);
 		this.ctx.font = '30px sans-serif';
-		this.ctx.fillText(`WINNER: ${winner}`, this.width / 2, this.height * 3/ 5, 1000);
+		this.ctx.fillText(`player ${winner} win!`, this.width / 2, this.height * 3/ 5, 1000);
 		this.ctx.fillStyle = `rgba(255, 255, 2552, ${Math.sin(opacity)})`;
 		this.ctx.fillText(`PRESS 'R' TO RESTART`, this.width / 2, this.height * 4 / 5, 1000);
 	}

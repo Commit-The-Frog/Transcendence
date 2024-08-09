@@ -8,7 +8,7 @@ class Ball extends Obj {
 		this.radius = radius;
 		this.speed = speed;
 		this.dx = -speed;
-		this.dy = -speed;
+		this.dy = 0;
 	}
 	get dx() { return this._dx; }
 	get dy() { return this._dy; }
@@ -39,10 +39,7 @@ class Ball extends Obj {
 			this.dx = -this.speed;
 		else if (dir === 'R')
 			this.dx = this.speed;
-		if (Math.floor(Math.random() * 100) % 2 == 0)
-			this.dy = -this.speed;
-		else
-			this.dy = this.speed;
+		this.dy = 0;
 	}
 }
 
