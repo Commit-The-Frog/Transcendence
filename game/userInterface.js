@@ -1,23 +1,35 @@
 
 let UserInterface = class {
-	constructor(ctx, width, height) {
-		this.ctx = ctx;
-		this.width = width;
-		this.height = height;
-		this.scoreFontSize = 48;
+	constructor(canvas) {
+		this.canvas = canvas;
+		this.ctx = this.canvas.ctx;
+		this.width = this.canvas.width;
+		this.height = this.canvas.height;
 	}
-	drawHalfLine = () => {
-		this.ctx.beginPath();
-		this.ctx.moveTo(this.width / 2, 10);
-		this.ctx.lineTo(this.width / 2, this.height);
-		this.ctx.setLineDash([20]);
-		this.ctx.stroke();
+	drawHomeScreen = () => {
+		this.ctx.fillStyle = 'black';
+		this.ctx.fillRect(0, 0, this.width, this.height);
+
+		this.ctx.font = `50px sans-serif`;
+		this.ctx.fillStyle = 'white';
+		this.ctx.textAlign = 'center';
+		this.ctx.fillText('PING PONG', this.width / 2, this.height / 3, 1000);
+		this.ctx.font = `30px sans-serif`;
+		this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 3 / 5, 1000);
 	}
-	drawScore = async (scoreL, scoreR) => {
-		this.ctx.font = `${this.scoreFontSize}px sans-serif`;
-		this.ctx.fillText(scoreL, this.width / 4 + 20, 100, 100);
-		this.ctx.fillText(scoreR, this.width * 3 / 4 - this.scoreFontSize, 100, 100);
-		
+	drawGameOverScreen = (opacity, winner, mousePos) => {
+		opacity /= 100;
+		this.ctx.fillStyle = 'black';
+		this.ctx.fillRect(0, 0, this.width, this.height);
+
+		this.ctx.font = '50px sans-serif';
+		this.ctx.fillStyle = 'white';
+		this.ctx.textAlign = 'center';
+		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 3, 1000);
+		this.ctx.font = '30px sans-serif';
+		this.ctx.fillText(`WINNER: ${winner}`, this.width / 2, this.height * 3/ 5, 1000);
+		this.ctx.fillStyle = `rgba(255, 255, 2552, ${Math.sin(opacity)})`;
+		this.ctx.fillText(`PRESS 'R' TO RESTART`, this.width / 2, this.height * 4 / 5, 1000);
 	}
 }
 
