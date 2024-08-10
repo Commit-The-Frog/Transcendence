@@ -5,13 +5,14 @@ import { Key } from './key.js';
 import { UserInterface } from './userInterface.js';
 
 const ballSpeed = 4;
+const ballSpeedMax = 6;
 const rPaddleSpeed = 5;
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballRadius = 15;
 const maxScore = 5;
 const scoreFontSize = 48;
-const em = 0.03;
+const em = 0.05;
 const cof = 0.42;
 const accelInit = 4;
 const accel = 0.1;
@@ -27,19 +28,20 @@ let Game = class {
 		this.key = new Key(this.canvas);
 		this.paddleL = new Paddle(50, (this.canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight, accel, em, cof);
 		this.paddleR = new Paddle(this.canvas.width - 50 - paddleWidth, (this.canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight, rPaddleSpeed, em, cof);
-		this.ball = new Ball((this.canvas.width - ballRadius) / 2, (this.canvas.height - ballRadius) / 2, ballRadius, ballSpeed);
+		this.ball = new Ball((this.canvas.width - ballRadius) / 2, (this.canvas.height - ballRadius) / 2, ballRadius, ballSpeed, ballSpeedMax);
 	}
 	renderGame = () => {
-		// console.log('rendering.. ballspeed : ' + this.ball.dy);
+		console.log('rendering.. ballspeed : ' + this.ball.dy + ',' + this.ball.dx);
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+		// 화면 렌더링
 		this.drawHalfLine();
 		this.drawScore();
 		this.paddleL.draw(this.canvas.ctx);
 		this.paddleR.draw(this.canvas.ctx);
 		this.ball.draw(this.canvas.ctx);
 		
-		// 패들 가속도 처리
+		// 패들 이동
 		if (this.key.WPressed)
 			this.paddleL.dy = Math.min(-accelInit, this.paddleL.dy - accel)
 		else if (this.key.SPressed)
@@ -55,11 +57,16 @@ let Game = class {
 			this.paddleR.dy = 0;
 		this.paddleR.move(this.canvas.height);
 
+		// 5점 득점시 게임 종료처리
 		if (this.scoreL === maxScore)
 			this.end('L');
 		else if (this.scoreR === maxScore)
 			this.end('R');
+
+		// 공 이동
 		this.ball.move(this.canvas.height, this.paddleL, this.paddleR)
+
+		// 득실 판정 및 처리
 		let loser = this.checkBallOut();
 		if (loser === 1) {
 			++this.scoreR;

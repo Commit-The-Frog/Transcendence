@@ -1,12 +1,13 @@
 import { Obj } from './object.js'
 
 class Ball extends Obj {
-	constructor(x, y, radius, speed = 3) {
+	constructor(x, y, radius, speed = 3, speedMax) {
 		super(x, y);
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
 		this.speed = speed;
+		this.speedMax = speedMax;
 		this.dx = -speed;
 		this.dy = 0;
 	}
@@ -31,6 +32,16 @@ class Ball extends Obj {
 		// 좌우 패들 튕기기
 		paddleL.checkCollision(this, 'L');
 		paddleR.checkCollision(this, 'R');
+	}
+	handleCollision = (dir, em, cof, paddleDy) => {
+		if (dir != 'L' && dir != 'R')
+			return ;
+		let newDy = cof * paddleDy + this.dy;
+		if (dir === 'L')
+			this.dx = Math.min(Math.abs(this.dx) + Math.abs(this.dx) * em, this.speedMax);
+		else
+			this.dx = -1 * Math.min(Math.abs(this.dx) + Math.abs(this.dx) * em, this.speedMax);
+		this.dy = newDy >= 0 ? Math.min(newDy, this.speedMax) : Math.max(newDy, -this.speedMax);
 	}
 	reset = (x, y, dir) => {
 		this.x = x;

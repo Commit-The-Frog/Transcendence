@@ -43,22 +43,18 @@ class Paddle extends Obj {
 		const padT = this.y;
 		const padB = this.y + this.height;
 
-		if (!(ballB >= padT && ballT <= padB))
-			return ;
-
 		// 좌측 패들 우측면 충돌판정
 		if (dir == 'L' && ballL < padR && ballL > padL) {
 			// 우측면 충돌
 			if (ball.dx <= 0) {
 				// 우상단->좌하단 접근시
-				if (ball.dy <= 0 && ball.y < this.y + this.height / 2)
-					ball.dx = Math.abs(ball.dx) + Math.abs(ball.dx) * this.em;
+				if (ball.dy <= 0 && ballB >= padT && ballB < this.y + this.height / 2)
+					ball.handleCollision('L', this.em, this.cof, this.dy);
 				// 우하단->좌상단 접근시
-				else if (ball.dy >= 0 && ball.y > this.y + this.height / 2)
-					ball.dx = Math.abs(ball.dx) + Math.abs(ball.dx) * this.em;
-				else
-					ball.dx = Math.abs(ball.dx) + Math.abs(ball.dx) * this.em;
-				ball.dy += this.cof * this.dy;
+				else if (ball.dy >= 0 && ballT <= padB && ballT > this.y + this.height / 2)
+					ball.handleCollision('L', this.em, this.cof, this.dy);
+				else if (ballB >= padT && ballT <= padB)
+					ball.handleCollision('L', this.em, this.cof, this.dy);
 			}
 		}
 		// 우측 패들 좌측면 충돌판정
@@ -66,14 +62,13 @@ class Paddle extends Obj {
 			// 좌측면 충돌
 			if (ball.dx >= 0) {
 				// 좌상단->우하단 접근시
-				if (ball.dy <= 0 && ball.y < this.y + this.height / 2)
-					ball.dx = -1 * Math.abs(ball.dx) - Math.abs(ball.dx) * this.em;
+				if (ball.dy <= 0 && ballB >= padT && ballB < this.y + this.height / 2)
+					ball.handleCollision('R', this.em, this.cof, this.dy);
 				// 좌하단->우상단 접근시
-				else if (ball.dy >= 0 && ball.y > this.y + this.height / 2)
-					ball.dx = -1 * Math.abs(ball.dx) - Math.abs(ball.dx) * this.em;
-				else
-					ball.dx = -1 *Math.abs(ball.dx) - Math.abs(ball.dx) * this.em;
-					ball.dy += this.cof * this.dy;
+				else if (ball.dy >= 0 && ballT <= padB && ballT > this.y + this.height / 2)
+					ball.handleCollision('R', this.em, this.cof, this.dy);
+				else if (ballB >= padT && ballT <= padB)
+					ball.handleCollision('R', this.em, this.cof, this.dy);
 			}
 		}
 	}
