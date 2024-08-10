@@ -6,14 +6,13 @@ import { UserInterface } from './userInterface.js';
 
 const ballSpeed = 4;
 const ballSpeedMax = 6;
-const rPaddleSpeed = 5;
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballRadius = 15;
 const maxScore = 5;
 const scoreFontSize = 48;
-const em = 0.05;
-const cof = 0.42;
+const em = 0.03;
+const cof = 0.3;
 const accelInit = 4;
 const accel = 0.1;
 let timer = 0;
@@ -27,11 +26,11 @@ let Game = class {
 		this.ui = new UserInterface(this.canvas);
 		this.key = new Key(this.canvas);
 		this.paddleL = new Paddle(50, (this.canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight, accel, em, cof);
-		this.paddleR = new Paddle(this.canvas.width - 50 - paddleWidth, (this.canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight, rPaddleSpeed, em, cof);
+		this.paddleR = new Paddle(this.canvas.width - 50 - paddleWidth, (this.canvas.height - paddleHeight) / 2, paddleWidth, paddleHeight, em, cof);
 		this.ball = new Ball((this.canvas.width - ballRadius) / 2, (this.canvas.height - ballRadius) / 2, ballRadius, ballSpeed, ballSpeedMax);
 	}
 	renderGame = () => {
-		console.log('rendering.. ballspeed : ' + this.ball.dy + ',' + this.ball.dx);
+		console.log('rendering.. ps : ' + this.paddleL.dy + ',' + this.paddleR.dy);
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// 화면 렌더링
@@ -41,20 +40,23 @@ let Game = class {
 		this.paddleR.draw(this.canvas.ctx);
 		this.ball.draw(this.canvas.ctx);
 		
-		// 패들 이동
-		if (this.key.WPressed)
+		// L패들 가속처리
+		if (this.key.WPressed && this.paddleL.y > 10)
 			this.paddleL.dy = Math.min(-accelInit, this.paddleL.dy - accel)
-		else if (this.key.SPressed)
+		else if (this.key.SPressed && this.paddleL.y + this.paddleL.height < this.canvas.height - 10)
 			this.paddleL.dy = Math.max(accelInit, this.paddleL.dy + accel)
 		else
 			this.paddleL.dy = 0;
+		// 패들 이동
 		this.paddleL.move(this.canvas.height);
-		if (this.key.upPressed)
+		// R패들 가속처리
+		if (this.key.upPressed && this.paddleR.y > 10)
 			this.paddleR.dy = Math.min(-accelInit, this.paddleR.dy - accel)
-		else if (this.key.downPressed)
+		else if (this.key.downPressed && this.paddleR.y + this.paddleR.height < this.canvas.height - 10)
 			this.paddleR.dy = Math.max(accelInit, this.paddleR.dy + accel)
 		else
 			this.paddleR.dy = 0;
+		// R패들 이동
 		this.paddleR.move(this.canvas.height);
 
 		// 5점 득점시 게임 종료처리
