@@ -5,13 +5,13 @@ import { Key } from './key.js';
 import { UserInterface } from './userInterface.js';
 
 const ballSpeed = 4;
-const ballSpeedMax = 6;
+const ballSpeedMax = 10;
 const paddleWidth = 10;
 const paddleHeight = 100;
 const ballRadius = 15;
 const maxScore = 5;
 const scoreFontSize = 48;
-const em = 0.03;
+const em = 0.5;
 const cof = 0.3;
 const accelInit = 4;
 const accel = 0.1;
