@@ -1,11 +1,12 @@
 import { Obj } from './object.js';
 
 class Paddle extends Obj {
-	constructor(x, y, width, height, accel, em = 0.01, cof = 0.1) {
+	constructor(x, y, width, height, accel, accelInit, em = 0.01, cof = 0.1) {
 		super(x, y);
 		this.width = width;
 		this.height = height;
 		this.accel = accel;
+		this.accelInit = accelInit;
 		this.em = em;
 		this.cof = cof;
 		this.dy = 0;

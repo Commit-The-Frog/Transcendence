@@ -1,6 +1,5 @@
 let Key = class {
-	constructor(canvas) {
-		this.canvas = canvas;
+	constructor() {
 		this.WPressed = false;
 		this.SPressed = false;
 		this.RPressed = false;
