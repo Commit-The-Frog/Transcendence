@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PING PONG</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      canvas {
+        background: #eee;
+        display: block;
+        margin: 0 auto;
+        border: 1px solid black;
+      }
+      h1 {
+        margin-bottom: 10px;
+      }
+      .input-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      label {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Please insert player nickname</h1>
+    <div class="input-container">
+      <label for="player1">Player 1:</label>
+      <input id="player1" type="text">
+    </div>
+    <div class="input-container">
+      <label for="player2">Player 2:</label>
+      <input id="player2" type="text">
+    </div>
+    <button id="btn">start</button>
+    <script>
+      
+      btn.addEventListener('click', () => {
+        const nickname1 = document.getElementById('player1').value;
+        const nickname2 = document.getElementById('player2').value;
+        const btn = document.getElementById('btn');
+        const url = `localSingleGame.html?player1=${nickname1}&player2=${nickname2}`;
+        window.location.href = url;
+      });
+    </script>
+  </body>
+</html>

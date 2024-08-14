@@ -21,7 +21,7 @@ const accel = 0.15;
 let timer = 0;
 
 let Game = class {
-	constructor() {
+	constructor(nickname) {
 		this.interval = 0;
 		this.canvas = new Canvas("ping pong");
 		this.ui = new UserInterface(this.canvas);
@@ -30,7 +30,7 @@ let Game = class {
 		this.info.initBall(ballRadius, ballSpeed, ballSpeedMax);
 		this.info.initPaddleL(paddleLWidth, paddleLHeight, accel, accelInit, em, cof);
 		this.info.initPaddleR(paddleRWidth, paddleRHeight, accel, accelInit, em, cof);
-		this.info.initPlayer(playerLNickname, playerRNickname);
+		this.info.initPlayer(nickname[0], nickname[1]);
 	}
 
 	// ### rendering ###
@@ -39,7 +39,7 @@ let Game = class {
 
 		// 화면 렌더링
 		this.ui.drawHalfLine();
-		this.ui.drawScore(this.info.playerL.score, this.info.playerR.score);
+		this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 		this.info.draw(this.canvas.ctx);
 
 		// 계산
@@ -81,7 +81,7 @@ let Game = class {
 	end = (winner) => {
 		clearInterval(this.interval);
 		this.interval = setInterval(() => {
-			this.renderGameOver(winner);
+			this.renderGameOver(winner.nickname);
 		}, 10);
 	}
 }

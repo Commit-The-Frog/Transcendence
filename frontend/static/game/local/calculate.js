@@ -35,11 +35,11 @@ const calculate = (info, key) => {
 	// 게임 종료 판정(5점 득점시)
 	if (info.playerL.score === info.maxScore) {
 		info.gameover = true;
-		info.winner = 'L';
+		info.winner = info.playerL;
 	}
 	else if (info.playerR.score === info.maxScore) {
 		info.gameover = true;
-		info.winner = 'R'
+		info.winner = info.playerR;
 	}
 }
 
