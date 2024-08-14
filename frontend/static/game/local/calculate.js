@@ -1,4 +1,3 @@
-
 const calculate = (info, key) => {
 	// L패들 가속처리
 	if (key.WPressed && info.paddleL.y > 10)

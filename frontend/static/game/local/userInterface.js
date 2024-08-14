@@ -39,10 +39,11 @@ let UserInterface = class {
 		this.ctx.stroke();
 	}
 	drawScoreAndNickname = (playerL, playerR) => {
+		this.ctx.font = `30px sans-serif`;
+		this.ctx.fillText(playerL.nickname, this.width / 4 + 20, 100, 1000);
+		this.ctx.fillText(playerR.nickname, this.width * 3 / 4 - 48, 100, 1000);
 		this.ctx.font = `48px sans-serif`;
-		this.ctx.fillText(playerL.nickname, this.width / 4 + 20, 100, 100);
 		this.ctx.fillText(playerL.score, this.width / 4 + 20, 160, 100);
-		this.ctx.fillText(playerR.nickname, this.width * 3 / 4 - 48, 100, 100);
 		this.ctx.fillText(playerR.score, this.width * 3 / 4 - 48, 160, 100);
 	}
 }
