@@ -31,6 +31,18 @@ let UserInterface = class {
 		this.ctx.fillStyle = `rgba(255, 255, 2552, ${Math.sin(opacity)})`;
 		this.ctx.fillText(`PRESS 'R' TO RESTART`, this.width / 2, this.height * 4 / 5, 1000);
 	}
+	drawHalfLine = () => {
+		this.ctx.beginPath();
+		this.ctx.moveTo(this.width / 2, 10);
+		this.ctx.lineTo(this.width / 2, this.height);
+		this.ctx.setLineDash([20]);
+		this.ctx.stroke();
+	}
+	drawScore = (playerLScore, playerRScore) => {
+		this.ctx.font = `48px sans-serif`;
+		this.ctx.fillText(playerLScore, this.width / 4 + 20, 100, 100);
+		this.ctx.fillText(playerRScore, this.width * 3 / 4 - 48, 100, 100);
+	}
 }
 
 export { UserInterface };

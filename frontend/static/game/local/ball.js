@@ -50,6 +50,8 @@ class Ball extends Obj {
 			this.dx = -this.speed;
 		else if (dir === 'R')
 			this.dx = this.speed;
+		else
+			this.dx = Math.random() % 2 === 0 ? this.speed : -this.speed;
 		this.dy = 0;
 	}
 }

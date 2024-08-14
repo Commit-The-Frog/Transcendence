@@ -20,7 +20,35 @@ const calculate = (info, key) => {
 	info.paddleR.move(info.canvasHeight);
 
 	// 공 이동
-	info.ball.move(info.canvasHeight, info.paddleL, info.paddleR)
+	info.ball.move(info.canvasHeight, info.paddleL, info.paddleR);
+
+	// 라운드 승패 판정 및 라운드 정보 초기화
+	let loser = checkBallOut(info);
+	if (loser === 1) {
+		++info.playerL.score;
+		info.resetRound('R');
+	} else if (loser === 2) {
+		++info.playerR.score;
+		info.resetRound('L');
+	}
+
+	// 게임 종료 판정(5점 득점시)
+	if (info.playerL.score === info.maxScore) {
+		info.gameover = true;
+		info.winner = 'L';
+	}
+	else if (info.playerR.score === info.maxScore) {
+		info.gameover = true;
+		info.winner = 'R'
+	}
+}
+
+const checkBallOut = (info) => {
+	if (info.ball.x < -50)
+		return 1;
+	if (info.ball.x > info.canvasWidth + 50)
+		return 2;
+	return 0;
 }
 
 export { calculate };
