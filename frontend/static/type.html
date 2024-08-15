@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PING PONG</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Select game type</h1>
+    <button id="btn1">1 vs 1</button>
+    <button id="btn2">TOURNAMENT</button>
+    <script>
+		const btn1 = document.getElementById('btn1');
+		const btn2 = document.getElementById('btn2');
+     	btn1.addEventListener('click', () => {
+        	const url = `nickname.html?type=1`;
+       		window.location.href = url;
+    	});
+		btn2.addEventListener('click', () => {
+			const url = `nickname.html?type=2`;
+			window.location.href = url;
+		});
+    </script>
+  </body>
+</html>

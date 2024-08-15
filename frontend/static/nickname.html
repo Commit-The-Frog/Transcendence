@@ -22,7 +22,7 @@
         margin: 0 auto;
         border: 1px solid black;
       }
-      h1 {
+      h1, h2 {
         margin-bottom: 10px;
       }
       .input-container {
@@ -36,25 +36,64 @@
     </style>
   </head>
   <body>
-    <h1>Please insert player nickname</h1>
-    <div class="input-container">
-      <label for="player1">Player 1:</label>
-      <input id="player1" type="text">
-    </div>
-    <div class="input-container">
-      <label for="player2">Player 2:</label>
-      <input id="player2" type="text">
-    </div>
+    <h2 id="msg">Please insert player nickname</h2>
     <button id="btn">start</button>
+
     <script>
-      
-      btn.addEventListener('click', () => {
-        const nickname1 = document.getElementById('player1').value;
-        const nickname2 = document.getElementById('player2').value;
-        const btn = document.getElementById('btn');
-        const url = `localSingleGame.html?player1=${nickname1}&player2=${nickname2}`;
-        window.location.href = url;
-      });
+		const body = document.body; // body 요소 선택
+		const h2 = document.getElementById('msg');
+		const button = document.getElementById('btn'); // 버튼 요소 선택
+		const params = new URLSearchParams(window.location.search);
+		const type = params.get('type');
+		const gameType = document.createElement('h1');
+		let n;
+		if (type == 1) {
+			n = 2;
+			gameType.textContent = '1 vs 1';
+		}
+		else if (type == 2) {
+			n = 4;
+			gameType.textContent = 'tournament';
+		}
+
+		body.insertBefore(gameType, h2);
+		for (let i = 1; i <= n; i++) {
+			// 새 div 요소 생성
+			const div = document.createElement('div');
+			div.className = 'input-container';
+
+			// label 요소 생성
+			const label = document.createElement('label');
+			label.setAttribute('for', `player${i}`);
+			label.textContent = `Player ${i}:`;
+
+			// input 요소 생성
+			const input = document.createElement('input');
+			input.id = `player${i}`;
+			input.type = 'text';
+
+			// div에 label과 input 추가
+			div.appendChild(label);
+			div.appendChild(input);
+
+			// body에 div 추가 (버튼 앞에 추가)
+			body.insertBefore(div, button);
+		}
+	  
+		button.addEventListener('click', () => {
+			let url;
+
+			if (type == 1)
+				url = 'localSingleGame.html?';
+			else if (type == 2)
+				url = 'localTournament.html?';
+			for (let i = 1; i <= n; i++) {
+				const playerName = document.getElementById(`player${i}`).value;
+				if (i != 1)	url += '&';
+				url += `player${i}=${playerName}`;
+			}
+        	window.location.href = url;
+		})
     </script>
   </body>
 </html>
