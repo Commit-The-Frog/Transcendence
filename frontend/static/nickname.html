@@ -81,18 +81,13 @@
 		}
 	  
 		button.addEventListener('click', () => {
-			let url;
+			let url = `local.html?type=${type}`;
 
-			if (type == 1)
-				url = 'localSingleGame.html?';
-			else if (type == 2)
-				url = 'localTournament.html?';
 			for (let i = 1; i <= n; i++) {
 				const playerName = document.getElementById(`player${i}`).value;
-				if (i != 1)	url += '&';
-				url += `player${i}=${playerName}`;
+				url += `&player${i}=${playerName}`;
 			}
-        	window.location.href = url;
+			window.location.href = url;
 		})
     </script>
   </body>
