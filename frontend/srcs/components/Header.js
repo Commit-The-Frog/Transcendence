@@ -6,6 +6,7 @@ export function Header () {
         changeUrl("/userinfo/1213");
     }
     const clickHeaderPingPongHandler = function() {
+        // pingpongurl로 변경해야함~
         changeUrl("/userinfo/1213");
     }
     bindEventHandler('click' , "clickHeaderMyPageHandler", clickHeaderMyPageHandler);

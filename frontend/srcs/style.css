@@ -1,4 +1,5 @@
 @import url('style/home.css');
+@import url('style/userinfo.css');
 
 :root{
     --default-bg-color : #C8A1E0;
@@ -11,8 +12,7 @@
 * {
     margin: 0;
     padding: 0;
-    height: 100%;
-    width: 100%;
+    box-sizing: border-box;
 }
 
 html {
@@ -22,9 +22,12 @@ html {
 
 body {
     background-color: #C8A1E0;
+    height: 100vh;
+    width: 100vw;
 }
 
 button {
+    background-color: white;
     border-radius: 19px;
     transition: transform 0.2s ease, background-color 0.2s ease;
 }
@@ -39,19 +42,22 @@ button:active {
 
 .header {
     background-color: var(--default-bg-color);
-    height: 120px;
+    height: 150px;
     width: 100%;
     display: flex;
     align-items: center;
+    padding: 10px;
 }
 
 .header button {
     line-height: 45px;
     background-color: white;
     margin-left: 20px;
-    width: 150px;
-    height: 45px;
-    border-radius: 19px 19px 19px 0px;
+    width: 200px;
+    height: 60px;
+    border-radius: 30px;
+
+    background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%);
 }
 
 .App {

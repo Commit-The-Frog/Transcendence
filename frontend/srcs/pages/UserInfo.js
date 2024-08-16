@@ -4,10 +4,20 @@ import { useEffect, useState } from "../core/myreact/myreact.js";
 export function UserInfo() {
     const [data, setData] = useState({});
 
+    useEffect(()=>{
+        setData({
+            username : 'kitty',
+            img : "../haerin.png",
+            score : {
+                win : 30,
+                lose : 0
+            }
+
+        })
+    },[])
     return `
     <div class="userInfo">
         ${Header()}
-        <h1> this is userinfo </h1>
         ${UserProfile({data : data})}
     </div>
     `

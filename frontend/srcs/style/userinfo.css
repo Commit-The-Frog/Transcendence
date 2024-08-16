@@ -1,0 +1,55 @@
+.userProfile {
+    background-color: white;
+    margin: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.userInfo .userProfileImgWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+    width: 160px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid black;
+}
+
+.userInfo .userProfileImgNameWrapper {
+    display: flex;
+    height: auto;
+    justify-content: start;
+    align-items: center;
+}
+
+.userInfo .userProfileImg {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+}
+
+.userInfo .userInfoWrapper1 {
+    margin-left: 50px;
+}
+
+
+.userInfo .username {
+    font-size: 40px;
+}
+
+.userInfo .userScoreWrapper {
+    color: gray;
+}
+
+.userInfo .userInfoEdit {
+    position: absolute;
+    right: 0;
+    margin-right: 100px;
+    width: 80px;
+    height: 40px;
+    background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%);
+}
