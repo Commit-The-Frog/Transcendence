@@ -3,7 +3,8 @@ import { Paddle } from './paddle.js'
 import { Player } from './player.js'
 
 let Info = class {
-	constructor(canvasWidth, canvasHeight, maxScore) {
+	constructor(canvasWidth, canvasHeight, maxScore, type) {
+		this.type = type;
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
 		this.ball = null;

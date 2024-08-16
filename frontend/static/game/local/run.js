@@ -7,20 +7,34 @@ import { Game } from "./game.js";
 	4. 토너먼트인 경우, 대진표를 짜서 해당하는 플레이어들의 게임을 진행시킨다.(run)
 */
 
-const getNickname = () => {
-	// 현재 URL에서 쿼리 파라미터를 가져오기
-	const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
+const type = params.get('type');
 
-	// 각 파라미터 값 가져오기
-	const player1 = params.get('player1');
-	const player2 = params.get('player2');
+// Fisher-Yates Shuffle
+const shuffleArray = (array) => {
+	for (let i = array.length - 1; i >= 0; i--) {
+		// 0부터 i까지의 임의의 정수 j를 선택
+		const j = Math.floor(Math.random() * (i + 1));
 
-	return [player1, player2];
+		// array[i]와 array[j]의 값을 교환
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
 }
 
+// url 파라미터에서 닉네임 가져오기
+const getNicknameList = () => {
+	let nicknameList = [];
+
+	for (let i=0; i<=type*2-1; i++)
+		nicknameList[i] = params.get(`player${i+1}`);
+	return nicknameList;
+}
+
+// 메인
 (function run() {
-	const nickname = getNickname();
-	let game = new Game(nickname);
+	const nicknameList = getNicknameList();
+	let game = new Game(type, nicknameList);
 
 	game.init();
 }());
