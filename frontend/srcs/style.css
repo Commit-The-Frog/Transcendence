@@ -1,3 +1,12 @@
+@import url('style/home.css');
+
+:root{
+    --default-bg-color : #C8A1E0;
+    --default-bg-color2 : #fef9fe;
+    --default-btn-color: #FFE9FF;
+    --header-bg-color : #FFFFFF;
+}
+
 
 * {
     margin: 0;
@@ -12,43 +21,41 @@ html {
 }
 
 body {
-    background-color: #d7b099;
-}
-
-.home {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-}
-
-.home .homeLogoImg {
-    margin: auto;
-    width: 440px;
-    height: 440px;
+    background-color: #C8A1E0;
 }
 
 button {
-    border: none;
+    border-radius: 19px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
-.home .loginWrapper {
+button:hover {
+    transform: scale(0.97);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.header {
+    background-color: var(--default-bg-color);
+    height: 120px;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 500px;
-    height: 500px;
+    align-items: center;
 }
 
-.home .homeLoginBtn {
-    margin: auto;
-    width: 150px;
-    height: 50px;
+.header button {
+    line-height: 45px;
     background-color: white;
-    border-radius: 20px;
+    margin-left: 20px;
+    width: 150px;
+    height: 45px;
+    border-radius: 19px 19px 19px 0px;
 }
 
 .App {
+    background: linear-gradient(to bottom, var(--default-bg-color) 10%,var(--default-bg-color2) 30%, var(--default-bg-color2) 80%, var(--default-bg-color) 100%);
     width: 100%;
     height: 100%;
 }

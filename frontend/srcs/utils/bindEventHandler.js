@@ -3,14 +3,22 @@ export const createEventHandler = (className, callback) => {
     return function(event) {
       if (event.target.classList.contains(className)) {
         callback(event);
-      }
+      } 
     };
   };
   
-  // 이벤트 핸들러를 바인딩하는 일반화된 함수
- export const bindEventHandler = (eventType, className, callback, delay = 0) => {
-    const handler = createEventHandler(className, callback);
-    setTimeout(() => {
-      document.addEventListener(eventType, handler);
-    }, delay);
+  const handlerMap = {};
+
+  export const bindEventHandler = (eventType, className, callback, delay = 0) => {
+    const handlerKey = `${eventType}_${className}`;
+    
+    if (!handlerMap[handlerKey]) {
+      const handler = createEventHandler(className, callback);
+      
+      handlerMap[handlerKey] = handler;
+      
+      setTimeout(() => {
+        document.addEventListener(eventType, handler);
+      }, delay);
+    }
   };
