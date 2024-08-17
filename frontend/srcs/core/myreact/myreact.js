@@ -5,25 +5,42 @@ function MyReact () {
     const options = {
         currentStateKey : 0,
         renderCount: 0,
-        states : [],
+        states : {},
         effects : [],
         root : null,
         rootComponent : null
     }
-    function useState (initState) {
-        const {currentStateKey : key, states} = options;
-        if (states.length === key) states.push(initState);
-        const state = states[key];
-        const setState = (newState) => {
-            if (Object.is(states[key], newState)) {
-                return ;
-            }
-            states[key] = newState;
-            _render();
+
+    function useState(initState, key = null) {
+        const stateKey = key || options.currentStateKey++;
+        if (!(stateKey in options.states)) {
+            options.states[stateKey] = initState;
         }
-        options.currentStateKey += 1;
+        const state = options.states[stateKey];
+        const setState = (newState) => {
+            if (Object.is(options.states[stateKey], newState)) {
+                return;
+            }
+            options.states[stateKey] = newState;
+            _render();
+        };
         return [state, setState];
     }
+    // function useState (initState) {
+    //     const {currentStateKey : key, states} = options;
+    //     if (states.length === key) states.push(initState);
+    //     const state = states[key];
+    //     const setState = (newState) => {
+    //         if (Object.is(states[key], newState)) {
+    //             return ;
+    //         }
+    //         states[key] = newState;
+    //         console.log(states);
+    //         _render();
+    //     }
+    //     options.currentStateKey += 1;
+    //     return [state, setState];
+    // }
     function useEffect (callback, dependencies) {
         const {currentStateKey : key, states, effects} = options;
         const oldDependencies = states[key];
@@ -62,6 +79,7 @@ function MyReact () {
     function render (root, rootComponent) {
         options.root = root ;
         options.rootComponent = rootComponent;
+        options.currentStateKey = 0;
         _render();
     }
   

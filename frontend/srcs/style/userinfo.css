@@ -1,8 +1,12 @@
+.userInfo {
+    padding: 30px;
+}
+
 .userProfile {
     background-color: white;
-    margin: 10px;
+    /* margin: 10px;
     margin-left: 30px;
-    margin-right: 30px;
+    margin-right: 30px; */
     padding: 30px;
     border-radius: 20px;
     border: 1px solid black;
@@ -10,7 +14,7 @@
 
 .userInfo .userProfileImgWrapper {
     display: flex;
-    justify-content: center;
+    justify-content :space-between;
     align-items: center;
     height: 160px;
     width: 160px;
@@ -22,8 +26,12 @@
 .userInfo .userProfileImgNameWrapper {
     display: flex;
     height: auto;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
+}
+
+.userInfo .userProfileImgNameWrapper2 {
+    display: flex;
 }
 
 .userInfo .userProfileImg {
@@ -44,12 +52,150 @@
 .userInfo .userScoreWrapper {
     color: gray;
 }
+.userHub {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    margin-top: 30px;
+    padding: 10px;
+    border-radius: 20px;
+}
 
 .userInfo .userInfoEdit {
-    position: absolute;
+    position: relative;
     right: 0;
     margin-right: 100px;
     width: 80px;
     height: 40px;
     background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%);
+}
+
+.userHubWrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userHubTabs {
+    width: fit-content;
+    height: fit-content;
+    background-color: whitesmoke;
+    padding: 10px 0px 10px 10px;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+
+.userHubTabs button {
+    height: 40px;
+    width: 100px;
+    margin-right: 20px;
+    background: var(whitesmoke);
+}
+
+.userHubTabs button.selected {
+    background: var(--btn-color-yellow);
+    background-image: none;
+}
+
+.userFriends {
+    /* padding: 10px; */
+    width: 100%;
+}
+
+.userFriendsSearch {
+    padding: 10px 20px 10px 20px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    user-select: none;
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 300px;
+}
+
+.userFriendSearchNone {
+    margin-top: 22px;
+    padding: 10px 20px 10px 20px;
+}
+
+.userFriendsSearch:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.userFriend {
+    display: flex;
+    border: 1px solid black;
+    height: 100px;
+    padding-left: 20px;
+    line-height: 100px;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.userHistory {
+    align-items: center;
+    justify-content: center;
+    padding-right: 20px;
+}
+
+.userFriend .isonline{
+    margin-top: 45px;
+    margin-right: 5px;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    line-height: 100px;
+}
+
+.historyplayer {
+    display: flex;
+    width: 120px;
+    display: flex;
+    line-height: 45px;
+    height: 45px;
+    border: 1px solid black;
+    margin: 10px;
+    /* background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%); */
+    /* background: linear-gradient(to bottom,  white 20%, #4FFBDF 100%); */
+}
+
+.winner {
+    background: linear-gradient(to bottom,  white 30%, var(--btn-color-yellow) 100%);
+}
+
+.loser {
+    background: linear-gradient(to bottom,  white 30%, rgb(195, 195, 195) 100%);
+}
+
+.historyplayerself {
+    border-radius: 13px 13px 0px 13px;
+    margin-right: 10px;
+}
+
+.historyplayeropponent {
+    border-radius: 13px 13px 13px 0px;
+    margin-left: 10px;
+}
+
+.historyplayer p {
+    margin: auto;
+}
+
+.userFriend .online {
+    background-color: greenyellow;
+    border: 1px solid black;
+}
+
+.userFriend .offline {
 }

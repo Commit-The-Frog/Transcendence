@@ -2,10 +2,10 @@ import { bindEventHandler } from "../utils/bindEventHandler.js"
 import { changeUrl } from "../utils/changeUrl.js";
 
 export function Header () {
-    const clickHeaderMyPageHandler = function() {
+    const clickHeaderMyPageHandler = () => {
         changeUrl("/userinfo/1213");
     }
-    const clickHeaderPingPongHandler = function() {
+    const clickHeaderPingPongHandler = () => {
         // pingpongurl로 변경해야함~
         changeUrl("/userinfo/1213");
     }

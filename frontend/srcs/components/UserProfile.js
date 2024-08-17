@@ -4,6 +4,7 @@ export default function UserProfile ( {
     return `
     <div class="userProfile">
         <div class="userProfileImgNameWrapper">
+        <div class="userProfileImgNameWrapper2">
             <div class="userProfileImgWrapper">
                 <img class="userProfileImg" src="${data?.img}"/>
             </div>
@@ -14,11 +15,12 @@ export default function UserProfile ( {
                     </div>
                     <div class="userScoreWrapper">
                         <span>${data?.score?.win ? data?.score?.win : ''} </span>
-                        <span> 승 </span>
+                        <span> win </span>
                         <span>${data?.score?.lose ? data?.score?.lose : '0'} </span>
-                        <span> 패 </span>
+                        <span> lose </span>
                     </div>
                 </div>
+            </div>
             </div>
             <button class="userInfoEdit"> Edit </button>
         </div>

@@ -1,4 +1,5 @@
 import { Header } from "../components/Header.js";
+import UserHub from "../components/UserHub.js";
 import UserProfile from "../components/UserProfile.js";
 import { useEffect, useState } from "../core/myreact/myreact.js";
 export function UserInfo() {
@@ -19,6 +20,9 @@ export function UserInfo() {
     <div class="userInfo">
         ${Header()}
         ${UserProfile({data : data})}
+        <div class="userHubWrapper">
+            ${UserHub()}
+        </div>
     </div>
     `
 }

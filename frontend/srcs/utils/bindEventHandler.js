@@ -1,4 +1,4 @@
-// 일반화된 이벤트 핸들러 함수 생성
+                  // 일반화된 이벤트 핸들러 함수 생성
 export const createEventHandler = (className, callback) => {
     return function(event) {
       if (event.target.classList.contains(className)) {
