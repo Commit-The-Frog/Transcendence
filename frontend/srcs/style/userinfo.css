@@ -50,7 +50,7 @@
 }
 
 .userInfo .userScoreWrapper {
-    color: gray;
+    color: #808080;
 }
 .userHub {
     width: 100%;
@@ -147,6 +147,7 @@
     align-items: center;
     justify-content: center;
     padding-right: 20px;
+    position: relative;
 }
 
 .userFriend .isonline{
@@ -156,6 +157,17 @@
     width: 10px;
     height: 10px;
     line-height: 100px;
+}
+
+.matchday {
+    position: absolute;
+    left: 20px;
+    color: var(--text-gray-color);
+}
+.matchHistory {
+    display: flex;
+    line-height: 100px;
+    align-items: center;
 }
 
 .historyplayer {
