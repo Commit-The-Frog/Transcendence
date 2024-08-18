@@ -6,7 +6,7 @@ function MyReact () {
         currentStateKey : 0,
         renderCount: 0,
         states : {},
-        effects : [],
+        effects : {},
         root : null,
         rootComponent : null
     }
@@ -41,9 +41,10 @@ function MyReact () {
     //     options.currentStateKey += 1;
     //     return [state, setState];
     // }
-    function useEffect (callback, dependencies) {
-        const {currentStateKey : key, states, effects} = options;
-        const oldDependencies = states[key];
+    function useEffect (callback, dependencies , key = null) {
+        const { states, effects} = options;
+        const stateKey = key || options.currentStateKey++;
+        const oldDependencies = states[stateKey];
 
         let isChanged = true;
         
@@ -53,18 +54,17 @@ function MyReact () {
             );
         }
         if (isChanged) {
-            if (effects[key]?.cleanup) {
-                effects[key].cleanup();
+            if (effects[stateKey]?.cleanup) {
+                effects[stateKey].cleanup();
             }
 
             const newcleanup = callback();
-            effects[key] = {
+            effects[stateKey] = {
                 cleanup : typeof newcleanup === 'function' ? newcleanup : null,
                 deps : dependencies,
             }
-            states[key] = dependencies;
+            states[stateKey] = dependencies;
         }
-        options.currentStateKey += 1;
     }
     const _render = debounceFrame(()=>{
         const {root, rootComponent, effects} = options;
@@ -73,7 +73,9 @@ function MyReact () {
         options.currentStateKey = 0;
         options.renderCount+=1;
 
-        effects.forEach(effect => effect.cleanup?.());
+        for (let key in effects){
+            effects[key].cleanup?.();
+        }
         options.effects = [];
     });
     function render (root, rootComponent) {

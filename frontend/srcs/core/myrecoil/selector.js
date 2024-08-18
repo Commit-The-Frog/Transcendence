@@ -3,6 +3,7 @@ class Selector {
         this.key = key;
         this.get = get;
         this.set = set;
+        this.cache = null;
         this.dependencies = new Set();
     }
     evaluate(getFunction) {

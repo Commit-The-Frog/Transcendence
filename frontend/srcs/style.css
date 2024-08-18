@@ -59,9 +59,10 @@ button:active {
     align-items: center;
     padding: 10px;
     margin-bottom: 30px;
+    justify-content: space-between;
 }
 
-.header button {
+.routingBtnWrapper button {
     line-height: 45px;
     background-color: white;
     margin-left: 20px;
@@ -69,6 +70,17 @@ button:active {
     height: 60px;
     border-radius: 30px;
     background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%);
+}
+
+.languageBtnWrapper button {
+    height: 35px;
+    width: 35px;
+    font-size: 13px;
+    border: 1px solid black;
+}
+
+.languageBtnWrapper .selected {
+    background-color: var(--btn-color-yellow);
 }
 
 .App {

@@ -1,3 +1,7 @@
+import { getRecoilValue } from "../core/myrecoil/myrecoil.js"
+import { languageState } from "../recoil/languageState.js"
+import translations from "../translations.js"
+
 export default function UserProfile ( {
     data
 }){
@@ -15,14 +19,14 @@ export default function UserProfile ( {
                     </div>
                     <div class="userScoreWrapper">
                         <span>${data?.score?.win ? data?.score?.win : ''} </span>
-                        <span> win </span>
+                        <span> ${translations[getRecoilValue(languageState)]?.win} </span>
                         <span>${data?.score?.lose ? data?.score?.lose : '0'} </span>
-                        <span> lose </span>
+                        <span> ${translations[getRecoilValue(languageState)]?.lose} </span>
                     </div>
                 </div>
             </div>
             </div>
-            <button class="userInfoEdit"> Edit </button>
+            <button class="userInfoEdit"> ${translations[getRecoilValue(languageState)]?.edit} </button>
         </div>
     </div>
     `

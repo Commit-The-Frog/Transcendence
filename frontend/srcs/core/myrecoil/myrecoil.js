@@ -1,5 +1,5 @@
 import { Atom } from "./atom.js";
-import { useState, useEffect } from "../myreact/myreact.js";
+import { useState, useEffect, _render } from "../myreact/myreact.js";
 import {Selector} from "./selector.js"
 
 function MyRecoil() {
@@ -35,12 +35,15 @@ function MyRecoil() {
             throw new Error(`Invalid Recoil value`);
         }
     }
-    function useRecoilValue(recoilValue) {
-        const [state, setState] = useState(()=> getRecoilValue(recoilValue));
+    function useRecoilValue(recoilValue, key = null) {
+        const [state, setState] = useState(() => getRecoilValue(recoilValue), key);
         
         useEffect(()=>{
             if (recoilValue instanceof Atom) {
-                const unsubscribe = recoilValue.subscribe(setState);
+                const unsubscribe = recoilValue.subscribe((newValue) => {
+                    setState(newValue);
+                });
+                setState(()=>getRecoilValue(recoilValue));
                 return () => unsubscribe();
             } else if (recoilValue instanceof Selector) {
                 const unsubscribeFunctions = [];
@@ -54,14 +57,17 @@ function MyRecoil() {
                     unsubscribeFunctions.forEach(unsubscribe => unsubscribe());
                 }
             }
-        },[recoilValue]);
+        },[recoilValue],key + 'effects');
     
         return state;
     }
     
     function useSetRecoilState(recoilValue) {
         if (recoilValue instanceof Atom) {
-            return newValue => recoilValue.set(newValue);
+            return (newValue) => {
+                recoilValue.set(newValue)
+                _render();
+            };
         } else if (recoilValue instanceof Selector && typeof recoilValue.set === 'function') {
             return newValue => recoilValue.setValue({set: (atom, value) => atom.set(value), get: getRecoilValue}, newValue);
         } else {
@@ -69,13 +75,13 @@ function MyRecoil() {
         }
     }
     
-    function useRecoilState(recoilValue) {
-        const state = useRecoilValue(recoilValue);
+    function useRecoilState(recoilValue, key = null) {
+        const state = useRecoilValue(recoilValue, key);
         const setRecoilState = useSetRecoilState(recoilValue);
         return [state, setRecoilState];
     }
-    return {atom, selector, useRecoilState};
+    return {atom, selector, useRecoilState, getRecoilValue};
 }
 
 
-export const {atom, selector, useRecoilState} = MyRecoil();
+export const {atom, selector, useRecoilState, getRecoilValue} = MyRecoil();
