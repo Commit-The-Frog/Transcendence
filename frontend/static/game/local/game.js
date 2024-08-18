@@ -73,16 +73,13 @@ let Game = class {
 		this.info.gameover = false;
 		if (this.key.HPressed) {
 			if (this.info.type == 1)		this.home();
-			if (this.info.type == 2) {
-				this.tourRound++;
+			else if (this.info.type == 2) {
 				if (this.tourRound <= 2) {
-					this.winners.push(this.info.winner);
-					this.info.initPlayer(this.nickname[2], this.nickname[3]);
 					this.init();
-				} else if (this.tourRound == 3) {
-					this.info.initPlayer(winner[0], winner[1]);
+				} 
+				else if (this.tourRound == 3)
 					this.init();
-				} else
+				else
 					this.home();
 			}
 		}
@@ -95,6 +92,19 @@ let Game = class {
 	}
 	start = () => {
 		clearInterval(this.interval);
+		if (this.info.type == 2) {
+			if (this.tourRound == 1)
+				this.info.initPlayer(this.nickname[0], this.nickname[1]);
+			else if (this.tourRound == 2) {
+				this.winners.push(this.info.winner);
+				this.info.initPlayer(this.nickname[2], this.nickname[3]);
+			}
+			else {
+				this.winners.push(this.info.winner);
+				this.info.initPlayer(this.winners[0].nickname, this.winners[1].nickname);
+			}
+		}
+		this.tourRound++;
 		this.interval = setInterval(this.renderGame, 7);
 	}
 	end = (winner) => {
