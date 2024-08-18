@@ -19,11 +19,15 @@ let Info = class {
 	initBall = (radius, speed, speedMax) => {
 		this.ball = new Ball((this.canvasWidth - radius) / 2, (this.canvasHeight - radius) / 2, radius, speed, speedMax);
 	}
-	initPaddleL = (width, height, accel, em, cof) => {
-		this.paddleL = new Paddle(50, (this.canvasHeight - height) / 2, width, height, accel, em, cof);
+	initPaddleL = (width, height, accel, accelInit, em, cof, item) => {
+		let paddlex = 50;
+		if (item == 2)	paddlex += 100;
+		this.paddleL = new Paddle(paddlex, (this.canvasHeight - height) / 2, width, height, accel, accelInit, em, cof, item);
 	}
-	initPaddleR = (width, height, accel, em, cof) => {
-		this.paddleR = new Paddle(this.canvasWidth - 50 - width, (this.canvasHeight - height) / 2, width, height, accel, em, cof);
+	initPaddleR = (width, height, accel, accelInit, em, cof, item) => {
+		let paddlex = 50;
+		if (item == 2)	paddlex += 100;
+		this.paddleR = new Paddle(this.canvasWidth - paddlex - width, (this.canvasHeight - height) / 2, width, height, accel, accelInit, em, cof, item);
 	}
 	initPlayer = (nicknameL, nicknameR) => {
 		this.playerL = new Player(nicknameL);
@@ -37,16 +41,12 @@ let Info = class {
 	resetGame = () => {
 		this.playerL.score = 0;
 		this.playerR.score = 0;
-		this.paddleL.x = 50;
 		this.paddleL.y = (this.canvasHeight - this.paddleL.height) / 2;
-		this.paddleR.x = this.canvasWidth - 50 - this.paddleR.width;
 		this.paddleR.y = (this.canvasHeight - this.paddleR.height) / 2;
 		this.ball.reset((this.canvasWidth - 7) / 2, (this.canvasHeight - 7) / 2);
 	}
 	resetRound = (dir) => {
-		this.paddleL.x = 50;
 		this.paddleL.y = (this.canvasHeight - this.paddleL.height) / 2;
-		this.paddleR.x = this.canvasWidth - 50 - this.paddleR.width;
 		this.paddleR.y = (this.canvasHeight - this.paddleR.height) / 2;
 		this.ball.reset((this.canvasWidth - 7) / 2, (this.canvasHeight - 7) / 2, dir);
 	}

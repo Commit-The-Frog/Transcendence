@@ -19,23 +19,38 @@
       h1 {
         margin-bottom: 10px;
       }
+      .input-label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      label {
+        margin-left: 5px;
+      }
     </style>
   </head>
   <body>
     <h1>Select game type</h1>
+    <div class="input-label">
+      <input id="mode" type="checkbox">
+      <label for="mode">turn item mode</label>
+    </div>
     <button id="btn1">1 vs 1</button>
     <button id="btn2">TOURNAMENT</button>
     <script>
-		const btn1 = document.getElementById('btn1');
-		const btn2 = document.getElementById('btn2');
-     	btn1.addEventListener('click', () => {
-        	const url = `nickname.html?type=1`;
-       		window.location.href = url;
-    	});
-		btn2.addEventListener('click', () => {
-			const url = `nickname.html?type=2`;
-			window.location.href = url;
-		});
+      const mode = document.getElementById("mode");
+      const btn1 = document.getElementById('btn1');
+      const btn2 = document.getElementById('btn2');
+      btn1.addEventListener('click', () => {
+          let url = `nickname.html?type=1`;
+          url += `&item_mode=${mode.checked}`;
+          window.location.href = url;
+        });
+        btn2.addEventListener('click', () => {
+          let url = `nickname.html?type=2`;
+          url += `&item_mode=${mode.checked}`;
+          window.location.href = url;
+      });
     </script>
   </body>
 </html>

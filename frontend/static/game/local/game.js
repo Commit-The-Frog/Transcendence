@@ -4,17 +4,7 @@ import { calculate } from './calculate.js';
 import { Key } from './key.js';
 import { Info } from './info.js';
 
-/*
-	토너먼트와 1대1
-	- 각각 4, 2명의 플레이어 닉네임을 보내준다.
-	- 토너먼트는 대진표를 먼저 보여준다.(필수는 아님)
-	- 현재 대전상대를 보여주고, 아무 버튼을 누르면 시작한다.
-	- 1대1은 게임이 종료되면 종료 화면이 나오고, 누르면 홈으로 이동한다.
-	- 토너먼트는 1게임이 종료되면 2게임이 시작된다....4게임까지 진행함
-	- 토너먼트는 모든 게임이 종료되면 종료 화면이 나오고, 누르면 홈으로 이동한다.
-*/
-
-const ballSpeed = 10;
+const ballSpeed = 5;
 const ballSpeedMax = 10;
 const paddleLWidth = 10;
 const paddleLHeight = 100;
@@ -23,30 +13,31 @@ const paddleRHeight = 100;
 const ballRadius = 15;
 const maxScore = 5;
 const em = 0.03;
-const cof = 2;
+const cof = 0.3;
 const accelInit = 4;
 const accel = 0.15;
 let timer = 0;
 
 let Game = class {
-	constructor(type, nickname) {
+	constructor(type, nickname, itemList) {
+		console.log(itemList)
 		this.tourRound = 1;
 		this.winners = [];
 		this.nickname = nickname;
+		this.itemList = itemList;
 		this.interval = 0;
 		this.canvas = new Canvas("ping pong");
 		this.ui = new UserInterface(this.canvas);
 		this.key = new Key();
 		this.info = new Info(this.canvas.width, this.canvas.height, maxScore, type);
 		this.info.initBall(ballRadius, ballSpeed, ballSpeedMax);
-		this.info.initPaddleL(paddleLWidth, paddleLHeight, accel, accelInit, em, cof);
-		this.info.initPaddleR(paddleRWidth, paddleRHeight, accel, accelInit, em, cof);
+		this.info.initPaddleL(paddleLWidth, paddleLHeight, accel, accelInit, em, cof, itemList[0]);
+		this.info.initPaddleR(paddleRWidth, paddleRHeight, accel, accelInit, em, cof, itemList[1]);
 		this.info.initPlayer(this.nickname[0], this.nickname[1]);
 	}
 
 	// ### rendering ###
 	renderGame = () => {
-		
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// 화면 렌더링

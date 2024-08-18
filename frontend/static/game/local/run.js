@@ -1,14 +1,16 @@
 import { Game } from "./game.js";
 
 /*
-	1. 타입에 따라서 1대1이나 토너먼트를 한다.
-	2. 타입에 따라서 다른 개수의 닉네임을 받는다.(2, 4개)
-	3. 1대1인 경우, 그냥 게임을 한다.(run)
-	4. 토너먼트인 경우, 대진표를 짜서 해당하는 플레이어들의 게임을 진행시킨다.(run)
+	item
+	1) 상대의 패들 길이를 20으로 줄이는 아이템
+	2) 상대 패들을 앞으로 100 당기는 아이템
+	3) 상대 패들 마찰제거: 미끄러워짐
+	4) 상대 패들 투명화: rgba(0,0,0,0.01)
 */
 
 const params = new URLSearchParams(window.location.search);
 const type = params.get('type');
+const mode = params.get('item_mode');
 
 // Fisher-Yates Shuffle
 const shuffleArray = (array) => {
@@ -34,8 +36,11 @@ const getNicknameList = () => {
 // 메인
 (function run() {
 	const nicknameList = getNicknameList();
+	let itemList = [1, 2, 3, 4];
+	shuffleArray(itemList);
 	if (type == 2) shuffleArray(nicknameList);
-	let game = new Game(type, nicknameList);
+	if (mode === "false")itemList = [0, 0, 0, 0];
+	let game = new Game(type, nicknameList, itemList);
 
 	game.init();
 }());

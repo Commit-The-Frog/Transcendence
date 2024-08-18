@@ -45,6 +45,7 @@
 		const button = document.getElementById('btn'); // 버튼 요소 선택
 		const params = new URLSearchParams(window.location.search);
 		const type = params.get('type');
+		const mode = params.get('item_mode');
 		const gameType = document.createElement('h1');
 		let n;
 		if (type == 1) {
@@ -81,7 +82,7 @@
 		}
 	  
 		button.addEventListener('click', () => {
-			let url = `local.html?type=${type}`;
+			let url = `local.html?type=${type}&item_mode=${mode}`;
 
 			for (let i = 1; i <= n; i++) {
 				const playerName = document.getElementById(`player${i}`).value;

@@ -1,10 +1,15 @@
 import { Obj } from './object.js';
 
 class Paddle extends Obj {
-	constructor(x, y, width, height, accel, accelInit, em = 0.01, cof = 0.1) {
-		super(x, y);
+	constructor(x, y, width, height, accel, accelInit, em = 0.01, cof = 0.1, itemNum, dir) {
+		if (itemNum == 2 && dir === 'L')		super(x + 100, y);
+		else if (itemNum == 2 && dir === 'R')	super(x - 100, y);
+		else									super(x, y);
+		this.itemNum = itemNum;
 		this.width = width;
 		this.height = height;
+		if (itemNum == 1)
+			this.height = 60;
 		this.accel = accel;
 		this.accelInit = accelInit;
 		this.em = em;
@@ -26,7 +31,9 @@ class Paddle extends Obj {
 	draw = (ctx) => {
 		ctx.beginPath();
 		ctx.rect(this.x, this.y, this.width, this.height);
-		ctx.fillStyle = "black";
+		ctx.fillStyle = `rgba(0,0,0,1)`;
+		if (this.itemNum == 4)
+			ctx.fillStyle = `rgba(0,0,0,0.01)`;
 		ctx.fill();
 		ctx.closePath();
 	}
