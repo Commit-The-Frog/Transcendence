@@ -34,6 +34,7 @@ const getNicknameList = () => {
 // 메인
 (function run() {
 	const nicknameList = getNicknameList();
+	if (type == 2) shuffleArray(nicknameList);
 	let game = new Game(type, nicknameList);
 
 	game.init();

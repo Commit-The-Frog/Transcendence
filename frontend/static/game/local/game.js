@@ -46,6 +46,7 @@ let Game = class {
 
 	// ### rendering ###
 	renderGame = () => {
+		
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		// 화면 렌더링
