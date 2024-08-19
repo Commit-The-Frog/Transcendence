@@ -41,13 +41,16 @@
       const mode = document.getElementById("mode");
       const btn1 = document.getElementById('btn1');
       const btn2 = document.getElementById('btn2');
+      const params = new URLSearchParams(window.location.search);
+      const loc = params.get('location');
+
       btn1.addEventListener('click', () => {
-          let url = `nickname.html?type=1`;
+          let url = `nickname.html?location=${loc}&type=1`;
           url += `&item_mode=${mode.checked}`;
           window.location.href = url;
         });
         btn2.addEventListener('click', () => {
-          let url = `nickname.html?type=2`;
+          let url = `nickname.html?location=${loc}&type=2`;
           url += `&item_mode=${mode.checked}`;
           window.location.href = url;
       });
