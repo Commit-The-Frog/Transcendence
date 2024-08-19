@@ -58,7 +58,7 @@ function MyReact () {
                 effects[stateKey].cleanup();
             }
 
-            const newcleanup = callback();
+            const newcleanup = callback;
             effects[stateKey] = {
                 cleanup : typeof newcleanup === 'function' ? newcleanup : null,
                 deps : dependencies,
@@ -76,7 +76,7 @@ function MyReact () {
         for (let key in effects){
             effects[key].cleanup?.();
         }
-        options.effects = [];
+        options.effects = {};
     });
     function render (root, rootComponent) {
         options.root = root ;

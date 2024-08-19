@@ -1,0 +1,15 @@
+.newjeans {
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+}
+
+.newjeansGameWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.newjeansCanvas {
+    width: 800px;
+    height: 600px;
+}

@@ -1,12 +1,14 @@
 import { Home } from "../../pages/Home.js";
 import { UserInfo } from "../../pages/UserInfo.js";
 import { parseUrl } from "../../utils/parseUrl.js";
+import Newjeans from "../../pages/Newjeans.js"
 
 export function Router() {
 
 const routes = {
     "/" : Home,
     "/userinfo/:id" : UserInfo,
+    "/newjeans" : Newjeans
 }
 
 const path = window.location.pathname;

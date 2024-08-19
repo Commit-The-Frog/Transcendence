@@ -13,13 +13,18 @@ export function Header () {
         // pingpongurl로 변경해야함~
         changeUrl("/userinfo/1213");
     }
+    const clickHeaderNewjeansHandler = () => {
+        changeUrl("/newjeans");
+    }
     bindEventHandler('click' , "clickHeaderMyPageHandler", clickHeaderMyPageHandler);
     bindEventHandler('click' , "clickHeaderPingPongHandler", clickHeaderPingPongHandler);
+    bindEventHandler('click' , "clickHeaderNewjeansHandler", clickHeaderNewjeansHandler);
     return `
     <div class="header">
         <div class="routingBtnWrapper">
             <button class="clickHeaderMyPageHandler">${translations[getRecoilValue(languageState)]?.mypage} </button>
             <button class="clickHeaderPingPongHandler"> ${translations[getRecoilValue(languageState)]?.pingpong} </button>
+            <button class="clickHeaderNewjeansHandler"> ${translations[getRecoilValue(languageState)]?.newjeans} </button>
         </div>
         <div class="languageBtnWrapper1">
             ${LanguageBtn()}
