@@ -18,10 +18,13 @@ function MyReact () {
         }
         const state = options.states[stateKey];
         const setState = (newState) => {
-            if (Object.is(options.states[stateKey], newState)) {
+            const nextState = typeof newState === 'function' 
+            ? newState(options.states[stateKey]) // 함수일 경우 이전 상태를 받아 새로운 상태를 계산
+            : newState; // 값일 경우 그대로 사용
+            if (Object.is(options.states[stateKey], nextState)) {
                 return;
             }
-            options.states[stateKey] = newState;
+            options.states[stateKey] = nextState;
             _render();
         };
         return [state, setState];

@@ -10,8 +10,7 @@ export function Header () {
         changeUrl("/userinfo/1213");
     }
     const clickHeaderPingPongHandler = () => {
-        // pingpongurl로 변경해야함~
-        changeUrl("/userinfo/1213");
+        changeUrl("/pingpong");
     }
     const clickHeaderNewjeansHandler = () => {
         changeUrl("/newjeans");
@@ -24,7 +23,6 @@ export function Header () {
         <div class="routingBtnWrapper">
             <button class="clickHeaderMyPageHandler">${translations[getRecoilValue(languageState)]?.mypage} </button>
             <button class="clickHeaderPingPongHandler"> ${translations[getRecoilValue(languageState)]?.pingpong} </button>
-            <button class="clickHeaderNewjeansHandler"> ${translations[getRecoilValue(languageState)]?.newjeans} </button>
         </div>
         <div class="languageBtnWrapper1">
             ${LanguageBtn()}
