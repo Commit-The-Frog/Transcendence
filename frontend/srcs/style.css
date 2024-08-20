@@ -1,6 +1,6 @@
 @import url('style/home.css');
 @import url('style/userinfo.css');
-@import url('style/newjeans.css');
+@import url('style/pingpong.css');
 
 :root{
     --default-bg-color : #C8A1E0;
@@ -8,8 +8,11 @@
     --default-btn-color: #FFE9FF;
     --default-aqua-color :#4FFBDF;
     --btn-color-yellow : #F9F871;
+    --btn-color-yellow2 : #ffffdf;
     --btn-color-blue :#00D2FC;
-    --btn-color-red :#FF6F91;
+    --btn-color-pink :#fd85a1;
+    --btn-color-pink2 : #ffebf0;
+    --btn-color-pink3 :#ff9fb6;
     --header-bg-color : #FFFFFF;
     --text-gray-color : #808080;
 }
@@ -92,4 +95,26 @@ button:active {
 
 .pingpong {
     padding: 30px;
+}
+
+input {
+    background-color: white;
+    border-radius: 10px;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    padding: 3px;
+    margin: 2px;
+    padding-left: 10px;
+    border: 1px solid var(--btn-color-yellow2);
+    background: linear-gradient(to bottom,  var(--btn-color-yellow2) 50%, var(--btn-color-yellow) 100%);
+}
+
+input:hover {
+    box-shadow: 4px 4px 8px var(--btn-color-yellow);
+    cursor: pointer;
+}
+
+input:focus {
+    outline: none;
+    background-color: var(--btn-color-yellow2);
+    border: 1px solid black;
 }

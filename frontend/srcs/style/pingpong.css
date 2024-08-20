@@ -1,0 +1,191 @@
+.pingpong {
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+    min-height: 90vh;
+    position: relative;
+}
+
+.pingpongWrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 90vh;
+    justify-content: center;
+    position: relative;
+}
+
+.pingpong .hanniWrapper {
+    position:absolute;
+    left: 50px;
+    bottom: 50px;
+}
+
+.pingpong .minjiWrapper {
+    position:absolute;
+    right: 50px;
+    top: 50px;
+}
+
+.pingpongtype {
+    height: 500px;
+    width: 800px;
+    background-color: hwb(346 75% 0% / 0.302);
+    display: flex;
+    padding: 20px;
+    position: relative;
+    border-radius: 0 10px 10px 10px;
+}
+
+.pingpongselectbox {
+    margin-top: 200px;
+}
+
+.pingpongtypeWrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+}
+
+.pingpongtype .itemBtnWrapper {
+    display: flex;
+    justify-content: center;
+    height: 60px;
+}
+
+.pingpongtype .itemBtn {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+}
+
+.pingpongtype .itemBtnWrapper p {
+    font-size: 20px;
+    margin: 0px;
+    height: 60px;
+    line-height: 60px;
+    margin-left: 15px;
+}
+
+.pingpongtype .itemBtnWrapper div {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.pingpongtype .typeBtnWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pingpongtype .typeBtnWrapper2 {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.pingpongtype .typeBtnWrapper button{
+    display: flex;
+    padding: 2px;
+    width: 165px;
+    height: 40px;
+    margin-top: 15px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--btn-color-pink);
+    background: linear-gradient(to bottom,  var(--btn-color-yellow2) 50%, var(--btn-color-yellow) 100%);
+}
+.pingpongtype .typeBtnWrapper .selected{
+    box-shadow: 0 0 5px 5px rgb(255, 192, 207, 0.8);
+}
+
+
+
+.pingponginputWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.pingponginputWrapper input {
+    border: 1px solid var(--btn-color-pink);
+    background: white;
+    width: 300px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.pingponginputWrapper input:hover {
+    box-shadow: 4px 4px 8px var(--btn-color-pink2);
+    cursor: pointer;
+}
+
+.pingponginputWrapper input:focus {
+    box-shadow: 4px 4px 8px var(--btn-color-pink2);
+    background: white;
+    /* background: #ff9fb54f; */
+    border: 3px solid  var(--btn-color-pink3);
+    cursor: pointer;
+}
+
+.startBtnWrapper {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}
+
+.itemBtnWrapper .selected {
+    background-color: var(--btn-color-pink3);
+}
+
+.itemBtnWrapper  span{
+    color: white;
+    opacity: 1;
+    text-shadow: none;
+}
+
+.pingpongStart {
+    width: 100px;
+    height: 40px;
+    background: linear-gradient(to bottom,  var(--btn-color-yellow2) 50%, var(--btn-color-yellow) 100%);
+    border: 1px solid #656500;
+}
+
+/* .pingpongselect {
+    margin-top: 300px;
+    height: 500px;
+    width: 800px;
+    background-color: rgb(255, 192, 207, 0.1);
+    border: 1px solid var(--btn-color-pink);
+    border-radius: 20px;
+    display: flex;
+    padding: 20px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+} */
+
+.pingpongselectWrapper {
+    display: flex;
+}
+
+.pingpongselectWrapper button {
+    width: 150px;
+    height: 40px;
+    border-radius: 0px;
+    background: rgb(255, 192, 207, 0.1);
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0% 100%);
+    background-color: rgb(255, 192, 207, 0.5);
+    border: none;
+}
+
+.pingpongselectWrapper .selected {
+    background-color: rgb(255, 192, 207, 0.3);
+}
+.pingponglocalgame canvas {
+    position: relative;
+    z-index: 100;
+}

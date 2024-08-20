@@ -18,7 +18,7 @@ function MyReact () {
         }
         const state = options.states[stateKey];
         const setState = (newState) => {
-            const nextState = typeof newState === 'function' 
+            const nextState = typeof newState === 'function'
             ? newState(options.states[stateKey]) // 함수일 경우 이전 상태를 받아 새로운 상태를 계산
             : newState; // 값일 경우 그대로 사용
             if (Object.is(options.states[stateKey], nextState)) {
@@ -29,28 +29,12 @@ function MyReact () {
         };
         return [state, setState];
     }
-    // function useState (initState) {
-    //     const {currentStateKey : key, states} = options;
-    //     if (states.length === key) states.push(initState);
-    //     const state = states[key];
-    //     const setState = (newState) => {
-    //         if (Object.is(states[key], newState)) {
-    //             return ;
-    //         }
-    //         states[key] = newState;
-    //         console.log(states);
-    //         _render();
-    //     }
-    //     options.currentStateKey += 1;
-    //     return [state, setState];
-    // }
     function useEffect (callback, dependencies , key = null) {
         const { states, effects} = options;
         const stateKey = key || options.currentStateKey++;
         const oldDependencies = states[stateKey];
 
         let isChanged = true;
-        
         if (oldDependencies && dependencies) {
             isChanged = dependencies.some(
                 (dep, i) => !Object.is(dep, oldDependencies[i])
