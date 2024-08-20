@@ -1,7 +1,7 @@
 FROM node:18-alpine
 
-RUN mkdir transcendence
-WORKDIR /transcendence
+RUN mkdir /frontend
+WORKDIR /frontend
 
 COPY package*.json ./
 
@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "./frontend/app.js"]
+CMD ["node", "app.js"]

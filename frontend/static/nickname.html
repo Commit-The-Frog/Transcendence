@@ -109,10 +109,11 @@
 	  
 		button.addEventListener('click', () => {
 			let url = `${loc}.html?location=${loc}&type=${type}&item_mode=${mode}`;
+			let nickname;
 
 			for (let i = 1; i <= n; i++) {
-				const playerName = document.getElementById(`player${i}`).value;
-				url += `&player${i}=${playerName}`;
+				nickname = document.getElementById(`player${i}`).value;
+				url += `&player${i}=${nickname}`;
 			}
 			if (loc == 'local')
 				window.location.href = url;
@@ -129,7 +130,7 @@
 				body.appendChild(modal);
 
 				// 웹소켓 열고 매치메이킹 시작
-				const wsUrl = `ws://10.18.226.23:8000/ws/game/lobby/`;
+				const wsUrl = `ws://10.18.223.141:8000/ws/game/lobby/`;
 				const ws = new WebSocket(wsUrl);
 
 				ws.onopen = (event) => {
@@ -142,7 +143,7 @@
 
 					if (event.data) {
 						modal.remove();
-						window.location.href = `/game/match/${matchName}/`;
+						window.location.href = `/game/match/${matchName}?nickname=${nickname}`;
 					}
 				}
 
