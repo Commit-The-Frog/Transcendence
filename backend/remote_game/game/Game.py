@@ -54,8 +54,14 @@ class Game:
                     'type': 'game_update',
                     'data': {
                         'status': Game.game_status[self.status],
-                        'player1Score': self.players[0].get_score(),
-                        'player2Score': self.players[1].get_score(),
+                        'playerL': {
+                            'nickname': self.players[0].get_nickname(),
+                            'score': self.players[0].get_score(),
+                        },
+                        'playerR': {
+                            'nickname': self.players[1].get_nickname(),
+                            'score': self.players[1].get_score(),
+                        },
                         'ball': {
                             'x': self.__ball.x,
                             'y': self.__ball.y,
@@ -91,8 +97,14 @@ class Game:
                     'type': 'game_update',
                     'data' : {
                         'status': Game.game_status[self.status],
-                        'player1Score': self.players[0].get_score(),
-                        'player2Score': self.players[1].get_score(),
+                        'playerL': {
+                            'nickname': self.players[0].get_nickname(),
+                            'score': self.players[0].get_score(),
+                        },
+                        'playerR': {
+                            'nickname': self.players[1].get_nickname(),
+                            'score': self.players[1].get_score(),
+                        },
                         'ball': {
                             'x': self.__ball.x,
                             'y': self.__ball.y,
