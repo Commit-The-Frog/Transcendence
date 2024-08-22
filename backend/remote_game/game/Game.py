@@ -55,11 +55,11 @@ class Game:
                     'data': {
                         'status': Game.game_status[self.status],
                         'playerL': {
-                            'nickname': self.players[0].get_nickname(),
+                            'nickname': self.players[0].get_id(),
                             'score': self.players[0].get_score(),
                         },
                         'playerR': {
-                            'nickname': self.players[1].get_nickname(),
+                            'nickname': self.players[1].get_id(),
                             'score': self.players[1].get_score(),
                         },
                         'ball': {
