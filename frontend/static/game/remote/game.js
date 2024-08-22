@@ -33,7 +33,7 @@ let Game = class {
 					this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 				});
 			} else if (this.info && this.info.status === 'game over') {
-				this.end(this.info.winner)
+				this.end()
 			}
 		};
 	}
@@ -57,9 +57,9 @@ let Game = class {
 		this.animationFrameId = requestAnimationFrame(this.renderStart);
 	}
 
-	renderGameOver = (winner) => {
+	renderGameOver = () => {
 		timer++;
-		this.ui.drawGameOverScreen(this.info.type, timer % 360, winner);
+		this.ui.drawGameOverScreen(1, (timer * 2) % 360, this.info.winner);
 		if (this.key.spacePressed) {
 			this.home();
 			// if (this.info.type == 1) {
@@ -85,17 +85,13 @@ let Game = class {
 	}
 
 	start = () => {
-		if (this.animationFrameId) {
-			cancelAnimationFrame(this.animationFrameId);
-		}
+		cancelAnimationFrame(this.animationFrameId);
 		this.renderGame();
 	}
 
-	end = (winner) => {
-		if (this.animationFrameId) {
-			cancelAnimationFrame(this.animationFrameId);
-		}
-		this.renderGameOver(winner);
+	end = () => {
+		cancelAnimationFrame(this.animationFrameId);
+		this.renderGameOver();
 	}
 
 	home = () => {
