@@ -12,7 +12,7 @@ let Game = class {
 		this.key = new Key();
 		this.info = null;
 		this.ws = null;
-		this.wsUrl = `ws://10.18.223.141:8000/ws/game/match/?match_name=${matchName}&id=${nickname}`;
+		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/match?match_name=${matchName}&id=${nickname}`;
 		this.status = 'ready';
 		this.count = 0;
 	}
@@ -30,13 +30,14 @@ let Game = class {
 					// 화면 렌더링
 					this.ui.drawHalfLine();
 					this.ui.drawInfo(this.info);
+					this.ui.drawScoreAndNickname(playerL, playerR);
 				});
 			}
 		};
 	}
 
 	renderStart = () => {
-		this.ui.drawGameStartScreen('playerL', 'playerR');
+		this.ui.drawGameStartScreen(this.info.playerL, this.info.playerR);
 		if (this.key.nowPressed) { // 준비완료 버튼(아무버튼이나)
 			if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
 				this.ws = new WebSocket(this.wsUrl);

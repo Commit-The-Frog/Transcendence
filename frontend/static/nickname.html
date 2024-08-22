@@ -57,6 +57,7 @@
     <h2 id="msg">Please insert player nickname</h2>
     <button id="btn">start</button>
 
+	<script src="./config/config.js"></script>
     <script>
 		const body = document.body; // body 요소 선택
 		const h2 = document.getElementById('msg');
@@ -113,6 +114,11 @@
 
 			for (let i = 1; i <= n; i++) {
 				nickname = document.getElementById(`player${i}`).value;
+
+				if (!nickname) {
+					alert(`Player ${i} nickname is required!`);
+					return ; // 하나라도 빈 값이 있으면 for 루프 중지
+				}
 				url += `&player${i}=${nickname}`;
 			}
 			if (loc == 'local')
@@ -130,7 +136,7 @@
 				body.appendChild(modal);
 
 				// 웹소켓 열고 매치메이킹 시작
-				const wsUrl = `ws://10.18.223.141:8000/ws/game/lobby/`;
+				const wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/lobby/`;
 				const ws = new WebSocket(wsUrl);
 
 				ws.onopen = (event) => {
