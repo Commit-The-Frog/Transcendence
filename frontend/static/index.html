@@ -7,8 +7,23 @@
 </head>
 <body>
 	<h1>Choose Game type</h1>
-	<a href="./type.html">LOCAL</a>
+	<button id="local">LOCAL</button>
 	<br>
-	<a href="./remote.html">REMOTE</a>
+	<button id="remote">REMOTE</button>
+	<script>
+		const localBtn = document.getElementById("local");
+		const remoteBtn = document.getElementById("remote");
+
+		localBtn.addEventListener('click', ()=> {
+			let url = `type.html?location=local`;
+
+			window.location.href = url;
+		})
+		remoteBtn.addEventListener('click', ()=> {
+			let url = `type.html?location=remote`;
+
+			window.location.href = url;
+		})
+	</script>
 </body>
 </html>
