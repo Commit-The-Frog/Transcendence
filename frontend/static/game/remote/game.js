@@ -74,6 +74,7 @@ let Game = class {
 			// 	}
 			// }
 		}
+		this.animationFrameId = requestAnimationFrame(this.renderGameOver);
 	}
 
 	// ### control ###
@@ -94,7 +95,7 @@ let Game = class {
 		if (this.animationFrameId) {
 			cancelAnimationFrame(this.animationFrameId);
 		}
-		this.renderGameOver(winner.nickname);
+		this.renderGameOver(winner);
 	}
 
 	home = () => {
