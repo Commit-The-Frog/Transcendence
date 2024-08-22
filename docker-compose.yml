@@ -1,0 +1,32 @@
+version: '3.8'
+
+name: transcendence
+
+services:
+  backend:
+    container_name: backend
+    image: backend-img
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "8000:8000"  # Django 기본 포트
+    # env_file:
+    #   - ./backend/.env  # 환경 변수 파일이 있다면 명시적으로 로드
+
+  frontend:
+    container_name: frontend
+    image: frontend-img
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"  # Node.js 기본 포트
+networks:
+  app-network:
+    driver: bridge
+
