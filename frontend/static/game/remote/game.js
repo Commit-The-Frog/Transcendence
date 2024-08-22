@@ -37,7 +37,7 @@ let Game = class {
 	}
 
 	renderStart = () => {
-		this.ui.drawGameStartScreen(this.info.playerL, this.info.playerR);
+		this.ui.drawGameStartScreen();
 		if (this.key.nowPressed) { // 준비완료 버튼(아무버튼이나)
 			if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
 				this.ws = new WebSocket(this.wsUrl);

@@ -6,7 +6,7 @@ let UserInterface = class {
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 	}
-	drawGameStartScreen = (playerL, playerR) => {
+	drawGameStartScreen = () => {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -16,10 +16,6 @@ let UserInterface = class {
 		this.ctx.fillText('PING PONG', this.width / 2, this.height / 5, 1000);
 		this.ctx.font = `30px sans-serif`;
 		this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 4 / 5, 1000);
-		this.ctx.font = `50px sans-serif`;
-		this.ctx.fillText(playerL.nickname, this.width / 4 + 40, this.height /2, 1000);
-		this.ctx.fillText('vs', this.width / 2, this.height / 2, 100);
-		this.ctx.fillText(playerR.nickname, this.width * 3 / 4 - 40, this.height /2, 1000);
 	}
 	drawGameOverScreen = (type, opacity, winner) => {
 		opacity /= 100;
