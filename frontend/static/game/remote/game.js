@@ -23,7 +23,7 @@ let Game = class {
 		this.ws.onmessage = (event) => {
 			this.count++;
 			this.info = JSON.parse(event.data);
-			if (this.info) {
+			if (this.info && this.info.status === 'in progress') {
 				// requestAnimationFrame을 사용하여 렌더링
 				this.animationFrameId = requestAnimationFrame(() => {
 					this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -32,6 +32,8 @@ let Game = class {
 					this.ui.drawInfo(this.info);
 					this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 				});
+			} else if (this.info && this.info.status === 'game over') {
+				this.end(this.info.winner)
 			}
 		};
 	}
@@ -58,19 +60,19 @@ let Game = class {
 	renderGameOver = (winner) => {
 		timer++;
 		this.ui.drawGameOverScreen(this.info.type, timer % 360, winner);
-		this.info.gameover = false;
 		if (this.key.HPressed) {
-			if (this.info.type == 1) {
-				this.home();
-			} else if (this.info.type == 2) {
-				if (this.tourRound <= 2) {
-					this.init();
-				} else if (this.tourRound == 3) {
-					this.init();
-				} else {
-					this.home();
-				}
-			}
+			this.home();
+			// if (this.info.type == 1) {
+			// 	this.home();
+			// } else if (this.info.type == 2) {
+			// 	if (this.tourRound <= 2) {
+			// 		this.init();
+			// 	} else if (this.tourRound == 3) {
+			// 		this.init();
+			// 	} else {
+			// 		this.home();
+			// 	}
+			// }
 		}
 	}
 
