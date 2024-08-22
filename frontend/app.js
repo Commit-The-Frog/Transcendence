@@ -22,6 +22,12 @@ app.get('/game/match/:uuid', (req, res) => {
     res.sendFile(path.join(__dirname, 'static', 'remote.html'));
 });
 
+app.get('/config.js', (req, res) => {
+    const filePath = path.join(__dirname, 'static', 'config/config.js');
+    res.type(mime.getType(filePath));  // MIME 타입을 자동으로 설정
+    res.sendFile(filePath);
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

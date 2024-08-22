@@ -12,7 +12,7 @@ let Game = class {
 		this.key = new Key();
 		this.info = null;
 		this.ws = null;
-		this.wsUrl = `ws://10.18.223.141:8000/ws/game/match/?match_name=${matchName}&id=${nickname}`;
+		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/match?match_name=${matchName}&id=${nickname}`;
 		this.status = 'ready';
 		this.count = 0;
 	}
