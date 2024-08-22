@@ -114,6 +114,11 @@
 
 			for (let i = 1; i <= n; i++) {
 				nickname = document.getElementById(`player${i}`).value;
+
+				if (!nickname) {
+					alert(`Player ${i} nickname is required!`);
+					return ; // 하나라도 빈 값이 있으면 for 루프 중지
+				}
 				url += `&player${i}=${nickname}`;
 			}
 			if (loc == 'local')
