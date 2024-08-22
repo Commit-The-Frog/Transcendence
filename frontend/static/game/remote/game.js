@@ -60,7 +60,7 @@ let Game = class {
 	renderGameOver = (winner) => {
 		timer++;
 		this.ui.drawGameOverScreen(this.info.type, timer % 360, winner);
-		if (this.key.HPressed) {
+		if (this.key.spacePressed) {
 			this.home();
 			// if (this.info.type == 1) {
 			// 	this.home();

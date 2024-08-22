@@ -1,6 +1,6 @@
 let Key = class {
 	constructor() {
-		this.HPressed = false;
+		this.spacePressed = false;
 		this.upPressed = false;
 		this.downPressed = false;
 		this.nowPressed = null;
@@ -20,8 +20,8 @@ let Key = class {
 			this.downPressed = true;
 			this.sendKeyEventToWs();
 		}
-		else if (e.code === "KeyH")
-			this.HPressed = true;
+		else if (e.code === "Space")
+			this.spacePressed = true;
 	}
 	keyUpHandler = (e) => {
 		if (e) this.nowPressed = null;
@@ -33,8 +33,8 @@ let Key = class {
 			this.downPressed = false;
 			this.sendKeyEventToWs();
 		}
-		else if (e.code === "KeyH")
-			this.HPressed = false;
+		else if (e.code === "Space")
+			this.spacePressed = false;
 	}
 	setKeyEventHandler() {
 		document.addEventListener("keydown", this.keyDownHandler, false);
