@@ -8,9 +8,6 @@ import { Game } from "./game.js";
 	4) 상대 패들 투명화: rgba(0,0,0,0.01)
 */
 
-const params = new URLSearchParams(window.location.search);
-const type = params.get('type');
-const mode = params.get('item_mode');
 
 // Fisher-Yates Shuffle
 const shuffleArray = (array) => {
@@ -25,7 +22,7 @@ const shuffleArray = (array) => {
 }
 
 // url 파라미터에서 닉네임 가져오기
-const getNicknameList = () => {
+const getNicknameList = (params, type) => {
 	let nicknameList = [];
 
 	for (let i=0; i<=type*2-1; i++)
@@ -35,10 +32,13 @@ const getNicknameList = () => {
 
 // 메인
 function run() {
-	const nicknameList = getNicknameList();
+	const params = new URLSearchParams(window.location.search);
+	const type = params.get('type');
+	const mode = params.get('item_mode');
+	const nicknameList = getNicknameList(params, type);
 	let itemList = [1, 2, 3, 4];
 	shuffleArray(itemList);
-	if (type == 2) shuffleArray(nicknameList);
+	if (type == "2") shuffleArray(nicknameList);
 	if (mode === "false")itemList = [0, 0, 0, 0];
 	let game = new Game(type, nicknameList, itemList);
 

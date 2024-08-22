@@ -7,6 +7,7 @@ function MyReact () {
         renderCount: 0,
         states : {},
         effects : {},
+        callbacks: {},
         root : null,
         rootComponent : null
     }
@@ -19,8 +20,8 @@ function MyReact () {
         const state = options.states[stateKey];
         const setState = (newState) => {
             const nextState = typeof newState === 'function'
-            ? newState(options.states[stateKey]) // 함수일 경우 이전 상태를 받아 새로운 상태를 계산
-            : newState; // 값일 경우 그대로 사용
+            ? newState(options.states[stateKey])
+            : newState;
             if (Object.is(options.states[stateKey], nextState)) {
                 return;
             }
@@ -53,6 +54,19 @@ function MyReact () {
             states[stateKey] = dependencies;
         }
     }
+    function useCallback(callback, dependencies, key = null) {
+        const stateKey = key || options.currentStateKey++;
+        const oldDependencies = options.states[stateKey];
+        const hasChanged = !oldDependencies || dependencies.some(
+            (dep, i) => !Object.is(dep, oldDependencies[i])
+        );
+        if (hasChanged) {
+            options.callbacks[stateKey] = callback;
+            options.states[stateKey] = dependencies;
+        }
+
+        return options.callbacks[stateKey];
+    }
     const _render = debounceFrame(()=>{
         const {root, rootComponent, effects} = options;
         if (!root || !rootComponent) return ;
@@ -64,6 +78,7 @@ function MyReact () {
             effects[key].cleanup?.();
         }
         options.effects = {};
+        options.callbacks = {};
     });
     function render (root, rootComponent) {
         options.root = root ;
@@ -72,7 +87,7 @@ function MyReact () {
         _render();
     }
   
-    return { useState, useEffect, render , _render };
+    return { useState, useEffect, render , _render, useCallback };
 }
   
- export const { useState, useEffect , render, _render } = MyReact();
+ export const { useState, useEffect , render, _render, useCallback } = MyReact();

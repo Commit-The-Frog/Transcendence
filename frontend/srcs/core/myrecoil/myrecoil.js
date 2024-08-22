@@ -80,8 +80,8 @@ function MyRecoil() {
         const setRecoilState = useSetRecoilState(recoilValue);
         return [state, setRecoilState];
     }
-    return {atom, selector, useRecoilState, getRecoilValue};
+    return {atom, selector, useRecoilState, getRecoilValue, useRecoilValue};
 }
 
 
-export const {atom, selector, useRecoilState, getRecoilValue} = MyRecoil();
+export const {atom, selector, useRecoilState, getRecoilValue, useRecoilValue} = MyRecoil();

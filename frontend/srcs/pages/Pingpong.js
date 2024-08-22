@@ -1,9 +1,8 @@
 import { Header } from "../components/Header.js";
-import PingPongSelect from "../components/PingPongSelect.js";
-import PingpongType from "../components/PingPongType.js";
 import { bindEventHandler } from "../utils/bindEventHandler.js";
 import { changeUrl } from "../utils/changeUrl.js";
 import PingPongLocalGame from "../components/PingPongLocalGame.js"
+import PingPongSelectBox from "../components/PingPongSelectBox.js";
 
 const pingpongParamRoute = () => {
     const params = window.location.pathname.split('/');
@@ -13,7 +12,7 @@ const pingpongParamRoute = () => {
         changeUrl('/pingpong/local');
         return ;
     } else if ((params2 === 'local' || params2 === 'remote') && !params3){
-        return PingpongType;
+        return PingPongSelectBox;
     } else if ((params2 === 'local' || params2 === 'remote') && params3 === "start") {
         return PingPongLocalGame;
     } 
@@ -43,7 +42,6 @@ const Pingpong = () => {
                 <img src="/Hanni2.png"/>
             </div>
                 <div class="pingpongselectbox">
-                    ${PingPongSelect()}
                     ${innerComponent ? innerComponent() : ''}
                 </div>
             <div class="minjiWrapper">

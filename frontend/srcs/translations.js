@@ -9,7 +9,16 @@ const translations = {
         friends: 'friends',
         history: 'history',
         win: 'win',
-        lose: 'lose'
+        lose: 'lose',
+        local : 'local',
+        remote : 'remote',
+        itemmode : 'item mode',
+        vs : '1 vs 1',
+        tournament : 'tournament',
+        playernamemissing : 'player name missing',
+        exceeds10characters : 'exceed 10 characters',
+        space : '&nbsp;',
+        start : 'start'
     },
     ko: {
         login: '로그인',
@@ -21,7 +30,16 @@ const translations = {
         friends: '친구',
         history: '기록',
         win: '승리',
-        lose: '패배'
+        lose: '패배',
+        local : '로컬',
+        remote : '원격',
+        itemmode : '아이템 모드',
+        vs : '1 대 1',
+        tournament : '토너먼트',
+        playernamemissing : '플레이어 이름이 없습니다',
+        exceeds10characters : '10자를 초과합니다',
+        space : '&nbsp;',
+        start : '시작'
     },
     fr: {
         login: 'connexion',
@@ -33,7 +51,16 @@ const translations = {
         friends: 'amis',
         history: 'historique',
         win: 'gagner',
-        lose: 'perdre'
+        lose: 'perdre',
+        local : 'local',
+        remote : 'à distance',
+        itemmode : 'mode objet',
+        vs : '1 contre 1',
+        tournament : 'tournoi',
+        playernamemissing : 'nom de joueur manquant',
+        exceeds10characters : 'dépasse 10 caractères',
+        space : '&nbsp;',
+        start : 'démarrer'
     }
 };
 

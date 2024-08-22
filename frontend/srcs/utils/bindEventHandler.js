@@ -9,9 +9,8 @@ export const createEventHandler = (className, callback) => {
   
   const handlerMap = {};
 
-  export const bindEventHandler = (eventType, className, callback, delay = 0) => {
-    const handlerKey = `${eventType}_${className}`;
-    
+  export const bindEventHandler = (eventType, className, callback, arg = '' , delay = 0) => {
+    const handlerKey = `${eventType}_${className}_${arg}`;
 
     if (!handlerMap[handlerKey]) {
       const handler = createEventHandler(className, callback);

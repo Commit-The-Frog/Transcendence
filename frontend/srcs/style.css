@@ -31,10 +31,10 @@ html {
 
 body {
     background-color: #C8A1E0;
-    height: 100vh;
-    width: 100vw;
-    min-width: 1000px;
-    min-height: 1000px;
+    height: 100%;
+    width: 100%;
+    min-width: 100vw;
+    min-height: 100vh;
 }
 
 body::-webkit-scrollbar {

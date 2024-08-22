@@ -19,9 +19,16 @@ export function UserInfo() {
     return `
     <div class="userInfo">
         ${Header()}
-        ${UserProfile({data : data})}
-        <div class="userHubWrapper">
-            ${UserHub()}
+        <div class="userInfoWrapper1">
+            <div class="danielleWrapper">
+                <img src="/Danielle1.png"/>
+            </div>
+            <div class="userInfoWrapper">
+                ${UserProfile({data : data})}
+                <div class="userHubWrapper">
+                    ${UserHub()}
+                </div>
+            </div>
         </div>
     </div>
     `
