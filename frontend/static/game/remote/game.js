@@ -30,7 +30,7 @@ let Game = class {
 					// 화면 렌더링
 					this.ui.drawHalfLine();
 					this.ui.drawInfo(this.info);
-					this.ui.drawScoreAndNickname(playerL, playerR);
+					this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 				});
 			}
 		};
