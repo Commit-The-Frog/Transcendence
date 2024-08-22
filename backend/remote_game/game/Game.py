@@ -98,11 +98,11 @@ class Game:
                     'data' : {
                         'status': Game.game_status[self.status],
                         'playerL': {
-                            'nickname': self.players[0].get_nickname(),
+                            'nickname': self.players[0].get_id(),
                             'score': self.players[0].get_score(),
                         },
                         'playerR': {
-                            'nickname': self.players[1].get_nickname(),
+                            'nickname': self.players[1].get_id(),
                             'score': self.players[1].get_score(),
                         },
                         'ball': {
@@ -122,6 +122,7 @@ class Game:
                             'width': self.__right_paddle.width,
                             'height': self.__right_paddle.height,
                         },
+                        'winner': self.winner.get_id()
                     }
                 }
             )
@@ -201,5 +202,9 @@ class Game:
                     self.__ball.dy += self.__left_paddle.dy * Ball.cof
                     self.__ball.dy = min(Ball.ball_speed_max, self.__ball.dy)
 
-        if self.players[0].get_score() >= 5 or self.players[1].get_score() >= 5:
+        if self.players[0].get_score() >= 5:
+            self.winner = self.players[0]
+            self.status = 2
+        if self.players[1].get_score() >= 5:
+            self.winner = self.players[1]
             self.status = 2
