@@ -2,10 +2,11 @@ import asyncio, uuid
 from channels.layers import get_channel_layer
 
 class WaitingQueue:
-    def __init__(self):
+    def __init__(self, size):
         self.users = set()
         self.running = False
         self.lock = asyncio.Lock()
+        self.size = size
 
     async def put(self, user):
         async with self.lock:
@@ -19,28 +20,22 @@ class WaitingQueue:
         channel_layer = get_channel_layer()
         while True:
             async with self.lock:
-                if len(self.users) >= 2:
-                    user1 = self.users.pop()
-                    user2 = self.users.pop()
+                user_group = []
+                if len(self.users) >= self.size:
+                    for _ in range(self.size):
+                        user_group.append(self.users.pop())
+                    match_name = uuid.uuid4()
+                    for user in user_group:
+                        await channel_layer.send(
+                            user,
+                            {
+                                "type": "match_found",
+                                "match_name": f'{match_name}'
+                            }
+                        )
                 else:
                     await asyncio.sleep(1)
                     continue
-            if user1 == user2:
-                await channel_layer.send(user1, {
-                    "type": "match_found_error",
-                    "message": "Match Found Error. Please refresh"
-                })
-            else:
-                match_name = uuid.uuid4()
-                await channel_layer.send(user1, {
-                    "type": "match_found",
-                    "match_name": f'{match_name}'
-                })
-                await channel_layer.send(user2, {
-                    "type": "match_found",
-                    "match_name": f'{match_name}'
-                })
-            await asyncio.sleep(0.5)
 
     async def delete_from_queue(self, user):
         async with self.lock:

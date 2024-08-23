@@ -21,21 +21,19 @@ class Game:
     def __init__(self, game_id):
         self.id = game_id
         self.status = 0
-        self.is_started = False
         self.players = {}
         self.__ball = Ball((Game.canvas_width - 15) / 2, (Game.canvas_height - 15) / 2)
         self.__left_paddle = Paddle(50, (Game.canvas_height - 100) / 2)
         self.__right_paddle = Paddle(Game.canvas_width - 50 - 10, (Game.canvas_height - 100) / 2)
-        self.game_over = False
-        self.game_err = False
         self.winner = None
 
     async def start(self):
-        self.is_started = True
         channel_layer = get_channel_layer()
         while len(self.players) < 2:
             await asyncio.sleep(0.5)
         while not self.players[0].get_is_ready() or not self.players[1].get_is_ready():
+            if not self.players[0].is_connected() or not self.players[1].is_connected():
+                break
             await channel_layer.group_send(
                 self.id,
                 {
@@ -46,7 +44,10 @@ class Game:
                 }
             )
             await asyncio.sleep(1)
-        self.status = 1
+        if self.players[0].is_connected() and self.players[1].is_connected():
+            self.status = 1
+        else:
+            self.status = 2
         while self.status == 1: # game is in progress
             await channel_layer.group_send(
                 self.id,
@@ -83,12 +84,6 @@ class Game:
                 }
             )
             self._calculate()
-            if not self.players[0].get_is_ready():
-                self.players.pop(0)
-                self.status = 3
-            if not self.players[1].get_is_ready():
-                self.players.pop(1)
-                self.status = 3
             await asyncio.sleep(1/100)
         if self.status == 2: # game over with game winner
             await channel_layer.group_send(
@@ -127,12 +122,19 @@ class Game:
                 }
             )
         else: # game over by connection lost
+            if self.players[0].is_connected():
+                winner = self.players[0]
+            elif self.players[1].is_connected():
+                winner = self.players[1]
+            else:
+                winner = self.players[0]
             await channel_layer.group_send(
                 self.id,
                 {
                     'type': 'game_update',
                     'data' : {
                         'status': Game.game_status[self.status],
+                        'winner': winner.get_id() if winner else "",
                     }
                 }
             )
@@ -155,6 +157,9 @@ class Game:
         return len(self.players) >= 2
 
     def _calculate(self):
+        if not self.players[0].is_connected() or not self.players[1].is_connected():
+            self.status = 3
+            return
         if self.players[0].get_input()['upPressed']:
             self.__left_paddle.dy = min(-Paddle.vInit, self.__left_paddle.dy - self.__left_paddle.accel)
         if self.players[0].get_input()['downPressed']:

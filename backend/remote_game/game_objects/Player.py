@@ -12,6 +12,7 @@ class Player:
             'upPressed' : False,
             'downPressed' : False,
         }
+        self.__connected = True
 
     def get_id(self):
         return self.__id
@@ -28,6 +29,9 @@ class Player:
     def get_input(self):
         return self.__input
 
+    def is_connected(self):
+        return self.__connected
+
     def set_is_ready(self, is_ready):
         self.__is_ready = is_ready
 
@@ -42,3 +46,6 @@ class Player:
 
     def set_input(self, key_input):
         self.__input = key_input
+
+    def set_disconnect(self):
+        self.__connected = False
