@@ -282,18 +282,62 @@
     flex: 1;
 }
 
+.userFriendsSearchModal {
+    height: 300px;
+    width: 500px;
+    position: relative;
+}
+
 .userfriendsSerachInput {
+    position: absolute;
+    left : 0;
+    right : 0;
+    margin: auto;
+    margin-top: 10px;
     background: white;
-    border: 1px solid black;
+    border: 1px solid var(--btn-color-blue);
+    box-shadow: 4px 4px 8px rgba(0, 210, 252, 0.5);
     height: 50px;
-    width: 400px;
+    width: 480px;
 }
 
 .userfriendsSerachInput:hover {
+    border: 1px solid var(--btn-color-blue);
     box-shadow: 4px 4px 8px rgba(0, 210, 252, 0.5);
 }
 
 .userfriendsSerachInput:focus {
     background-color: white;
+    border: 1px solid var(--btn-color-blue);
     box-shadow: 4px 4px 8px rgba(0, 210, 252, 0.5);
+}
+
+.searchFriendsResult {
+    left : 0;
+    right : 0;
+    width: 480px;
+    margin: auto;
+    bottom: 0;
+    position: absolute;
+    margin-top: 5px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 3px;
+}
+
+.searchFriendsResult::-webkit-scrollbar-track {
+    background: rgba(0, 210, 252, 0.5) !important;
+}
+
+.userfriendEl {
+    color: gray;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.userfriendEl:hover {
+    background-color: rgba(0, 210, 252, 0.2);
+    cursor: pointer;
 }

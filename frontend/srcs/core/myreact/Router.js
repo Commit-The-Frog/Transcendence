@@ -18,7 +18,7 @@ const parsed = parseUrl(path, routes);
 if (parsed) {
     const {route , params} = parsed;
     if (routes[route])
-        return routes[route]();
+        return routes[route]({params : params});
     else
         return `<div> 404 not fond </div>`
     }else {

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "../core/myreact/myreact.js";
 import { bindEventHandler } from "../utils/bindEventHandler.js";
+import { changeUrl } from "../utils/changeUrl.js";
 
-const UserFriendsSearchModal = () => {
+const UserFriendsSearchModal = ({onClose}) => {
     const [searchFriends, setSearchFriends] = useState([]);
     const [input, setInput] = useState('','friendsSearchInput');
     const timeoutRef = useRef(null);
@@ -11,38 +12,43 @@ const UserFriendsSearchModal = () => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        if (input != value) {
-            setInput(value);
-        }
-        timeoutRef.current = setTimeout(()=>{
+        setInput(value);
+        if (value === "") {
+            setSearchFriends([]);
+        } else {
             fetch(`http://localhost:3000/user/search?nick=${value}`)
             .then((res)=>res.json())
             .then((data)=>{
                 if (data)
                     setSearchFriends([...data]);
             })
-            .catch(()=>{});
-        },300);
+            .catch(()=>{
+                setSearchFriends([]);
+            });
     }
+    }
+    const userFriendHndler = (event) =>{
+        const friendId = event.target.getAttribute('data-id');
+        changeUrl(`/userinfo/${friendId}`);
+        onClose();
+    }
+    bindEventHandler('click', "userFriendHndler",userFriendHndler);
     bindEventHandler('change', "userFriendSearchHandler",userFriendSearchHandler);
     return `
-    <div>
-        <input class="userfriendsSerachInput userFriendSearchHandler" name="userfriendsSerachInput"  type="text" value="${input}" placeholder="🔍 friends search...">
-        ${searchFriends.map((el)=>{
-            return `
-            <div>
-                ${el.name}
-            </div>
-            `
-        }).join('')}
+    <div class="userFriendsSearchModal">
+        <input class="userfriendsSerachInput userFriendSearchHandler" name="userfriendsSerachInput"  type="text" value="${input}" placeholder="🔍 friends search..." autocomplete="off">
+        <div class="searchFriendsResult">
+            ${searchFriends.map((el)=>{
+                return `
+                <div class="userfriendEl userFriendHndler" data-id="${el.id}">
+                    ${el.nick}
+                </div>
+                `
+            }).join('')}
+        </div>
     </div>
     `
 }
 
 
 export default UserFriendsSearchModal;
-
-
-        // timeout = setTimeout(()=>{
-        //     
-        // }, 300);

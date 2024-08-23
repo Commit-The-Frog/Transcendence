@@ -6,7 +6,7 @@ import { bindEventHandler } from "../utils/bindEventHandler.js";
 import UserFriends from "./UserFriends.js";
 import UserHubContent from "./UserHubContent.js";
 
-export default function UserHub () {
+export default function UserHub ({userId}) {
 
     const [btnUserHubNumber, setBtnUserHubNumber] = useState(0);
 
@@ -26,7 +26,7 @@ export default function UserHub () {
             <button class=" onClickMatchHistoryHandler ${btnUserHubNumber === 1 ? 'selected' : ''}">${translations[getRecoilValue(languageState)]?.history}</button>
         </div>
         <div class="userHubWrapper">
-            ${UserHubContent({btnnum : btnUserHubNumber})}
+            ${UserHubContent({btnnum : btnUserHubNumber, userId})}
         </div>
     </div>
     `

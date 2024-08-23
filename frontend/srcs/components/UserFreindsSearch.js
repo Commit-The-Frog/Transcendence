@@ -20,6 +20,6 @@ export default function UserFriendsSearch () {
     <div class="userFriendsSearch displaynone friendsSearchHandler">
         🔍 &nbsp ${translations[getRecoilValue(languageState)]?.friendsSearch}
     </div>
-    ${modal === true ? Modal({modal, closeHandler, className : 'userSearchModal' , children : UserFriendsSearchModal}) : ''}
+    ${modal === true ? Modal({modal, closeHandler, onClose : () => setModal(false), children : UserFriendsSearchModal}) : ''}
     `
 }

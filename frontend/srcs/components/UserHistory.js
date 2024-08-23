@@ -1,39 +1,51 @@
 import { useEffect, useState } from "../core/myreact/myreact.js";
 
-export default function UserHistory ({btnnum}) {
+export default function UserHistory ({btnnum, userId}) {
     const [history, setHistory] = useState([], 'history');
     const [user, setUser] = useState('' , 'historyuser');
 
     useEffect(()=>{
-        setHistory([
-            {
-                opponent : 'wonyeong',
-                didwin : false,
-                day : '2024. 7. 21'
-            }, {
-               opponent : 'gaeul',
-               didwin : true, 
-                day : '2023. 12. 21'
-            }, {
-                opponent : 'eseo',
-                didwin : true,
-                day : '2023. 10. 21'
-            }, {
-                opponent : 'yujin',
-                didwin : true,
-                day : '2023. 8. 12'
-            }, {
-                opponent : 'liz',
-                didwin : false,
-                day : '2022. 2. 1'
-            }, {
-                opponent : 'ray',
-                didwin : false,
-                day : '2021. 2. 6'
+        fetch(`http://localhost:3000/match?id=${userId}`)
+        .then((res)=>{
+            if (!res.ok) {
+                throw new Error('HTTP error ' + res.status);
             }
-        ]);
-        setUser('haerin');
-    },[btnnum]);
+            return res.json();
+        })
+        .then((data)=>{
+            setHistory(data);
+        }).catch((e)=>{
+            console.log(e);
+        })
+        // setHistory([
+        //     {
+        //         opponent : 'wonyeong',
+        //         didwin : false,
+        //         day : '2024. 7. 21'
+        //     }, {
+        //        opponent : 'gaeul',
+        //        didwin : true, 
+        //         day : '2023. 12. 21'
+        //     }, {
+        //         opponent : 'eseo',
+        //         didwin : true,
+        //         day : '2023. 10. 21'
+        //     }, {
+        //         opponent : 'yujin',
+        //         didwin : true,
+        //         day : '2023. 8. 12'
+        //     }, {
+        //         opponent : 'liz',
+        //         didwin : false,
+        //         day : '2022. 2. 1'
+        //     }, {
+        //         opponent : 'ray',
+        //         didwin : false,
+        //         day : '2021. 2. 6'
+        //     }
+        // ]);
+        // setUser('haerin');
+    },[btnnum, userId], 'fetchHistoryE');
 
     return `
     <div class="userFriends">
@@ -43,20 +55,20 @@ export default function UserHistory ({btnnum}) {
                 history.map((el)=>{
                    return `<div class="userFriend userHistory">
                         <div class="matchday">
-                            ${el?.day}
+                            ${el?.date}
                         </div>
                         <div class="matchHistory">
                              <div>
-                                 ${el?.didwin ? '🥇' : '&nbsp&nbsp&nbsp&nbsp'}
+                                 ${el?.playerL?.win ? '🥇' : '&nbsp&nbsp&nbsp&nbsp'}
                              </div>
-                             <div class="historyplayer historyplayerself ${el?.didwin ? `winner` : `loser`}">
-                                 <p>${user}</p>
+                             <div class="historyplayer historyplayerself ${el?.playerL?.win ? `winner` : `loser`}">
+                                 <p>${el?.playerL?.nick}</p>
                              </div>
-                             <div class="historyplayer historyplayeropponent ${el?.didwin ? `loser` : `winner`}">
-                                 <p>${el?.opponent}</p>
+                             <div class="historyplayer historyplayeropponent ${el?.playerR?.win ? `winner` : `loser`}">
+                                 <p>${el?.playerR?.nick}</p>
                              </div>
                              <div>
-                                 ${el?.didwin ? '&nbsp&nbsp&nbsp&nbsp' : '🥇'}
+                                 ${el?.playerR?.nick ? '&nbsp&nbsp&nbsp&nbsp' : '🥇'}
                              </div>
                          </div>
                    </div>`

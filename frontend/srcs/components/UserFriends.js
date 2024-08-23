@@ -1,28 +1,22 @@
 import { useEffect, useState } from "../core/myreact/myreact.js"
+import { changeUrl } from "../utils/changeUrl.js";
 import UserFreindsSearch from "./UserFreindsSearch.js"
 
-export default function UserFriends ({btnnum}) {
+export default function UserFriends ({btnnum, userId}) {
     const [friends, setFriends] = useState([], 'friends');
-    const [user, setUser] = useState('', 'user');
-
     useEffect(()=>{
-        setFriends([
-            {
-                username : 'minji',
-                online : false,
-            }, {
-                username : 'hani',
-                online : true,
-            }, {
-                username : 'hyein',
-                online : false,
-            }, {
-                username : 'daniel',
-                online : true,
-            }
-        ])
-    }, [])
-    setUser('hi');
+        fetch(`http://localhost:3000/user/friend?id=${userId}`)
+        .then((res)=>{
+            return res.json();
+        })
+        .then((data)=>{
+            console.log('data',data);
+            setFriends(data);
+        })
+        .catch((e)=>{
+            console.log(e);
+        })
+    }, [userId],'userHFreindsFetch')
     return `
     <div class="userFriends">
         ${UserFreindsSearch()}
@@ -30,8 +24,8 @@ export default function UserFriends ({btnnum}) {
             ${
                 friends?.map((el)=>{
                    return `<div class="userFriend">
-                         <div class="isonline ${el?.online ? "online" : 'offline'}"></div>
-                        <p>${el?.username}</p>
+                         <div class="isonline ${el?.status ? "online" : 'offline'}"></div>
+                        <p>${el?.nick}</p>
                    </div>`
                 }).join('')
             }

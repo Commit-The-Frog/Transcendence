@@ -1,6 +1,6 @@
 import { bindEventHandler } from "../utils/bindEventHandler.js";
 
-const Modal = ({ modal, closeHandler, className, children = null }) =>{
+const Modal = ({ modal, closeHandler, onClose, children = null }) =>{
 
   if (!modal) {
     return `<div></div>`;
@@ -15,13 +15,8 @@ const Modal = ({ modal, closeHandler, className, children = null }) =>{
     <div class="mymodal">
       <div class="mymodalOverlay closeHandler">
         <div class="mymodalbox eventPrevent">
-          <div class="closeWrapper closeHandler">
-            <button class="closeHandler">
-              X
-            </button>
-          </div>
           <div class="contentWrapper ">
-            ${children ? children() : ''}
+            ${children ? children({onClose}) : ''}
             </div>
         </div>
       </div>

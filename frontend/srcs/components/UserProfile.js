@@ -15,13 +15,7 @@ export default function UserProfile ( {
             <div class="userInfoWrapper1">
                 <div class="userInfoWrapper2">
                     <div>
-                    <p class="username">${data?.username ? data.username : ''}</p>
-                    </div>
-                    <div class="userScoreWrapper">
-                        <span>${data?.score?.win ? data?.score?.win : ''} </span>
-                        <span> ${translations[getRecoilValue(languageState)]?.win} </span>
-                        <span>${data?.score?.lose ? data?.score?.lose : '0'} </span>
-                        <span> ${translations[getRecoilValue(languageState)]?.lose} </span>
+                    <p class="username">${data?.nick ? data.nick : ''}</p>
                     </div>
                 </div>
             </div>
@@ -31,3 +25,10 @@ export default function UserProfile ( {
     </div>
     `
 }
+
+{/* <div class="userScoreWrapper">
+<span>${data?.score?.win ? data?.score?.win : ''} </span>
+<span> ${translations[getRecoilValue(languageState)]?.win} </span>
+<span>${data?.score?.lose ? data?.score?.lose : '0'} </span>
+<span> ${translations[getRecoilValue(languageState)]?.lose} </span>
+</div> */}
