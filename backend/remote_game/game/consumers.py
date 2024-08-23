@@ -72,7 +72,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     # Delete game from gamedict when game is done
     async def game_done(self, event):
         logger.debug(f'{self.match_group_name} game done')
-        game_dict.pop(self.match_group_name)
+        if self.match_group_name in game_dict.keys():
+            game_dict.pop(self.match_group_name)
 
 class TournamentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
