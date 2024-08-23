@@ -5,7 +5,7 @@ import urllib.parse
 from channels.generic.websocket import AsyncWebsocketConsumer
 from . import WaitingQueue
 
-WaitingQueue = WaitingQueue.WaitingQueue(2)
+GameWaitingQueue = WaitingQueue.WaitingQueue(2)
 TournamentWaitingQueue = WaitingQueue.WaitingQueue(4)
 
 class WaitingQueueConsumer(AsyncWebsocketConsumer):
@@ -14,12 +14,12 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
         query_params = urllib.parse.parse_qs(query_string)
 
         self.que_type = query_params.get('type', [None])[0]
-        if not WaitingQueue.is_running():  # Assuming you have a way to check if it's already running
-            asyncio.create_task(WaitingQueue.start())
+        if not GameWaitingQueue.is_running():  # Assuming you have a way to check if it's already running
+            asyncio.create_task(GameWaitingQueue.start())
         if not TournamentWaitingQueue.is_running():
             asyncio.create_task(TournamentWaitingQueue.start())
         if self.que_type == '1vs1':
-            await WaitingQueue.put(self.channel_name)
+            await GameWaitingQueue.put(self.channel_name)
         elif self.que_type == 'tournament':
             await TournamentWaitingQueue.put(self.channel_name)
         await self.accept()
@@ -29,7 +29,7 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, code):
         if self.que_type == '1vs1':
-            await WaitingQueue.delete_from_queue(self.channel_name)
+            await GameWaitingQueue.delete_from_queue(self.channel_name)
         elif self.que_type == 'tournament':
             await TournamentWaitingQueue.delete_from_queue(self.channel_name)
 
