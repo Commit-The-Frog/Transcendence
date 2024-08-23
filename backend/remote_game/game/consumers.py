@@ -2,6 +2,7 @@ import asyncio
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .Game import Game
+from .Tournament import Tournament
 from remote_game.game_objects.Player import Player
 import logging
 import urllib.parse
@@ -72,7 +73,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     # Delete game from gamedict when game is done
     async def game_done(self, event):
         logger.debug(f'{self.match_group_name} game done')
-        game_dict.pop(self.match_group_name)
+        if self.match_group_name in game_dict.keys():
+            game_dict.pop(self.match_group_name)
 
 class TournamentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -95,9 +97,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await self.close()
             return
         logger.debug(f'TOURNAMENT: {self.player.get_id()} connected to {self.tournament_group_name}')
-        if self.tournament_group_name not in game_dict: # 게임에 먼저 참가한다면,
+        if self.tournament_group_name not in tournament_dict.keys(): # 게임에 먼저 참가한다면,
             logger.debug("TournamentDict Created")
-            tournament_dict[self.tournament_group_name] = Game(self.tournament_group_name)
+            tournament_dict[self.tournament_group_name] = Tournament(self.tournament_group_name)
             self.tournament = tournament_dict[self.tournament_group_name]
             self.tournament.add_player(self.player)
             asyncio.create_task(self.tournament.start())

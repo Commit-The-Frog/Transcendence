@@ -4,10 +4,12 @@ from channels.layers import get_channel_layer
 
 from remote_game.game.Game import Game
 from remote_game.game_objects.Player import Player
-
+import logging
+logger = logging.getLogger('transendence')
 
 class Tournament:
     def __init__(self, tournament_id):
+        logger.info(f'{tournament_id} started')
         self.id = tournament_id
         self.games: dict[int, Game] = {}
         self.players: dict[int, Player] = {}
@@ -18,6 +20,7 @@ class Tournament:
     async def start(self):
         while len(self.players) < 4:
             await asyncio.sleep(0.1)
+        logger.info('All players participate')
         self.games[0] = Game(self.id)
         self.games[0].add_player(self.players[0])
         self.games[0].add_player(self.players[1])
