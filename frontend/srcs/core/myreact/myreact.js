@@ -8,6 +8,7 @@ function MyReact () {
         states : {},
         effects : {},
         callbacks: {},
+        refs : {},
         root : null,
         rootComponent : null
     }
@@ -54,6 +55,13 @@ function MyReact () {
             states[stateKey] = dependencies;
         }
     }
+    function useRef(initialValue = null, key = null) {
+        const stateKey = key || options.currentStateKey++;
+        if (!(stateKey in options.refs)) {
+            options.refs[stateKey] = { current: initialValue };
+        }
+        return options.refs[stateKey];
+    }
     function useCallback(callback, dependencies, key = null) {
         const stateKey = key || options.currentStateKey++;
         const oldDependencies = options.states[stateKey];
@@ -87,7 +95,7 @@ function MyReact () {
         _render();
     }
   
-    return { useState, useEffect, render , _render, useCallback };
+    return { useState, useEffect, render , _render, useCallback ,useRef };
 }
   
- export const { useState, useEffect , render, _render, useCallback } = MyReact();
+ export const { useState, useEffect , render, _render, useCallback ,useRef } = MyReact();

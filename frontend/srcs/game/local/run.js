@@ -38,6 +38,7 @@ function run() {
 	const nicknameList = getNicknameList(params, type);
 	let itemList = [1, 2, 3, 4];
 	shuffleArray(itemList);
+	console.log(params, type);
 	if (type == "2") shuffleArray(nicknameList);
 	if (mode === "false")itemList = [0, 0, 0, 0];
 	let game = new Game(type, nicknameList, itemList);

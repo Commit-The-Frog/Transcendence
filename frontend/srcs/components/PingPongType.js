@@ -39,19 +39,13 @@ const PingpongType = () => {
             'pingpong-player3': translations[language]?.[msgKey['pingpong-player3']],
             'pingpong-player4': translations[language]?.[msgKey['pingpong-player4']],
         });
+        console.log(msg);
     }, [language], 'setMsgEffect');
-
-    console.log(msg);
-    useEffect(() => {
-        updateQueryParam('type', mode);
-    }, [mode], 'setModeEffect');
-
-    useEffect(() => {
-        updateQueryParam('item_mode', itemmode);
-    }, [itemmode],'setItemEffect');
-
+    updateQueryParam('type', mode);
+    updateQueryParam('item_mode', itemmode);
     const handleModeChange = (newMode) => {
         setMode(newMode);
+        updateQueryParam('type', newMode);
     };
     const itemmodeHandler = () => {
         setItemmode((prev) => {
@@ -158,14 +152,14 @@ const PingpongType = () => {
             </div>
             <div class="pingponginputWrapper">
                 <form>
-                    <input type="text" class="pinpongPlyaerInput1 pingpongPlayerHandler" id="pingpong-player1" name="pingpong-player1" placeholder="player1" value="${players['pingpong-player1']}">
-                    <p class="pingpongPlayerMsg">${msg['pingpong-player1']}</p>
-                    <input type="text" class="pinpongPlyaerInput2 pingpongPlayerHandler" id="pingpong-player2" name="pingpong-player2" placeholder="player2" value="${players['pingpong-player2']}">
-                    <p class="pingpongPlayerMsg">${msg['pingpong-player2']}</p>
-                    ${mode === 2 ? `<input type="text" class="pinpongPlyaerInput3 pingpongPlayerHandler" id="pingpong-player3" name="pingpong-player3" placeholder="player3" value="${players['pingpong-player3']}">
-                    <p class="pingpongPlayerMsg">${msg['pingpong-player3']}</p>` : ''}
-                    ${mode === 2 ? `<input type="text" class="pinpongPlyaerInput4 pingpongPlayerHandler" id="pingpong-player4" name="pingpong-player4" placeholder="player4" value="${players['pingpong-player4']}">
-                    <p class="pingpongPlayerMsg">${msg['pingpong-player4']}</p>` : ''}
+                    <input type="text" class="pinpongPlyaerInput1 pingpongPlayerHandler" id="pingpong-player1" autocomplete="off" name="pingpong-player1" placeholder="player1" value="${players['pingpong-player1']}">
+                    <p class="pingpongPlayerMsg">${msg['pingpong-player1']? msg['pingpong-player1']: '&nbsp;' }</p>
+                    <input type="text" class="pinpongPlyaerInput2 pingpongPlayerHandler" id="pingpong-player2" autocomplete="off" name="pingpong-player2" placeholder="player2" value="${players['pingpong-player2']}">
+                    <p class="pingpongPlayerMsg">${msg['pingpong-player2'] ? msg['pingpong-player2']: '&nbsp;' }</p>
+                    ${mode === 2 ? `<input type="text" class="pinpongPlyaerInput3 pingpongPlayerHandler" autocomplete="off" id="pingpong-player3" name="pingpong-player3" placeholder="player3" value="${players['pingpong-player3']}">
+                    <p class="pingpongPlayerMsg">${msg['pingpong-player3'] ? msg['pingpong-player3']: '&nbsp;' }</p>` : ''}
+                    ${mode === 2 ? `<input type="text" class="pinpongPlyaerInput4 pingpongPlayerHandler" autocomplete="off" id="pingpong-player4" name="pingpong-player4" placeholder="player4" value="${players['pingpong-player4']}">
+                    <p class="pingpongPlayerMsg">${msg['pingpong-player4'] ? msg['pingpong-player4']: '&nbsp;' }</p>` : ''}
                 </form>
             </div>
             <div class="startBtnWrapper">

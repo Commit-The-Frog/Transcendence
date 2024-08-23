@@ -20,14 +20,17 @@ export function UserInfo() {
     <div class="userInfo">
         ${Header()}
         <div class="userInfoWrapper1">
-            <div class="danielleWrapper">
-                <img src="/Danielle1.png"/>
+            <div class="HaerinWrapper">
+                <img src="/Haerin1.png" />
             </div>
             <div class="userInfoWrapper">
                 ${UserProfile({data : data})}
                 <div class="userHubWrapper">
                     ${UserHub()}
                 </div>
+            </div>
+            <div class="danielleWrapper">
+                <img src="/Danielle1.png"/>
             </div>
         </div>
     </div>

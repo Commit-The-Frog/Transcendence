@@ -6,10 +6,10 @@
     --default-bg-color : #C8A1E0;
     --default-bg-color2 : #fef9fe;
     --default-btn-color: #FFE9FF;
-    --default-aqua-color :#4FFBDF;
+    --default-aqua-color :hwb(170 31% 2%);
     --btn-color-yellow : #F9F871;
     --btn-color-yellow2 : #ffffdf;
-    --btn-color-blue :#00D2FC;
+    --btn-color-blue :#00d2fc;
     --btn-color-pink :#fd85a1;
     --btn-color-pink2 : #ffebf0;
     --btn-color-pink3 :#ff9fb6;
