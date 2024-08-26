@@ -67,7 +67,7 @@
 		const mode = params.get('item_mode');
 		const loc = params.get('location');
 		const gameType = document.createElement('h1');
-		let n;
+		let n, typeForBe;
 
 		if (loc == 'local' && type == 1) {
 			n = 2;
@@ -83,6 +83,9 @@
 			n = 1;
 			gameType.textContent = 'tournament';
 		}
+
+		if (type == 1)	typeForBe = '1vs1';
+		else if (type == 2)	typeForBe = 'tournament';
 
 		body.insertBefore(gameType, h2);
 		for (let i = 1; i <= n; i++) {
@@ -108,6 +111,9 @@
 			body.insertBefore(div, button);
 		}
 	  
+		/*
+			start 버튼 클릭시 매치메이킹 시작
+		*/
 		button.addEventListener('click', () => {
 			let url = `${loc}.html?location=${loc}&type=${type}&item_mode=${mode}`;
 			let nickname;
@@ -136,11 +142,11 @@
 				body.appendChild(modal);
 
 				// 웹소켓 열고 매치메이킹 시작
-				const wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/lobby/`;
+				const wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/lobby?type=${typeForBe}`;
 				const ws = new WebSocket(wsUrl);
 
 				ws.onopen = (event) => {
-            		console.log("WebSocket is open now.");
+            		console.log("GameQueue WebSocket 오픈");
 				}
 
 				ws.onmessage = (event) => {
@@ -149,7 +155,7 @@
 
 					if (event.data) {
 						modal.remove();
-						window.location.href = `/game/match/${matchName}?nickname=${nickname}`;
+						window.location.href = `/game/${typeForBe}?match_name=${matchName}`;
 					}
 				}
 
