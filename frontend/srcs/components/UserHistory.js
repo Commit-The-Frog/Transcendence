@@ -2,7 +2,7 @@ import { useEffect, useState } from "../core/myreact/myreact.js";
 
 export default function UserHistory ({btnnum, userId}) {
     const [history, setHistory] = useState([], 'history');
-    const [user, setUser] = useState('' , 'historyuser');
+    // const [user, setUser] = useState('' , 'historyuser');
 
     useEffect(()=>{
         fetch(`http://localhost:3000/match?id=${userId}`)

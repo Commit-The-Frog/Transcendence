@@ -10,7 +10,6 @@ export default function UserFriends ({btnnum, userId}) {
             return res.json();
         })
         .then((data)=>{
-            console.log('data',data);
             setFriends(data);
         })
         .catch((e)=>{

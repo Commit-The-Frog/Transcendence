@@ -7,7 +7,7 @@ import LanguageBtn from "./LanguageBtn.js";
 
 export function Header () {
     const clickHeaderMyPageHandler = () => {
-        changeUrl("/userinfo/1213");
+        changeUrl("/userinfo/15880");
     }
     const clickHeaderPingPongHandler = () => {
         changeUrl("/pingpong");

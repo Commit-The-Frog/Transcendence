@@ -18,7 +18,9 @@ const translations = {
         playernamemissing : 'player name missing',
         exceeds10characters : 'exceed 10 characters',
         space : '&nbsp;',
-        start : 'start'
+        start : 'start',
+        twofainfo : 'Please enter the code sent via email.',
+        submit : 'submit'
     },
     ko: {
         login: '로그인',
@@ -39,7 +41,9 @@ const translations = {
         playernamemissing : '플레이어 이름이 없습니다',
         exceeds10characters : '10자를 초과합니다',
         space : '&nbsp;',
-        start : '시작'
+        start : '시작',
+        twofainfo : '메일로 전송된 코드를 입력하세요',
+        submit : '제출',
     },
     fr: {
         login: 'connexion',
@@ -60,7 +64,9 @@ const translations = {
         playernamemissing : 'nom de joueur manquant',
         exceeds10characters : 'dépasse 10 caractères',
         space : '&nbsp;',
-        start : 'démarrer'
+        start : 'démarrer',
+        twofainfo : 'Veuillez entrer le code envoyé par e-mail.',
+        submit : 'soumettre'
     }
 };
 

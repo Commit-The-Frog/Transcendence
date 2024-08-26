@@ -1,10 +1,22 @@
+import { useState } from "../core/myreact/myreact.js"
 import { getRecoilValue } from "../core/myrecoil/myrecoil.js"
 import { languageState } from "../recoil/languageState.js"
 import translations from "../translations.js"
-
+import UserEdit from "./UserEdit.js";
+import { bindEventHandler } from "../utils/bindEventHandler.js";
+import Modal from "./Modal.js";
 export default function UserProfile ( {
     data
 }){
+    const [editOpen, setEditOpen] = useState(false, 'editopen');
+    const userEditOpenHandler = () => {
+        setEditOpen(true);
+    }
+
+    const closeHandler = () => {
+        setEditOpen(false);
+    }
+    bindEventHandler('click', "userEditOpenHandler", userEditOpenHandler);
     return `
     <div class="userProfile">
         <div class="userProfileImgNameWrapper">
@@ -20,15 +32,9 @@ export default function UserProfile ( {
                 </div>
             </div>
             </div>
-            <button class="userInfoEdit"> ${translations[getRecoilValue(languageState)]?.edit} </button>
+            <button class="userInfoEdit userEditOpenHandler"> ${translations[getRecoilValue(languageState)]?.edit} </button>
         </div>
     </div>
+    ${editOpen === true ? Modal({modal : editOpen, closeHandler, onclose : () => setEditOpen(false), children : UserEdit, childrenName : "userEdit"}) : ''}
     `
 }
-
-{/* <div class="userScoreWrapper">
-<span>${data?.score?.win ? data?.score?.win : ''} </span>
-<span> ${translations[getRecoilValue(languageState)]?.win} </span>
-<span>${data?.score?.lose ? data?.score?.lose : '0'} </span>
-<span> ${translations[getRecoilValue(languageState)]?.lose} </span>
-</div> */}
