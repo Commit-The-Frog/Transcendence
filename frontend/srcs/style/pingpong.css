@@ -31,7 +31,7 @@
 .pingpongtype {
     height: 500px;
     width: 800px;
-    background-color: hwb(346 75% 0% / 0.302);
+    background-color: var(--pingpong-typebox-color);
     display: flex;
     padding: 20px;
     position: relative;
@@ -168,7 +168,7 @@
 }
 
 .pingpongselectWrapper .selected {
-    background-color: rgb(255, 192, 207, 0.3);
+    background-color: var(--pingpong-typebox-color);
 }
 .pingponglocalgame canvas {
     position: relative;

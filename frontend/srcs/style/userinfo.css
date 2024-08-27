@@ -38,8 +38,10 @@
 }
 
 .userInfoWrapper {
-    width: 1000px;
+    width: 800px;
+    border-radius: 10px;
     margin-top: 100px;
+    padding: 30px;
 }
 
 .userInfo .userProfileImgWrapper {
@@ -235,14 +237,6 @@
     border: 1px solid black;
 }
 
-.userFriend .offline {
-}
-
-.mymodal {
-}
-.mymodalbox {
-}
-
 .mymodal .mymodalOverlay {
     position: fixed;
     z-index: 1;
@@ -259,18 +253,10 @@
     display: flex;
     flex-direction: column;
     background: white;
-    padding: 20px;
     border-radius: 10px;
-    min-width: 500px;
     height: fit-content;
-    min-height: 300px;
     border: 1px solid black;
-}
-
-.closeWrapper {
-    flex: 1;
-    display: flex;
-    justify-content: end;
+    padding: 0;
 }
 
 .closeWrapper button {
@@ -280,32 +266,27 @@
 }
 
 .contentWrapper {
-    flex: 4;
     display: flex;
     justify-content: center;
 }
 
-.btnWrapper {
-    flex: 1;
-}
 
 .userFriendsSearchModal {
+    background-color: #e9f7ff;
+    padding: 30px;
+    border-radius: 10px;
     height: 300px;
     width: 500px;
     position: relative;
 }
 
 .userfriendsSerachInput {
-    position: absolute;
-    left : 0;
-    right : 0;
-    margin: auto;
     margin-top: 10px;
     background: white;
     border: 1px solid var(--btn-color-blue);
     box-shadow: 4px 4px 8px rgba(0, 210, 252, 0.5);
     height: 50px;
-    width: 480px;
+    width: 100%;
 }
 
 .userfriendsSerachInput:hover {
@@ -320,15 +301,10 @@
 }
 
 .searchFriendsResult {
-    left : 0;
-    right : 0;
-    width: 480px;
-    margin: auto;
-    bottom: 0;
-    position: absolute;
     margin-top: 5px;
-    height: 220px;
+    height: 180px;
     display: flex;
+    width: 100%;
     flex-direction: column;
     overflow: auto;
     padding: 3px;
@@ -336,6 +312,11 @@
 
 .searchFriendsResult::-webkit-scrollbar-track {
     background: rgba(0, 210, 252, 0.5) !important;
+}
+
+.searchFriendsResult .active {
+    background-color: rgba(0, 210, 252, 0.2);
+    cursor: pointer;
 }
 
 .userfriendEl {
@@ -347,6 +328,14 @@
 .userfriendEl:hover {
     background-color: rgba(0, 210, 252, 0.2);
     cursor: pointer;
+}
+
+.usereditInputWrapper {
+    width: 400px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
 }
 
 .profileimgInputWrapper input[type="file"] {
@@ -364,10 +353,61 @@
     text-align: center;
 }
 
+.useredit {
+    background-color: aqua;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: var(--btn-color-pink2);
+    position: relative;
+}
+
 .useredit .prfilePreviewImg {
     height: 100px;
     width: 100px;
     margin-bottom: 10px;
     border: 1px solid black;
     border-radius: 50%;
+}
+
+.usernameInputWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.usernameInputWrapper label {
+    padding-left: 10px;
+    font-weight: 500;
+    color: gray;
+}
+
+.usernameInputWrapper input {
+    border: 1px solid var(--btn-color-pink);
+    background: white;
+    width: 170px;
+    height: 30px;
+}
+
+.usernameInputWrapper input:hover {
+    box-shadow: 4px 4px 8px var(--btn-color-pink2);
+    cursor: pointer;
+}
+
+.usernameInputWrapper input:focus {
+    box-shadow: 4px 4px 8px var(--btn-color-pink2);
+    background: white;
+    border: 3px solid  var(--btn-color-pink3);
+    cursor: pointer;
+}
+
+.usereditSubmit {
+    right: 20px;
+    bottom: 20px;
+    position: absolute;
+    background: linear-gradient(to bottom,  var(--btn-color-yellow2) 50%, var(--btn-color-yellow) 100%);
+    border-radius: 10px;
+    border: 1px solid var(--btn-color-pink);
+    padding: 5px 10px 5px 10px;
 }

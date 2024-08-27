@@ -20,7 +20,9 @@ const translations = {
         space : '&nbsp;',
         start : 'start',
         twofainfo : 'Please enter the code sent via email.',
-        submit : 'submit'
+        submit : 'submit',
+        name : 'name',
+        file : 'file',
     },
     ko: {
         login: '로그인',
@@ -44,6 +46,8 @@ const translations = {
         start : '시작',
         twofainfo : '메일로 전송된 코드를 입력하세요',
         submit : '제출',
+        name : '이름',
+        file : '파일'
     },
     fr: {
         login: 'connexion',
@@ -66,7 +70,9 @@ const translations = {
         space : '&nbsp;',
         start : 'démarrer',
         twofainfo : 'Veuillez entrer le code envoyé par e-mail.',
-        submit : 'soumettre'
+        submit : 'soumettre',
+        name : 'pseudo',
+        file : 'fichier'
     }
 };
 

@@ -1,8 +1,10 @@
+import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
+import { languageState } from "../recoil/languageState.js";
+import translations from "../translations.js";
 import { bindEventHandler } from "../utils/bindEventHandler.js";
+import { isValidNick, notvalidNickMsg, shake } from "../utils/notvalidNick.js";
 
-const UserEdit = () => {
-    // submit btn을 눌렀을때 사진이 있으면 사진 보내고,
-    // 없으면... 기본 사진 넣어주고..
+const UserEdit = ({onClose}) => {
     const profileImgInputHandler = (event) => {
         const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
@@ -13,18 +15,44 @@ const UserEdit = () => {
             }
             reader.readAsDataURL(file);
         } else {
-            // 에러처리
         }
     }
+    const userEditSubmitHandler = (event) => {
+        const nick = document.getElementById('username-input');
+        if (!isValidNick(nick?.value)) {
+            shake(nick);
+            return ;
+        }
+
+        onClose();
+    }
+
+    const userNameInputHandler = (event) => {
+        const {value} = event.target;
+        
+        notvalidNickMsg(".userinputMsg", value);
+    }
     bindEventHandler('change', "profileImgInputHandler", profileImgInputHandler);
+    bindEventHandler('click', "userEditSubmitHandler", userEditSubmitHandler);
+    bindEventHandler('input', "userNameInputHandler", userNameInputHandler);
     return `
     <div class="useredit">
-        <div class="profileimgInputWrapper">
-            <div class="profilePreviewContainer">
-                <img class="prfilePreviewImg" id="imagePreview" src="/default.png" alt="Image Preview"  />
+        <div class="usereditInputWrapper">
+            <div class="profileimgInputWrapper">
+                <div class="profilePreviewContainer">
+                    <img class="prfilePreviewImg" id="imagePreview" src="/default.png" alt="Image Preview"  />
+                </div>
+                <label for="profileimg-input" class="profileimgInputLabel"> ${translations[getRecoilValue(languageState)]?.file}</label>
+                <input type="file" id="profileimg-input" accept=".jpg, .jpeg, .png" class="profileimgInput profileImgInputHandler"/>
             </div>
-            <label for="profileimg-input" class="profileimgInputLabel"> 업로드 </label>
-            <input type="file" id="profileimg-input" accept=".jpg, .jpeg, .png" class="profileimgInput profileImgInputHandler"/>
+            <div class="usernameInputWrapper">
+                <label for="username-input" class="usernameInputLabel">${translations[getRecoilValue(languageState)]?.name}</label>
+                <input type="text" id="username-input" class="profileusername userNameInputHandler" />
+                <p class="userinputMsg pingpongPlayerMsg">&nbsp;</p>
+            </div>
+        </div>
+        <div class="usereditSubmitWrapper">
+            <button class="usereditSubmit userEditSubmitHandler">${translations[getRecoilValue(languageState)]?.submit}</button>
         </div>
     </div>
     `

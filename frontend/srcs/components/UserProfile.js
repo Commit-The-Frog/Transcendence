@@ -35,6 +35,6 @@ export default function UserProfile ( {
             <button class="userInfoEdit userEditOpenHandler"> ${translations[getRecoilValue(languageState)]?.edit} </button>
         </div>
     </div>
-    ${editOpen === true ? Modal({modal : editOpen, closeHandler, onclose : () => setEditOpen(false), children : UserEdit, childrenName : "userEdit"}) : ''}
+    ${editOpen === true ? Modal({modal : editOpen, closeHandler, onClose : () => setEditOpen(false), children : UserEdit, childrenName : "userEdit"}) : ''}
     `
 }
