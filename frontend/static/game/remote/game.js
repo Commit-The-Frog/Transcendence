@@ -5,15 +5,16 @@ import { Key } from './key.js';
 let timer = 0;
 
 let Game = class {
-	constructor(matchName, nickname) {
+	constructor(matchName, nickname, type, itemMode) {
 		this.animationFrameId = null;
 		this.canvas = new Canvas("ping pong");
 		this.ui = new UserInterface(this.canvas);
 		this.key = new Key();
 		this.info = null;
 		this.ws = null;
+		this.type = type;
+		this.itemMode = itemMode;
 		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/match?match_name=${matchName}&id=${nickname}`;
-		this.status = 'ready';
 		this.count = 0;
 	}
 
@@ -36,6 +37,31 @@ let Game = class {
 				this.end()
 			}
 		};
+	}
+
+	/* 
+		대진표 화면 렌더링
+			- 참가자 배열 전달 후 화면 그리기
+			- 웹소켓 연결요청
+	*/
+	renderSchedule = () => {
+		this.ui.drawScheduleScreen(['', '', '', ''], 'Waiting for players...');
+		if (this.key.nowPressed) {
+			this.ws = new WebSocket(this.wsUrl);
+			this.ws.onopen = () => {
+				console.log(`토너먼트 웹소켓 오픈 : ${matchName}`);
+			};
+			this.ws.onmessage = (event) => {
+				const players = event.players;
+				console.log(`서버로부터 참가자 데이터 수신 : ${players}`);
+				if (players.length == 4) {
+					let countDown = 5;
+					this.ui.drawScheduleScreen(players, `Game start in ${countDown}`);
+				} else {
+					this.ui.drawScheduleScreen(players, 'Waiting for players...');
+				}
+			}
+		}
 	}
 
 	renderStart = () => {
@@ -62,26 +88,26 @@ let Game = class {
 		this.ui.drawGameOverScreen(1, (timer * 2) % 360, this.info.winner);
 		if (this.key.spacePressed) {
 			this.home();
-			// if (this.info.type == 1) {
-			// 	this.home();
-			// } else if (this.info.type == 2) {
-			// 	if (this.tourRound <= 2) {
-			// 		this.init();
-			// 	} else if (this.tourRound == 3) {
-			// 		this.init();
-			// 	} else {
-			// 		this.home();
-			// 	}
-			// }
 		}
 		this.animationFrameId = requestAnimationFrame(this.renderGameOver);
 	}
 
 	// ### control ###
 	init = () => {
-		// setInterval 대신 requestAnimationFrame 사용
 		cancelAnimationFrame(this.animationFrameId);
-		this.renderStart();
+		if (this.type == 2)	this.initTournament();
+		else	this.initGame();
+	}
+
+	// 토너먼트 시작 명령
+	initTournament = () => {
+		cancelAnimationFrame(this.animationFrameId);
+		
+	}
+
+	// 게임 시작 명령
+	initGame = () => {
+
 	}
 
 	start = () => {
