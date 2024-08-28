@@ -37,22 +37,9 @@ let Game = class {
 					this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 				});
 			} else if (this.info && this.info.status === 'game over') {
-				clearInterval(keyReact);
-				this.gameOver();
+				this.end()
 			}
 		};
-		keyReact = setInterval(()=> {
-			if (isMe) {
-				const keyInfo = {
-					type: 'update',
-					key: { 
-						'upPressed': this.key.upPressed,
-						'downPressed': this.key.downPressed,
-					}
-				}
-				this.ws.send(JSON.stringify(keyInfo));
-			}
-		}, 5);
 	}
 	/* 
 		대진표 화면 렌더링
