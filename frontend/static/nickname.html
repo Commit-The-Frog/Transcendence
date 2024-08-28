@@ -130,6 +130,11 @@
 			if (loc == 'local')
 				window.location.href = url;
 			else if (loc == 'remote') {
+				// 테스트용
+				let uuid = 'minjachoisgay';
+				window.location.href = url + `&match_name=${uuid}`;
+
+				/*
 				// 매치메이킹 모달 띄우기
 				const modal = document.createElement('div');
 				modal.className = 'modal';
@@ -164,6 +169,7 @@
 					alert("WebSocket error observed:", error);
 					modal.remove();
 				};
+				*/
 			}
 		})
     </script>
