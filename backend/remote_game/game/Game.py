@@ -120,7 +120,7 @@ class Game:
 
     async def __send_message(self, channel_layer):
         message = None
-        if self.game_status == 0:
+        if self.status == 0:
             message = {
                 'type': 'game_update',
                 'data': {
@@ -135,7 +135,7 @@ class Game:
                     },
                 }
             }
-        elif self.game_status == 1:
+        elif self.status == 1:
             message = {
                 'type': 'game_update',
                 'data': {
@@ -165,10 +165,10 @@ class Game:
                         'width': self.__right_paddle.width,
                         'height': self.__right_paddle.height,
                     },
-                    'winner': self.winner.get_id()
+                    'winner': self.winner.get_id() if self.winner else ""
                 }
             }
-        elif self.game_status == 2:
+        elif self.status == 2:
             message = {
                 'type': 'game_update',
                 'data' : {
@@ -198,7 +198,7 @@ class Game:
                         'width': self.__right_paddle.width,
                         'height': self.__right_paddle.height,
                     },
-                    'winner': self.winner.get_id()
+                    'winner': self.winner.get_id() if self.winner else ""
                 }
             }
         else:
