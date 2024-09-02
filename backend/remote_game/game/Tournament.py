@@ -21,6 +21,7 @@ class Tournament:
 
     async def start(self):
         channel_layer = get_channel_layer()
+        cnt = 0
         while len(self.players) < 4:
             await channel_layer.group_send(self.id, {
                 'type': 'game_update',
@@ -31,7 +32,13 @@ class Tournament:
                     ],
                 }
             })
+            if cnt >= 10:
+                await channel_layer.group_send(self.id,{
+                    'type': 'game_timeout'
+                })
+                return
             await asyncio.sleep(0.5)
+            cnt += 0.5
         logger.info('All players participate')
         self.games[0] = Game(self.id)
         self.games[0].add_player(self.players[0])
