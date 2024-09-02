@@ -15,12 +15,14 @@ let Game = class {
 		this.type = type;
 		this.typestr = type == '1' ? '1vs1' : 'tournament';
 		this.itemMode = itemMode;
-		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
+		this.nickname = nickname;
+		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
 		this.count = 0;
 	}
 
 	// ### rendering ###
-	renderGame = () => {
+	renderGame = (isMe) => {
+		let keyReact;
 		// 계산(웹소켓으로 정보 받아옴)
 		this.ws.onmessage = (event) => {
 			this.count++;
@@ -35,11 +37,23 @@ let Game = class {
 					this.ui.drawScoreAndNickname(this.info.playerL, this.info.playerR);
 				});
 			} else if (this.info && this.info.status === 'game over') {
-				this.end()
+				clearInterval(keyReact);
+				this.gameOver();
 			}
 		};
+		keyReact = setInterval(()=> {
+			if (isMe) {
+				const keyInfo = {
+					type: 'update',
+					key: { 
+						'upPressed': this.key.upPressed,
+						'downPressed': this.key.downPressed,
+					}
+				}
+				this.ws.send(JSON.stringify(keyInfo));
+			}
+		}, 5);
 	}
-
 	/* 
 		대진표 화면 렌더링
 			- 참가자 배열 전달 후 화면 그리기
@@ -50,46 +64,59 @@ let Game = class {
 		console.log(`웹소켓 연결 시도 : ${this.wsUrl}`);
 		this.ws = new WebSocket(this.wsUrl);
 		this.ws.onopen = () => {
-			console.log(`토너먼트 웹소켓 오픈 : ${matchName}`);
+			console.log(`토너먼트 웹소켓 오픈 : ${this.wsUrl}`);
 		};
 		this.ws.onmessage = (event) => {
-			const players = event.players;
-			console.log(`서버로부터 참가자 데이터 수신 : ${players} -> 대진표 렌더링...`);
-			if (players.length == 4) {
-				let count = 5;
-				const countDown = setInterval(()=> {
-					this.ui.drawScheduleScreen(players, `Game start in ${countDown}`);
-					count--;
-					if (count == 0) {
-						clearInterval(count);
-						console.log('토너먼트 시작!');
-					}
-				}, 1000);
-			} else {
-				this.ui.drawScheduleScreen(players, 'Waiting for players...');
+			const recv_data = JSON.parse(event.data);
+			if (recv_data.type == 'tour_waiting') {
+				const players = recv_data.players;
+				console.log(`서버로부터 참가자 데이터 수신 : ${players} -> 대진표 렌더링...`);
+				if (players.length == 4) {
+					let count = 6;
+					const countDown = setInterval(()=> {
+						this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+						count--;
+						this.ui.drawScheduleScreen(players, `Game start in ${count}`);
+						if (count == 0) {
+							clearInterval(countDown);
+							console.log('토너먼트 시작!');
+							this.initGame();
+						}
+					}, 1000);
+				} else {
+					this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					this.ui.drawScheduleScreen(players, 'Waiting for players...');
+				}
 			}
 		}
 	}
-
+	/* 
+		Game 시작 화면 렌더링
+	*/
 	renderStart = () => {
-		this.ui.drawGameStartScreen();
-		if (this.key.nowPressed) { // 준비완료 버튼(아무버튼이나)
-			if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
-				this.ws = new WebSocket(this.wsUrl);
-
-				this.ws.onopen = () => {
-					console.log("WebSocket is open now");
-					const eventData = JSON.stringify({ type: 'ready' });
-					this.ws.send(eventData); // 웹소켓으로 준비완료 정보 전송
-					this.key.initWs(this.ws);
-					this.start();
-				};
+		let recv_data;
+		let isMe = false;
+		this.ui.drawGameStartScreen(false, ['', '']);
+		this.ws.onmessage = (event) => {
+			recv_data = JSON.parse(event.data);
+			if (recv_data.status == 'waiting') {
+				if (recv_data.playerL.nickname === this.nickname || recv_data.playerR.nickname === this.nickname)
+					isMe = true;
+				this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				this.ui.drawGameStartScreen(isMe, [recv_data.playerL.nickname, recv_data.playerR.nickname]);
+			} else if (recv_data.status == 'in progress') {
+				this.gameStart(isMe);
 			}
 		}
-		// 다음 프레임에 renderStart를 다시 호출
-		this.animationFrameId = requestAnimationFrame(this.renderStart);
+		const keyReact = setInterval(() => {
+			if (isMe && this.key.nowPressed) {
+				const ready = {type: 'ready'};
+				let readyData = JSON.stringify(ready);
+				this.ws.send(readyData);
+				clearInterval(keyReact);
+			}
+		}, 5);
 	}
-
 	renderGameOver = () => {
 		timer++;
 		this.ui.drawGameOverScreen(1, (timer * 2) % 360, this.info.winner);
@@ -101,32 +128,26 @@ let Game = class {
 
 	// ### control ###
 	init = () => {
-		cancelAnimationFrame(this.animationFrameId);
 		if (this.type == 2)	this.initTournament();
 		else	this.initGame();
 	}
-
 	// 토너먼트 시작 명령
 	initTournament = () => {
-		cancelAnimationFrame(this.animationFrameId);
 		this.renderSchedule();
 	}
-
 	// 게임 시작 명령
 	initGame = () => {
-
+		this.renderStart();
 	}
-
-	start = () => {
-		cancelAnimationFrame(this.animationFrameId);
-		this.renderGame();
+	// 게임 시작
+	gameStart = (isMe) => {
+		this.renderGame(isMe);
 	}
-
-	end = () => {
+	// 게임 종료
+	gameOver = () => {
 		cancelAnimationFrame(this.animationFrameId);
 		this.renderGameOver();
 	}
-
 	home = () => {
 		if (this.animationFrameId) {
 			cancelAnimationFrame(this.animationFrameId);

@@ -37,28 +37,42 @@ let UserInterface = class {
 		this.ctx.font = `42px sans-serif`;
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('VS', this.width/2, this.height/2+15);
+		// 상단 상태정보
+		this.ctx.fillText(status, this.width/2, 50, 500);
 		// 1번 플레이어
 		this.ctx.font = `25px sans-serif`;
-		this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2-150, 100);
+		if (nicknames[0])
+			this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2-150, 100);
 		// 2번 플레이어
-		this.ctx.fillText(nicknames[1], this.width/2-250, this.height/2+150, 100);
+		if (nicknames[1])
+			this.ctx.fillText(nicknames[1], this.width/2-250, this.height/2+150, 100);
 		// 3번 플레이어
-		this.ctx.fillText(nicknames[2], this.width/2+250, this.height/2-150, 100);
+		if (nicknames[2])
+			this.ctx.fillText(nicknames[2], this.width/2+250, this.height/2-150, 100);
 		// 4번 플레이어
-		this.ctx.fillText(nicknames[3], this.width/2+250, this.height/2+150, 100);
-		// 상단 상태정보
-		this.ctx.fillText(status, this.width/2, this.height+50, 500);
+		if (nicknames[3])
+			this.ctx.fillText(nicknames[3], this.width/2+250, this.height/2+150, 100);
 	}
-	drawGameStartScreen = () => {
+	drawGameStartScreen = (isMe, nicknames) => {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
 		this.ctx.font = `40px sans-serif`;
 		this.ctx.fillStyle = 'white';
 		this.ctx.textAlign = 'center';
-		this.ctx.fillText('PING PONG', this.width / 2, this.height / 5, 1000);
+		// vs 텍스트
+		this.ctx.font = `42px sans-serif`;
+		this.ctx.textAlign = 'center';
+		this.ctx.fillText('VS', this.width/2, this.height/2);
+		// 1번 플레이어
+		if (nicknames[0])
+			this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2, 100);
+		// 2번 플레이어
+		if (nicknames[1])
+			this.ctx.fillText(nicknames[1], this.width/2+250, this.height/2, 100);
 		this.ctx.font = `30px sans-serif`;
-		this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 4 / 5, 1000);
+		if (isMe)
+			this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 4 / 5, 1000);
 	}
 	drawGameOverScreen = (type, opacity, winner) => {
 		opacity /= 100;
