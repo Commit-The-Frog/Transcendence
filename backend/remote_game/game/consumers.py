@@ -90,7 +90,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         query_params = urllib.parse.parse_qs(query_string)
 
         # match_name과 id 추출
-        tournament_name = query_params.get('tournament_name', [None])[0]
+        tournament_name = query_params.get('match_name', [None])[0]
         user_id = query_params.get('id', [None])[0]
         self.player = None
         if tournament_name and user_id:
