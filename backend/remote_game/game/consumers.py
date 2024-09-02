@@ -131,6 +131,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         msg_type = text_data_json['type']
+        # logger.info(f'{self.player.get_id()} >> {text_data_json}')
         if msg_type == 'ready':
             self.player.set_is_ready(True)
         elif msg_type == 'update':
