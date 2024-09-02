@@ -7,6 +7,7 @@ let UserInterface = class {
 		this.height = this.canvas.height;
 	}
 	drawScheduleScreen = (nicknames, status) => {
+		console.log(`status: ${status}`);
 		this.ctx.fillStyle = 'black';
 		this.ctx.beginPath();
 		// 가운데 가로선
@@ -46,7 +47,7 @@ let UserInterface = class {
 		// 4번 플레이어
 		this.ctx.fillText(nicknames[3], this.width/2+250, this.height/2+150, 100);
 		// 상단 상태정보
-		this.ctx.fillText(status, this.width/2, this.height+100, 500);
+		this.ctx.fillText(status, this.width/2, this.height+50, 500);
 	}
 	drawGameStartScreen = () => {
 		this.ctx.fillStyle = 'black';

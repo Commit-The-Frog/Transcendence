@@ -13,8 +13,9 @@ let Game = class {
 		this.info = null;
 		this.ws = null;
 		this.type = type;
+		this.typestr = type == '1' ? '1vs1' : 'tournament';
 		this.itemMode = itemMode;
-		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/match?match_name=${matchName}&id=${nickname}`;
+		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
 		this.count = 0;
 	}
 
@@ -46,20 +47,26 @@ let Game = class {
 	*/
 	renderSchedule = () => {
 		this.ui.drawScheduleScreen(['', '', '', ''], 'Waiting for players...');
-		if (this.key.nowPressed) {
-			this.ws = new WebSocket(this.wsUrl);
-			this.ws.onopen = () => {
-				console.log(`토너먼트 웹소켓 오픈 : ${matchName}`);
-			};
-			this.ws.onmessage = (event) => {
-				const players = event.players;
-				console.log(`서버로부터 참가자 데이터 수신 : ${players}`);
-				if (players.length == 4) {
-					let countDown = 5;
+		console.log(`웹소켓 연결 시도 : ${this.wsUrl}`);
+		this.ws = new WebSocket(this.wsUrl);
+		this.ws.onopen = () => {
+			console.log(`토너먼트 웹소켓 오픈 : ${matchName}`);
+		};
+		this.ws.onmessage = (event) => {
+			const players = event.players;
+			console.log(`서버로부터 참가자 데이터 수신 : ${players} -> 대진표 렌더링...`);
+			if (players.length == 4) {
+				let count = 5;
+				const countDown = setInterval(()=> {
 					this.ui.drawScheduleScreen(players, `Game start in ${countDown}`);
-				} else {
-					this.ui.drawScheduleScreen(players, 'Waiting for players...');
-				}
+					count--;
+					if (count == 0) {
+						clearInterval(count);
+						console.log('토너먼트 시작!');
+					}
+				}, 1000);
+			} else {
+				this.ui.drawScheduleScreen(players, 'Waiting for players...');
 			}
 		}
 	}
@@ -102,7 +109,7 @@ let Game = class {
 	// 토너먼트 시작 명령
 	initTournament = () => {
 		cancelAnimationFrame(this.animationFrameId);
-		
+		this.renderSchedule();
 	}
 
 	// 게임 시작 명령
