@@ -49,3 +49,10 @@ class Player:
 
     def set_disconnect(self):
         self.__connected = False
+
+    def reset(self):
+        self.__score = 0
+        self.__is_ready = False
+        self.__is_winner = False
+        self.__input['upPressed'] = False
+        self.__input['downPressed'] = False

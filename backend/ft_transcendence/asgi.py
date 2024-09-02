@@ -1,5 +1,5 @@
 """
-ASGI config for ft_transendence project.
+ASGI config for ft_transcendence project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -14,7 +14,7 @@ from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
 from channels.routing import ProtocolTypeRouter, URLRouter
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ft_transendence.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ft_transcendence.settings')
 
 from remote_game.routing import websocket_urlpatterns
 

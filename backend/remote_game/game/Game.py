@@ -7,7 +7,7 @@ from remote_game.game_objects.Player import Player
 
 import logging
 
-logger = logging.getLogger('transendence')
+logger = logging.getLogger('transcendence')
 
 class Game:
     canvas_width = 800
@@ -18,8 +18,9 @@ class Game:
         2 : 'game over',
         3 : 'error'
     }
-    def __init__(self, game_id):
+    def __init__(self, game_id, tournament_id:str=None):
         self.id = game_id
+        self.tournament_id = tournament_id
         self.status = 0
         self.players = {}
         self.__ball = Ball((Game.canvas_width - 15) / 2, (Game.canvas_height - 15) / 2)
@@ -31,132 +32,35 @@ class Game:
         channel_layer = get_channel_layer()
         while len(self.players) < 2:
             await asyncio.sleep(0.5)
-        while not self.players[0].get_is_ready() or not self.players[1].get_is_ready():
+        while not self.players[0].get_is_ready() or not self.players[1].get_is_ready(): #waiting
             if not self.players[0].is_connected() or not self.players[1].is_connected():
                 break
-            await channel_layer.group_send(
-                self.id,
-                {
-                    'type': 'game_update',
-                    'data' : {
-                        'status': Game.game_status[self.status],
-                    }
-                }
-            )
+            await self.__send_message(channel_layer)
             await asyncio.sleep(1)
         if self.players[0].is_connected() and self.players[1].is_connected():
             self.status = 1
         else:
             self.status = 2
         while self.status == 1: # game is in progress
-            await channel_layer.group_send(
-                self.id,
-                {
-                    'type': 'game_update',
-                    'data': {
-                        'status': Game.game_status[self.status],
-                        'playerL': {
-                            'nickname': self.players[0].get_id(),
-                            'score': self.players[0].get_score(),
-                        },
-                        'playerR': {
-                            'nickname': self.players[1].get_id(),
-                            'score': self.players[1].get_score(),
-                        },
-                        'ball': {
-                            'x': self.__ball.x,
-                            'y': self.__ball.y,
-                            'radius': self.__ball.radius,
-                        },
-                        'paddleL': {
-                            'x': self.__left_paddle.x,
-                            'y': self.__left_paddle.y,
-                            'width': self.__left_paddle.width,
-                            'height': self.__left_paddle.height,
-                        },
-                        'paddleR': {
-                            'x': self.__right_paddle.x,
-                            'y': self.__right_paddle.y,
-                            'width': self.__right_paddle.width,
-                            'height': self.__right_paddle.height,
-                        },
-                    },
-                }
-            )
-            self._calculate()
+            await self.__send_message(channel_layer)
+            self.__calculate()
             await asyncio.sleep(1/100)
-        if self.status == 2: # game over with game winner
-            await channel_layer.group_send(
-                self.id,
-                {
-                    'type': 'game_update',
-                    'data' : {
-                        'status': Game.game_status[self.status],
-                        'playerL': {
-                            'nickname': self.players[0].get_id(),
-                            'score': self.players[0].get_score(),
-                        },
-                        'playerR': {
-                            'nickname': self.players[1].get_id(),
-                            'score': self.players[1].get_score(),
-                        },
-                        'ball': {
-                            'x': self.__ball.x,
-                            'y': self.__ball.y,
-                            'radius': self.__ball.radius,
-                        },
-                        'paddleL': {
-                            'x': self.__left_paddle.x,
-                            'y': self.__left_paddle.y,
-                            'width': self.__left_paddle.width,
-                            'height': self.__left_paddle.height,
-                        },
-                        'paddleR': {
-                            'x': self.__right_paddle.x,
-                            'y': self.__right_paddle.y,
-                            'width': self.__right_paddle.width,
-                            'height': self.__right_paddle.height,
-                        },
-                        'winner': self.winner.get_id()
-                    }
-                }
-            )
+        if self.status == 2:
+            await self.__send_message(channel_layer)
         else: # game over by connection lost
             if self.players[0].is_connected():
-                winner = self.players[0]
+                self.winner = self.players[0]
             elif self.players[1].is_connected():
-                winner = self.players[1]
+                self.winner = self.players[1]
             else:
-                winner = self.players[0]
-            await channel_layer.group_send(
-                self.id,
-                {
-                    'type': 'game_update',
-                    'data' : {
-                        'status': Game.game_status[self.status],
-                        'winner': winner.get_id() if winner else "",
-                    }
-                }
-            )
-        await channel_layer.group_send(
-            self.id,
-            {
-                'type': 'game_done'
-            }
-        )
-
+                self.winner = self.players[0]
+            await self.__send_message(channel_layer)
 
     def add_player(self, player):
         idx = len(self.players)
         self.players[idx] = player
 
-    def is_started(self):
-        return self.status == 1
-
-    def player_is_full(self):
-        return len(self.players) >= 2
-
-    def _calculate(self):
+    def __calculate(self):
         if not self.players[0].is_connected() or not self.players[1].is_connected():
             self.status = 3
             return
@@ -213,3 +117,96 @@ class Game:
         if self.players[1].get_score() >= 5:
             self.winner = self.players[1]
             self.status = 2
+
+    async def __send_message(self, channel_layer):
+        message = None
+        if self.status == 0:
+            message = {
+                'type': 'game_update',
+                'data': {
+                    'status': Game.game_status[self.status],
+                    'playerL': {
+                        'nickname': self.players[0].get_id(),
+                        'is_ready': self.players[0].is_ready()
+                    },
+                    'playerR': {
+                        'nickname': self.players[1].get_id(),
+                        'is_ready': self.players[1].is_ready()
+                    },
+                }
+            }
+        elif self.status == 1:
+            message = {
+                'type': 'game_update',
+                'data': {
+                    'status': Game.game_status[self.status],
+                    'playerL': {
+                        'nickname': self.players[0].get_id(),
+                        'score': self.players[0].get_score(),
+                    },
+                    'playerR': {
+                        'nickname': self.players[1].get_id(),
+                        'score': self.players[1].get_score(),
+                    },
+                    'ball': {
+                        'x': self.__ball.x,
+                        'y': self.__ball.y,
+                        'radius': self.__ball.radius,
+                    },
+                    'paddleL': {
+                        'x': self.__left_paddle.x,
+                        'y': self.__left_paddle.y,
+                        'width': self.__left_paddle.width,
+                        'height': self.__left_paddle.height,
+                    },
+                    'paddleR': {
+                        'x': self.__right_paddle.x,
+                        'y': self.__right_paddle.y,
+                        'width': self.__right_paddle.width,
+                        'height': self.__right_paddle.height,
+                    },
+                    'winner': self.winner.get_id() if self.winner else ""
+                }
+            }
+        elif self.status == 2:
+            message = {
+                'type': 'game_update',
+                'data' : {
+                    'status': Game.game_status[self.status],
+                    'playerL': {
+                        'nickname': self.players[0].get_id(),
+                        'score': self.players[0].get_score(),
+                    },
+                    'playerR': {
+                        'nickname': self.players[1].get_id(),
+                        'score': self.players[1].get_score(),
+                    },
+                    'ball': {
+                        'x': self.__ball.x,
+                        'y': self.__ball.y,
+                        'radius': self.__ball.radius,
+                    },
+                    'paddleL': {
+                        'x': self.__left_paddle.x,
+                        'y': self.__left_paddle.y,
+                        'width': self.__left_paddle.width,
+                        'height': self.__left_paddle.height,
+                    },
+                    'paddleR': {
+                        'x': self.__right_paddle.x,
+                        'y': self.__right_paddle.y,
+                        'width': self.__right_paddle.width,
+                        'height': self.__right_paddle.height,
+                    },
+                    'winner': self.winner.get_id() if self.winner else ""
+                }
+            }
+        else:
+            message = {
+                'type': 'game_update',
+                'data' : {
+                    'status': Game.game_status[self.status],
+                    'winner': self.winner.get_id() if self.winner else "",
+                }
+            }
+        await channel_layer.group_send(self.id, message)
