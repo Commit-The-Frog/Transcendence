@@ -35,7 +35,7 @@ RUN pip install -r requirements.txt
 COPY .. .
 
 # Redis를 백엔드로 사용하기 위해 환경 변수 설정 (필요시)
-#ENV DJANGO_SETTINGS_MODULE=ft_transendence.settings
+#ENV DJANGO_SETTINGS_MODULE=ft_transcendence.settings
 
 # 장고 static 파일 수집
 RUN python manage.py collectstatic --noinput
@@ -44,4 +44,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Redis 서버 실행, Daphne ASGI 서버 실행
-CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 ft_transendence.asgi:application
+CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 ft_transcendence.asgi:application

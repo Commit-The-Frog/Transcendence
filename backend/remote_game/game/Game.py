@@ -7,7 +7,7 @@ from remote_game.game_objects.Player import Player
 
 import logging
 
-logger = logging.getLogger('transendence')
+logger = logging.getLogger('transcendence')
 
 class Game:
     canvas_width = 800

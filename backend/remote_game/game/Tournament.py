@@ -5,7 +5,7 @@ from channels.layers import get_channel_layer
 from remote_game.game.Game import Game
 from remote_game.game_objects.Player import Player
 import logging
-logger = logging.getLogger('transendence')
+logger = logging.getLogger('transcendence')
 
 class Tournament:
     def __init__(self, tournament_id):

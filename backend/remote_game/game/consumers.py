@@ -10,7 +10,7 @@ import urllib.parse
 game_dict = {}
 tournament_dict = {}
 
-logger = logging.getLogger('transendence')
+logger = logging.getLogger('transcendence')
 
 class GameConsumer(AsyncWebsocketConsumer):
     async def connect(self):
