@@ -77,6 +77,12 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.match_group_name in versus_dict.keys():
             versus_dict.pop(self.match_group_name)
 
+    async def game_timeout(self, event):
+        logger.debug(f'{self.match_group_name} game timed out')
+        if self.match_group_name in versus_dict.keys():
+            versus_dict.pop(self.match_group_name)
+        await self.close()
+
 class TournamentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # 쿼리 문자열을 파싱하여 match_name과 id를 가져오기
@@ -140,3 +146,9 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         logger.debug(f'{self.tournament_group_name} game done')
         if self.tournament_group_name in tournament_dict.keys():
             tournament_dict.pop(self.tournament_group_name)
+
+    async def game_timeout(self, event):
+        logger.debug(f'{self.tournament_group_name} game timed out')
+        if self.tournament_group_name in versus_dict.keys():
+            versus_dict.pop(self.tournament_group_name)
+        await self.close()
