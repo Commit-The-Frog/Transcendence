@@ -5,6 +5,7 @@ let Key = class {
 		this.downPressed = false;
 		this.nowPressed = null;
 		this.ws = null;
+		this.isme = false;
 		this.setKeyEventHandler();
 	}
 	initWs = (ws) => {
@@ -42,7 +43,7 @@ let Key = class {
 	}
 	sendKeyEventToWs = () => {
 		// 키정보 서버에 전송
-		if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+		if (this.isme && this.ws) {
 			const keyInfo = JSON.stringify( {
 				type: 'update',
 				key: {
