@@ -72,7 +72,7 @@ let UserInterface = class {
 			this.ctx.fillText(nicknames[1], this.width/2+250, this.height/2, 100);
 		this.ctx.font = `30px sans-serif`;
 		if (isMe)
-			this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 4 / 5, 1000);
+			this.ctx.fillText('PRESS SPACE BTN', this.width / 2, this.height * 4 / 5, 1000);
 	}
 	drawGameOverScreen = (type, opacity, winner) => {
 		opacity /= 100;
