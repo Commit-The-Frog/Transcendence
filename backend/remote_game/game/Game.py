@@ -22,7 +22,7 @@ class Game:
         self.id = game_id
         self.tournament_id = tournament_id
         self.status = 0
-        self.players = {}
+        self.players: dict[int, Player] = {}
         self.__ball = Ball((Game.canvas_width - 15) / 2, (Game.canvas_height - 15) / 2)
         self.__left_paddle = Paddle(50, (Game.canvas_height - 100) / 2)
         self.__right_paddle = Paddle(Game.canvas_width - 50 - 10, (Game.canvas_height - 100) / 2)
@@ -32,22 +32,25 @@ class Game:
         channel_layer = get_channel_layer()
         while len(self.players) < 2:
             await asyncio.sleep(0.5)
-        while not self.players[0].get_is_ready() or not self.players[1].get_is_ready(): #waiting
+        while len(self.players) >= 2 and (not self.players[0].get_is_ready() or not self.players[1].get_is_ready()): #waiting
             if not self.players[0].is_connected() or not self.players[1].is_connected():
                 break
             await self.__send_message(channel_layer)
             await asyncio.sleep(1)
-        if self.players[0].is_connected() and self.players[1].is_connected():
+        if len(self.players) >= 2 and self.players[0].is_connected() and self.players[1].is_connected():
+            logger.info(f'{self.id} Game Now Start')
             self.status = 1
         else:
-            self.status = 2
+            self.status = 3
         while self.status == 1: # game is in progress
             await self.__send_message(channel_layer)
             self.__calculate()
             await asyncio.sleep(1/100)
         if self.status == 2:
+            logger.info(f'{self.id} Game End')
             await self.__send_message(channel_layer)
         else: # game over by connection lost
+            logger.info(f'{self.id} Game Error End')
             if self.players[0].is_connected():
                 self.winner = self.players[0]
             elif self.players[1].is_connected():
@@ -127,11 +130,11 @@ class Game:
                     'status': Game.game_status[self.status],
                     'playerL': {
                         'nickname': self.players[0].get_id(),
-                        'is_ready': self.players[0].is_ready()
+                        'is_ready': self.players[0].get_is_ready()
                     },
                     'playerR': {
                         'nickname': self.players[1].get_id(),
-                        'is_ready': self.players[1].is_ready()
+                        'is_ready': self.players[1].get_is_ready()
                     },
                 }
             }

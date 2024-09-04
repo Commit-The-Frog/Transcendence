@@ -39,6 +39,15 @@ class Tournament:
                 return
             await asyncio.sleep(0.5)
             cnt += 0.5
+        await channel_layer.group_send(self.id, {
+            'type': 'game_update',
+            'data': {
+                'type': 'tour_waiting',
+                'players': [
+                    player.get_id() for player in self.players.values()
+                ],
+            }
+        })
         logger.info('All players participate')
         self.games[0] = Game(self.id)
         self.games[0].add_player(self.players[0])
@@ -73,14 +82,16 @@ class Tournament:
         self.games[2] = Game(self.id)
         self.games[2].add_player(self.games[0].winner)
         self.games[2].add_player(self.games[1].winner)
-        self.games[0].winner.reset()
-        self.games[1].winner.reset()
+        if self.games[0].winner:
+            self.games[0].winner.reset()
+        if self.games[1].winner:
+            self.games[1].winner.reset()
         await channel_layer.group_send(self.id, {
             'type': 'game_update',
             'data': {
                 'type': 'final',
-                'playerL': self.games[0].winner.get_id(),
-                'playerR': self.games[1].winner.get_id(),
+                'playerL': "" if not self.games[0].winner else self.games[0].winner.get_id(),
+                'playerR': "" if not self.games[1].winner else self.games[1].winner.get_id(),
             }
         })
         final = asyncio.create_task(self.games[2].start())

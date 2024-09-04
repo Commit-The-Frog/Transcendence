@@ -90,7 +90,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         query_params = urllib.parse.parse_qs(query_string)
 
         # match_name과 id 추출
-        tournament_name = query_params.get('tournament_name', [None])[0]
+        tournament_name = query_params.get('match_name', [None])[0]
         user_id = query_params.get('id', [None])[0]
         self.player = None
         if tournament_name and user_id:
@@ -131,6 +131,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         msg_type = text_data_json['type']
+        # logger.info(f'{self.player.get_id()} >> {text_data_json}')
         if msg_type == 'ready':
             self.player.set_is_ready(True)
         elif msg_type == 'update':
