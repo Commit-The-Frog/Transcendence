@@ -6,18 +6,18 @@ let timer = 0;
 
 let Game = class {
 	constructor(matchName, nickname, type, itemMode) {
-		this.animationFrameId = null;
 		this.canvas = new Canvas("ping pong");
 		this.ui = new UserInterface(this.canvas);
 		this.key = new Key();
-		this.info = null;
-		this.ws = null;
 		this.type = type;
 		this.typestr = type == '1' ? '1vs1' : 'tournament';
-		this.itemMode = itemMode;
 		this.nickname = nickname;
-		this.tourStatus = null;
+		this.ws = null;
 		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
+		this.info = null;
+		this.animationFrameId = null;
+		this.itemMode = itemMode;
+		this.status = null;
 		this.count = 0;
 	}
 
@@ -48,34 +48,23 @@ let Game = class {
 			- 참가자 배열 전달 후 화면 그리기
 			- 웹소켓 연결요청
 	*/
-	renderSchedule = () => {
-		this.ui.drawScheduleScreen(['', '', '', ''], 'Waiting for players...');
-		console.log(`웹소켓 연결 시도 : ${this.wsUrl}`);
-		this.ws = new WebSocket(this.wsUrl);
-		this.key.initWs(this.ws);
-		this.ws.onopen = () => {
-			console.log(`토너먼트 웹소켓 오픈 : ${this.wsUrl}`);
-		};
-		this.ws.onmessage = (event) => {
-			const recv_data = JSON.parse(event.data);
-			this.tourStatus = recv_data.type;
-			if (this.tourStatus == 'tour_waiting') {
-				const players = recv_data.players;
-				console.log(`서버로부터 참가자 데이터 수신 : ${players} -> 대진표 렌더링...`);
-				if (players.length == 4) {
-					let count = 6;
-					const countDown = setInterval(()=> {
-						this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-						count--;
-						this.ui.drawScheduleScreen(players, `Game start in ${count}`);
-						if (count == 0)
-							clearInterval(countDown);
-					}, 1000);
-				} else {
-					this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-					this.ui.drawScheduleScreen(players, 'Waiting for players...');
-				}
-			}
+	renderSchedule = (players) => {
+		if (players.length == 0) {
+			this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			this.ui.drawScheduleScreen(['', '', '', ''], 'Waiting for players...');
+		}
+		else if (players.length <= 3) {
+			this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			this.ui.drawScheduleScreen(players, 'Waiting for players...');
+		} else {
+			let count = 6;
+			const countDown = setInterval(()=> {
+				this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				count--;
+				this.ui.drawScheduleScreen(players, `Game start in ${count}`);
+				if (count == 0)
+					clearInterval(countDown);
+			}, 1000);
 		}
 	}
 	/* 
@@ -119,38 +108,46 @@ let Game = class {
 		this.animationFrameId = requestAnimationFrame(this.renderGameOver);
 	}
 
+
+
 	// ### control ###
 	init = () => {
-		if (this.type == 2)	this.initTournament();
-		else	this.initGame();
+		this.controlTournament();
 	}
-	// 토너먼트 시작 명령
-	initTournament = () => {
-		this.renderSchedule();
-		if (this.tourStatus === 'game1')
-			this.initGame();
-		else if (this.tourStatus === 'game2')
-			this.initGame();
-		else if (this.tourStatus === '')
-	}
-	// 게임 시작 명령
-	initGame = () => {
-		this.renderStart();
-	}
-	// 게임 시작
-	gameStart = (isMe) => {
-		this.renderGame(isMe);
-	}
-	// 게임 종료
-	gameOver = () => {
-		cancelAnimationFrame(this.animationFrameId);
-		this.renderGameOver();
-	}
-	home = () => {
-		if (this.animationFrameId) {
-			cancelAnimationFrame(this.animationFrameId);
-		}
-		window.location.href = `index.html`;
+	controlTournament = () => {
+		console.log(`웹소켓 연결 시도 : ${this.wsUrl}`);
+		this.ws = new WebSocket(this.wsUrl);
+		this.key.initWs(this.ws);
+		this.ws.onopen = () => {
+			console.log(`토너먼트 웹소켓 연결 성공`);
+		};
+		this.ws.onerror = (error) => {
+			console.log(`토너먼트 웹소켓 에러 발생`);
+			console.log(error);
+		};
+		this.ws.onclose = () =>{
+			console.log(`토너먼트 웹소켓 종료`);
+		};
+		this.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			if (data.type) {	// 토너먼트 컨트롤
+				if (data.type === 'tour_waiting') {
+					this.status = data.type;
+					this.renderSchedule(data.players);
+				}
+				else if (data.type === 'game1' || data.type === 'game2') {
+					this.status = data.type;
+					console.log(data.type);
+				}
+			}
+			else if (this.status) {
+				if (this.status === 'game1' || this.status === 'game2') {
+					
+				} else if (this.status === 'final') {
+					
+				}
+			}
+		};
 	}
 }
 export {Game};
