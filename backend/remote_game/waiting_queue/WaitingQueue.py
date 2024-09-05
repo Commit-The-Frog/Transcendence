@@ -1,5 +1,8 @@
 import asyncio, uuid
 from channels.layers import get_channel_layer
+import logging
+
+logger = logging.getLogger('transcendence')
 
 class WaitingQueue:
     def __init__(self, size):
@@ -10,6 +13,9 @@ class WaitingQueue:
 
     async def put(self, user):
         async with self.lock:
+            if user in self.users:
+                logger.debug(f'WAITING QUEUE: {user} is already waiting')
+                self.users.remove(user)
             self.users.add(user)
 
     def is_running(self):
@@ -20,10 +26,15 @@ class WaitingQueue:
         channel_layer = get_channel_layer()
         while True:
             async with self.lock:
-                user_group = []
+                user_group = set()
                 if len(self.users) >= self.size:
                     for _ in range(self.size):
-                        user_group.append(self.users.pop())
+                        user_group.add(self.users.pop())
+                    if len(user_group) < self.size:
+                        logger.debug(f'WAITING QUEUE: user duplicated error {user_group}')
+                        for user in user_group:
+                            self.users.add(user)
+                        continue
                     match_name = uuid.uuid4()
                     for user in user_group:
                         await channel_layer.send(
@@ -33,9 +44,7 @@ class WaitingQueue:
                                 "match_name": f'{match_name}'
                             }
                         )
-                else:
-                    await asyncio.sleep(1)
-                    continue
+                await asyncio.sleep(1)
 
     async def delete_from_queue(self, user):
         async with self.lock:
