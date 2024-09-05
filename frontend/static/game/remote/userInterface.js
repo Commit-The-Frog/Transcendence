@@ -6,16 +6,85 @@ let UserInterface = class {
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 	}
-	drawGameStartScreen = () => {
+	drawScheduleScreen = (nicknames, status) => {
+		console.log(`status: ${status}`);
+		this.ctx.fillStyle = 'black';
+		this.ctx.beginPath();
+		// 가운데 가로선
+		this.ctx.moveTo(this.width/2, this.height/2);
+		this.ctx.lineTo(this.width/2-50, this.height/2);
+		this.ctx.lineTo(this.width/2+50, this.height/2);
+		// 좌측 세로선
+		this.ctx.moveTo(this.width/2-50, this.height/2-150);
+		this.ctx.lineTo(this.width/2-50, this.height/2+150);
+		// 좌측 상단 가로선
+		this.ctx.moveTo(this.width/2-150, this.height/2-150);
+		this.ctx.lineTo(this.width/2-50, this.height/2-150);
+		// 좌측 하단 가로선
+		this.ctx.moveTo(this.width/2-150, this.height/2+150);
+		this.ctx.lineTo(this.width/2-50, this.height/2+150);
+		// 우측 세로선
+		this.ctx.moveTo(this.width/2+50, this.height/2-150);
+		this.ctx.lineTo(this.width/2+50, this.height/2+150);
+		// 우측 상단 가로선
+		this.ctx.moveTo(this.width/2+150, this.height/2-150);
+		this.ctx.lineTo(this.width/2+50, this.height/2-150);
+		// 우측 하단 가로선
+		this.ctx.moveTo(this.width/2+150, this.height/2+150);
+		this.ctx.lineTo(this.width/2+50, this.height/2+150);
+		this.ctx.stroke();
+		// vs 텍스트
+		this.ctx.font = `42px sans-serif`;
+		this.ctx.textAlign = 'center';
+		this.ctx.fillText('VS', this.width/2, this.height/2+15);
+		// 상단 상태정보
+		this.ctx.fillText(status, this.width/2, 50, 500);
+		// 1번 플레이어
+		this.ctx.font = `25px sans-serif`;
+		if (nicknames[0])
+			this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2-150, 100);
+		// 2번 플레이어
+		if (nicknames[1])
+			this.ctx.fillText(nicknames[1], this.width/2-250, this.height/2+150, 100);
+		// 3번 플레이어
+		if (nicknames[2])
+			this.ctx.fillText(nicknames[2], this.width/2+250, this.height/2-150, 100);
+		// 4번 플레이어
+		if (nicknames[3])
+			this.ctx.fillText(nicknames[3], this.width/2+250, this.height/2+150, 100);
+	}
+	drawGameStartScreen = (myTurn, players) => {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
 		this.ctx.font = `40px sans-serif`;
 		this.ctx.fillStyle = 'white';
 		this.ctx.textAlign = 'center';
-		this.ctx.fillText('PING PONG', this.width / 2, this.height / 5, 1000);
+		// vs 텍스트
+		this.ctx.font = `42px sans-serif`;
+		this.ctx.textAlign = 'center';
+		this.ctx.fillText('VS', this.width/2, this.height/2);
+		// 1번 플레이어
+		if (players[0]) {
+			if (players[0].nickname)
+				this.ctx.fillText(players[0].nickname, this.width/2-250, this.height/2, 100);
+			if (players[0].is_ready)
+				this.ctx.fillText('ready', this.width/2-250, this.height/2+100, 100);
+			else
+				this.ctx.fillText('waiting', this.width/2-250, this.height/2+100, 100);
+		}
+		// 2번 플레이어
+		if (players[1]) {
+			if (players[1].nickname)
+				this.ctx.fillText(players[1].nickname, this.width/2+250, this.height/2, 100);
+			if (players[1].is_ready)
+				this.ctx.fillText('ready', this.width/2+250, this.height/2+100, 100);
+			else
+				this.ctx.fillText('waiting', this.width/2+250, this.height/2+100, 100);
+		}
 		this.ctx.font = `30px sans-serif`;
-		this.ctx.fillText('PRESS ANY BUTTON', this.width / 2, this.height * 4 / 5, 1000);
+		if (myTurn)
+			this.ctx.fillText('PRESS SPACE BTN', this.width / 2, this.height * 4 / 5, 1000);
 	}
 	drawGameOverScreen = (type, opacity, winner) => {
 		opacity /= 100;

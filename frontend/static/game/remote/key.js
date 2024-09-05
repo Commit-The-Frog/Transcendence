@@ -5,6 +5,7 @@ let Key = class {
 		this.downPressed = false;
 		this.nowPressed = null;
 		this.ws = null;
+		this.myTurn = false;
 		this.setKeyEventHandler();
 	}
 	initWs = (ws) => {
@@ -42,7 +43,7 @@ let Key = class {
 	}
 	sendKeyEventToWs = () => {
 		// 키정보 서버에 전송
-		if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+		if (this.myTurn && this.ws) {
 			const keyInfo = JSON.stringify( {
 				type: 'update',
 				key: {
@@ -52,6 +53,18 @@ let Key = class {
 			});
 			this.ws.send(keyInfo);
 		}
+	}
+	sendSpaceKeyEventToWsOnce = () => {
+		// 스페이스 버튼 서버에 전송(1번만)
+		const keyReact = setInterval(() => {
+			if (this.spacePressed) {
+				const ready = {type: 'ready'};
+				let readyData = JSON.stringify(ready);
+				this.ws.send(readyData);
+				console.log('서버에 스베이스바 레디버튼 전송');
+				clearInterval(keyReact);
+			}
+		}, 1);
 	}
 }
 
