@@ -65,18 +65,52 @@ let Game = class {
 	*/
 	renderGameOver = (gameData) => {
 		console.log('game 종료');
+		this.myTurn = false;
+		this.key.myTurn = false;
 		timer++;
 		this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner);
 	}
 
 
-
 	// ### control ###
 	init = () => {
-		this.initTournament();
+		if (this.type == 1)
+			this.init1vs1();
+		else
+			this.initTournament();
+	}
+	init1vs1 = () => {
+		console.log(`1vs1 웹소켓 연결 시도 : ${this.wsUrl}`);
+		this.ws = new WebSocket(this.wsUrl);
+		this.key.initWs(this.ws);
+		this.ws.onopen = () => {
+			console.log(`토너먼트 웹소켓 연결 성공`);
+		};
+		this.ws.onerror = (error) => {
+			console.log(`토너먼트 웹소켓 에러 발생`);
+			console.log(error);
+		};
+		this.ws.onclose = () =>{
+			console.log(`토너먼트 웹소켓 종료`);
+		};
+		this.ws.onmessage = (event) => {
+			const data = JSON.parse(event.data);
+			if (data.status) {
+				this.myTurn = true;
+				this.key.myTurn = true;
+				if (data.status == 'waiting') {
+					this.renderStart(data);
+					if (this.myTurn) this.key.sendSpaceKeyEventToWsOnce();
+				} else if (data.status == 'in progress') {
+					this.renderGame(data);
+				} else if (data.status == 'game over') {
+					this.renderGameOver(data);
+				}
+			}
+		}
 	}
 	initTournament = () => {
-		console.log(`웹소켓 연결 시도 : ${this.wsUrl}`);
+		console.log(`토너먼트 웹소켓 연결 시도 : ${this.wsUrl}`);
 		this.ws = new WebSocket(this.wsUrl);
 		this.key.initWs(this.ws);
 		this.ws.onopen = () => {
