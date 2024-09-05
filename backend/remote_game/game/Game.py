@@ -37,6 +37,7 @@ class Game:
                 break
             await self.__send_message(channel_layer)
             await asyncio.sleep(1)
+        await self.__send_message(channel_layer)
         if len(self.players) >= 2 and self.players[0].is_connected() and self.players[1].is_connected():
             logger.info(f'{self.id} Game Now Start')
             self.status = 1

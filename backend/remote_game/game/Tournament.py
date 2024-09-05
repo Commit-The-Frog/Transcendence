@@ -64,6 +64,7 @@ class Tournament:
         })
         quarter_final_fst = asyncio.create_task(self.games[0].start())
         await quarter_final_fst
+        await asyncio.sleep(3)
         self.games[1] = Game(self.id)
         self.games[1].add_player(self.players[2])
         self.games[1].add_player(self.players[3])
@@ -79,6 +80,7 @@ class Tournament:
         })
         quarter_final_snd = asyncio.create_task(self.games[1].start())
         await quarter_final_snd
+        await asyncio.sleep(3)
         self.games[2] = Game(self.id)
         self.games[2].add_player(self.games[0].winner)
         self.games[2].add_player(self.games[1].winner)
