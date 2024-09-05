@@ -53,7 +53,7 @@ let UserInterface = class {
 		if (nicknames[3])
 			this.ctx.fillText(nicknames[3], this.width/2+250, this.height/2+150, 100);
 	}
-	drawGameStartScreen = (isMe, nicknames) => {
+	drawGameStartScreen = (myTurn, players) => {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
@@ -65,13 +65,25 @@ let UserInterface = class {
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('VS', this.width/2, this.height/2);
 		// 1번 플레이어
-		if (nicknames[0])
-			this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2, 100);
+		if (players[0]) {
+			if (players[0].nickname)
+				this.ctx.fillText(players[0].nickname, this.width/2-250, this.height/2, 100);
+			if (players[0].is_ready)
+				this.ctx.fillText('ready', this.width/2-250, this.height/2+100, 100);
+			else
+				this.ctx.fillText('waiting', this.width/2-250, this.height/2+100, 100);
+		}
 		// 2번 플레이어
-		if (nicknames[1])
-			this.ctx.fillText(nicknames[1], this.width/2+250, this.height/2, 100);
+		if (players[1]) {
+			if (players[1].nickname)
+				this.ctx.fillText(players[1].nickname, this.width/2+250, this.height/2, 100);
+			if (players[1].is_ready)
+				this.ctx.fillText('ready', this.width/2+250, this.height/2+100, 100);
+			else
+				this.ctx.fillText('waiting', this.width/2+250, this.height/2+100, 100);
+		}
 		this.ctx.font = `30px sans-serif`;
-		if (isMe)
+		if (myTurn)
 			this.ctx.fillText('PRESS SPACE BTN', this.width / 2, this.height * 4 / 5, 1000);
 	}
 	drawGameOverScreen = (type, opacity, winner) => {
