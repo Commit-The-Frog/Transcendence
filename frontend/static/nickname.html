@@ -57,6 +57,7 @@
     <h2 id="msg">Please insert player nickname</h2>
     <button id="btn">start</button>
 
+	<script src="./config/config.js"></script>
     <script>
 		const body = document.body; // body 요소 선택
 		const h2 = document.getElementById('msg');
@@ -66,7 +67,7 @@
 		const mode = params.get('item_mode');
 		const loc = params.get('location');
 		const gameType = document.createElement('h1');
-		let n;
+		let n, typeForBe;
 
 		if (loc == 'local' && type == 1) {
 			n = 2;
@@ -82,6 +83,9 @@
 			n = 1;
 			gameType.textContent = 'tournament';
 		}
+
+		if (type == 1)	typeForBe = '1vs1';
+		else if (type == 2)	typeForBe = 'tournament';
 
 		body.insertBefore(gameType, h2);
 		for (let i = 1; i <= n; i++) {
@@ -107,12 +111,20 @@
 			body.insertBefore(div, button);
 		}
 	  
+		/*
+			start 버튼 클릭시 매치메이킹 시작
+		*/
 		button.addEventListener('click', () => {
 			let url = `${loc}.html?location=${loc}&type=${type}&item_mode=${mode}`;
 			let nickname;
 
 			for (let i = 1; i <= n; i++) {
 				nickname = document.getElementById(`player${i}`).value;
+
+				if (!nickname) {
+					alert(`Player ${i} nickname is required!`);
+					return ; // 하나라도 빈 값이 있으면 for 루프 중지
+				}
 				url += `&player${i}=${nickname}`;
 			}
 			if (loc == 'local')
@@ -130,11 +142,11 @@
 				body.appendChild(modal);
 
 				// 웹소켓 열고 매치메이킹 시작
-				const wsUrl = `ws://10.18.223.141:8000/ws/game/lobby/`;
+				const wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/lobby?type=${typeForBe}`;
 				const ws = new WebSocket(wsUrl);
 
 				ws.onopen = (event) => {
-            		console.log("WebSocket is open now.");
+            		console.log("GameQueue WebSocket 오픈");
 				}
 
 				ws.onmessage = (event) => {
@@ -143,7 +155,7 @@
 
 					if (event.data) {
 						modal.remove();
-						window.location.href = `/game/match/${matchName}?nickname=${nickname}`;
+						window.location.href = `${url}&match_name=${matchName}`;
 					}
 				}
 
