@@ -1,9 +1,12 @@
 import asyncio
 
 from channels.layers import get_channel_layer
+from django.db import IntegrityError
 
 from remote_game.game.Game import Game
 from remote_game.game_objects.Player import Player
+from match import models
+from asgiref.sync import sync_to_async
 import logging
 logger = logging.getLogger('transcendence')
 
@@ -64,6 +67,12 @@ class Tournament:
         })
         quarter_final_fst = asyncio.create_task(self.games[0].start())
         await quarter_final_fst
+        quarter_final_fst_model = models.Game(
+            left_user= await self.players[0].get_db_object(),
+            right_user= await self.players[1].get_db_object(),
+            left_score=self.players[0].get_score(),
+            right_score=self.players[1].get_score(),
+        )
         await asyncio.sleep(3)
         self.games[1] = Game(self.id)
         self.games[1].add_player(self.players[2])
@@ -80,6 +89,12 @@ class Tournament:
         })
         quarter_final_snd = asyncio.create_task(self.games[1].start())
         await quarter_final_snd
+        quarter_final_snd_model = models.Game(
+            left_user= await self.players[2].get_db_object(),
+            right_user= await self.players[3].get_db_object(),
+            left_score=self.players[2].get_score(),
+            right_score=self.players[3].get_score(),
+        )
         await asyncio.sleep(3)
         self.games[2] = Game(self.id)
         self.games[2].add_player(self.games[0].winner)
@@ -98,12 +113,33 @@ class Tournament:
         })
         final = asyncio.create_task(self.games[2].start())
         await final
+        final_model = models.Game(
+            left_user= await self.games[2].players[0].get_db_object(),
+            right_user= await self.games[2].players[1].get_db_object(),
+            left_score=self.games[2].players[0].get_score(),
+            right_score=self.games[2].players[1].get_score(),
+        )
         await channel_layer.group_send(
             self.id,
             {
                 'type': 'game_done'
             }
         )
+        try:
+            await sync_to_async(quarter_final_fst_model.save)(force_insert=False, force_update=False, using=None, update_fields=None)
+            logger.info(f'Tournament Game Model Saved quarter 1 {quarter_final_fst_model.id}')
+            await sync_to_async(quarter_final_snd_model.save)(force_insert=False, force_update=False, using=None, update_fields=None)
+            logger.info(f'Tournament Game Model Saved quarter 2 {quarter_final_snd_model.id}')
+            await sync_to_async(final_model.save)(force_insert=False, force_update=False, using=None, update_fields=None)
+            logger.info(f'Tournament Game Model Saved final {final_model.id}')
+            await sync_to_async(models.Tournament(
+                game1=quarter_final_fst_model,
+                game2=quarter_final_snd_model,
+                game3=final_model,
+            ).save)(force_insert=False, force_update=False, using=None, update_fields=None)
+            logger.info(f'Tournament Model Saved {final_model.id}')
+        except IntegrityError:
+            logger.info('ForeignKey Error While Saving PvP model')
 
     def player_is_full(self):
         return len(self.players) >= 4
