@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "../core/myreact/myreact.js"
 import { bindEventHandler } from "../utils/bindEventHandler.js";
 import { changeUrl } from "../utils/changeUrl.js";
-import updateQueryParam from "../utils/updateQueryParams.js";
 import translations from "../translations.js";
 import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { languageState } from "../recoil/languageState.js";
@@ -27,15 +26,19 @@ const PingpongType = () => {
         });
     };
 
-    const startBtnHandler = (event) =>{
+    const localstartBtnHandler = (event) =>{
         playerInputChecker('pingpong', typeRef.current, itemmodeRef.current);
     };
 
+    const remotestartBtnHandler = (event) => {
+        playerInputChecker('pingpong', typeRef.current, itemmodeRef.current, true);
+    }
     
     bindEventHandler('click', "itemmodeHandler", itemmodeHandler);
     bindEventHandler('click', "twoPlayerBtnHandler",() => handleModeChange(1));
     bindEventHandler('click', "tournamentBtnHandler", () => handleModeChange(2));
-    bindEventHandler('click', "startBtnHandler", startBtnHandler);
+    bindEventHandler('click', "localstartBtnHandler", localstartBtnHandler);
+    bindEventHandler('click', "remotestartBtnHandler", remotestartBtnHandler);
     bindEventHandler('input', "playerInputHandler", playerInputHandler);
 
     return `
@@ -74,24 +77,24 @@ const PingpongType = () => {
             ` : ""}
             
             <div class="startBtnWrapper">
-                <button class="pingpongStart startBtnHandler"> ${translations[getRecoilValue(languageState)]?.start}</button>
+                <button class="pingpongStart ${params2 === "remote" ? "remotestartBtnHandler" : "localstartBtnHandler"}"> ${translations[getRecoilValue(languageState)]?.start}</button>
             </div>
         </div>
     `
 }
 
-export const playerInputChecker = (game, type, item_mode) => {
+export const playerInputChecker = (game, type, item_mode, remote = false) => {
     const player1 = document.getElementById(`${game}-player1`);
     const player2 = document.getElementById(`${game}-player2`);
     const player3 = document.getElementById(`${game}-player3`);
     const player4 = document.getElementById(`${game}-player4`);
     const url = new URL(window.location);
-    const params = window.location.pathname.split("/");
-    const params2 = params[2];
+    // const params = window.location.pathname.split("/");
+    // const params2 = params[2];
 
-    url.pathname += '/start';
+    url.pathname += remote ? '/lobby' : '/start';
     url.searchParams.set('type', type);
-    if (params2 === "remote") {
+    if (remote) {
         changeUrl(url);
         return ;
     }
