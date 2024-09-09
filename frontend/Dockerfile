@@ -1,5 +1,7 @@
-FROM node:22-alpine
+# 베이스 이미지로 Node.js 사용
+FROM node:16
 
+# 작업 디렉토리 설정
 RUN mkdir /frontend
 WORKDIR /frontend
 
@@ -9,6 +11,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3001
 
-CMD ["node", "app.js"]
+# 명령어 설정
+CMD ["npm", "start"]
