@@ -1,0 +1,41 @@
+
+.home {
+    background-color: #C8A1E0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+}
+
+.home .homeLogoImg {
+    margin: auto;
+    width: 440px;
+    height: 440px;
+}
+
+.home .loginWrapper {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 500px;
+    height: 500px;
+}
+
+.home .homeLoginBtn {
+    margin: auto;
+    width: 150px;
+    height: 50px;
+    background-color:white;
+    border-radius: 20px;
+    transition: transform 0.2s ease, background-color 0.2s ease; /* 크기 변화를 위한 부드러운 전환 */
+}
+
+.home .homeLoginBtn:hover {
+    transform: scale(0.97);
+}
+
+.home .homeLoginBtn:active {
+    background-color: var(--default-btn-color); 
+    transform: scale(0.97);
+}
+
