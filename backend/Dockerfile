@@ -26,16 +26,16 @@ RUN apk add --no-cache redis
 RUN pip install --upgrade pip setuptools wheel
 
 # 프로젝트의 의존성 파일 복사
-COPY requirements.txt .
-
-# 의존성 설치
-RUN pip install -r requirements.txt
-
-# 소스 코드 복사
 COPY .. .
 
+# 의존성 설치
+RUN pip install -r requirements.txt \
+    && chmod +w user/profile_images \
+    && python manage.py makemigrations \
+    && python manage.py migrate
+
 # Redis를 백엔드로 사용하기 위해 환경 변수 설정 (필요시)
-#ENV DJANGO_SETTINGS_MODULE=ft_transcendence.settings
+#ENV DJANGO_SETTINGS_MODULE=config.settings
 
 # 장고 static 파일 수집
 RUN python manage.py collectstatic --noinput
@@ -44,4 +44,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Redis 서버 실행, Daphne ASGI 서버 실행
-CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 ft_transcendence.asgi:application
+CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 config.asgi:application
