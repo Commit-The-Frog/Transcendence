@@ -134,11 +134,11 @@ class Game:
                 'data': {
                     'status': Game.game_status[self.status],
                     'playerL': {
-                        'nickname': self.players[0].get_id(),
+                        'nickname': self.players[0].get_nickname(),
                         'is_ready': self.players[0].get_is_ready()
                     },
                     'playerR': {
-                        'nickname': self.players[1].get_id(),
+                        'nickname': self.players[1].get_nickname(),
                         'is_ready': self.players[1].get_is_ready()
                     },
                 }
@@ -149,11 +149,11 @@ class Game:
                 'data': {
                     'status': Game.game_status[self.status],
                     'playerL': {
-                        'nickname': self.players[0].get_id(),
+                        'nickname': self.players[0].get_nickname(),
                         'score': self.players[0].get_score(),
                     },
                     'playerR': {
-                        'nickname': self.players[1].get_id(),
+                        'nickname': self.players[1].get_nickname(),
                         'score': self.players[1].get_score(),
                     },
                     'ball': {
@@ -173,7 +173,7 @@ class Game:
                         'width': self.__right_paddle.width,
                         'height': self.__right_paddle.height,
                     },
-                    'winner': self.winner.get_id() if self.winner else ""
+                    'winner': self.winner.get_nickname() if self.winner else ""
                 }
             }
         elif self.status == 2:
@@ -182,11 +182,11 @@ class Game:
                 'data' : {
                     'status': Game.game_status[self.status],
                     'playerL': {
-                        'nickname': self.players[0].get_id(),
+                        'nickname': self.players[0].get_nickname(),
                         'score': self.players[0].get_score(),
                     },
                     'playerR': {
-                        'nickname': self.players[1].get_id(),
+                        'nickname': self.players[1].get_nickname(),
                         'score': self.players[1].get_score(),
                     },
                     'ball': {
@@ -206,7 +206,7 @@ class Game:
                         'width': self.__right_paddle.width,
                         'height': self.__right_paddle.height,
                     },
-                    'winner': self.winner.get_id() if self.winner else ""
+                    'winner': self.winner.get_nickname() if self.winner else ""
                 }
             }
         else:
@@ -214,7 +214,7 @@ class Game:
                 'type': 'game_update',
                 'data' : {
                     'status': Game.game_status[self.status],
-                    'winner': self.winner.get_id() if self.winner else "",
+                    'winner': self.winner.get_nickname() if self.winner else "",
                 }
             }
         await channel_layer.group_send(self.id, message)

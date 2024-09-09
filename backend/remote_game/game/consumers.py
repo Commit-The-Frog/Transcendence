@@ -21,11 +21,14 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         # match_name과 id 추출
         match_name = query_params.get('match_name', [None])[0]
-        user_id = query_params.get('id', [None])[0]
+        user_id = self.scope['session'].get('api_id')
         self.player = None
         if match_name and user_id:
             self.match_group_name = f'versus_{match_name}'
             self.player = Player(user_id)
+            if not self.player.get_db_object():
+                await self.close()
+                return
             await self.channel_layer.group_add(
                 self.match_group_name, self.channel_name
             )
@@ -91,11 +94,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
         # match_name과 id 추출
         tournament_name = query_params.get('match_name', [None])[0]
-        user_id = query_params.get('id', [None])[0]
+        user_id = self.scope['session'].get('api_id')
         self.player = None
         if tournament_name and user_id:
             self.tournament_group_name = f'tournament_{tournament_name}'
             self.player = Player(user_id)
+            if not self.player.get_db_object():
+                await self.close()
             await self.channel_layer.group_add(
                 self.tournament_group_name, self.channel_name
             )

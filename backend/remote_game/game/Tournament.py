@@ -31,7 +31,7 @@ class Tournament:
                 'data': {
                     'type': 'tour_waiting',
                     'players': [
-                        player.get_id() for player in self.players.values()
+                        player.get_nickname() for player in self.players.values()
                     ],
                 }
             })
@@ -47,7 +47,7 @@ class Tournament:
             'data': {
                 'type': 'tour_waiting',
                 'players': [
-                    player.get_id() for player in self.players.values()
+                    player.get_nickname() for player in self.players.values()
                 ],
             }
         })
@@ -61,8 +61,8 @@ class Tournament:
             'type': 'game_update',
             'data': {
                 'type': 'game1',
-                'playerL': self.players[0].get_id(),
-                'playerR': self.players[1].get_id(),
+                'playerL': self.players[0].get_nickname(),
+                'playerR': self.players[1].get_nickname(),
             }
         })
         quarter_final_fst = asyncio.create_task(self.games[0].start())
@@ -83,8 +83,8 @@ class Tournament:
             'type': 'game_update',
             'data': {
                 'type': 'game2',
-                'playerL': self.players[2].get_id(),
-                'playerR': self.players[3].get_id(),
+                'playerL': self.players[2].get_nickname(),
+                'playerR': self.players[3].get_nickname(),
             }
         })
         quarter_final_snd = asyncio.create_task(self.games[1].start())
@@ -107,8 +107,8 @@ class Tournament:
             'type': 'game_update',
             'data': {
                 'type': 'final',
-                'playerL': "" if not self.games[0].winner else self.games[0].winner.get_id(),
-                'playerR': "" if not self.games[1].winner else self.games[1].winner.get_id(),
+                'playerL': "" if not self.games[0].winner else self.games[0].winner.get_nickname(),
+                'playerR': "" if not self.games[1].winner else self.games[1].winner.get_nickname(),
             }
         })
         final = asyncio.create_task(self.games[2].start())
