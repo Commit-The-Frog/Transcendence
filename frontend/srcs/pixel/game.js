@@ -145,7 +145,7 @@ class Game {
 
         if (this.keys['q'] || this.keys['Q'] || this.keys['ㅂ']) this.leftPlayer.shoot();
 
-        if (this.keys['/']) this.rightPlayer.shoot();
+        if (this.keys['l'] || this.keys['L'] || this.keys['ㅣ']) this.rightPlayer.shoot();
 
     }
 

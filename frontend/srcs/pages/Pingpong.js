@@ -4,6 +4,7 @@ import { changeUrl } from "../utils/changeUrl.js";
 import PingPongLocalGame from "../components/PingPongLocalGame.js"
 import PingPongSelectBox from "../components/PingPongSelectBox.js";
 import PingPongRemoteGame from "../components/PingPongRemoteGame.js";
+import PingPongLobby from "../components/PingPongLobby.js";
 
 const pingpongParamRoute = () => {
     const params = window.location.pathname.split('/');
@@ -18,6 +19,8 @@ const pingpongParamRoute = () => {
         return PingPongLocalGame;
     } else if (params2 === 'remote' && params3 === "start") {
         return PingPongRemoteGame;   
+    } else if ((params2 === 'remote') && params3 === "lobby") {
+        return PingPongLobby;
     }
     else {
         changeUrl('/not-found');

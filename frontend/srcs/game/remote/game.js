@@ -12,7 +12,7 @@ let Game = class {
 		this.type = type;
 		this.typestr = type == '1' ? '1vs1' : 'tournament';
 		this.nickname = nickname;
-		this.wsUrl = `ws://${window.env.SERVER_IP}:${window.env.SERVER_PORT}/ws/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
+		this.wsUrl = `wss://${window.location.host}/ws/game/${this.typestr}?match_name=${matchName}&id=${nickname}`;
 		this.itemMode = itemMode;
 		this.tourStatus = null;
 		this.gameStatus = null;

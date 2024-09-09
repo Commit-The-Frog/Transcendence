@@ -14,6 +14,7 @@ const routes = {
     "/pingpong" : Pingpong,
     "/pingpong/:option" : Pingpong,
     "/pingpong/:option/start" : Pingpong,
+    "/pingpong/remote/lobby" : Pingpong,
     "/pixel" : Pixel,
     "/pixel/start" : Pixel,
     "/twofa" : Twofa
