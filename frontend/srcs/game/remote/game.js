@@ -1,6 +1,7 @@
 import { Canvas } from './canvas.js';
 import { UserInterface } from './userInterface.js';
 import { Key } from './key.js';
+import { connectSocket, getcurrentSocket } from '../../utils/useSocket.js';
 
 let timer = 0;
 
@@ -81,19 +82,20 @@ let Game = class {
 	}
 	init1vs1 = () => {
 		console.log(`1vs1 웹소켓 연결 시도 : ${this.wsUrl}`);
-		this.ws = new WebSocket(this.wsUrl);
-		this.key.initWs(this.ws);
-		this.ws.onopen = () => {
+		const ws_ = {};
+		// this.ws = new WebSocket(this.wsUrl);
+		// this.key.initWs(this.ws);
+		ws_.onopen = () => {
 			console.log(`토너먼트 웹소켓 연결 성공`);
 		};
-		this.ws.onerror = (error) => {
+		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
 		};
-		this.ws.onclose = () =>{
+		ws_.onclose = () =>{
 			console.log(`토너먼트 웹소켓 종료`);
 		};
-		this.ws.onmessage = (event) => {
+		ws_.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			if (data.status) {
 				this.myTurn = true;
@@ -108,22 +110,27 @@ let Game = class {
 				}
 			}
 		}
+		connectSocket(this.wsUrl, ws_);
+		this.ws = getcurrentSocket();
+		this.key.initWs(getcurrentSocket());
+
 	}
 	initTournament = () => {
 		console.log(`토너먼트 웹소켓 연결 시도 : ${this.wsUrl}`);
-		this.ws = new WebSocket(this.wsUrl);
-		this.key.initWs(this.ws);
-		this.ws.onopen = () => {
+		const ws_ = {};
+		// this.ws = new WebSocket(this.wsUrl);
+		// this.key.initWs(this.ws);
+		ws_.onopen = () => {
 			console.log(`토너먼트 웹소켓 연결 성공`);
 		};
-		this.ws.onerror = (error) => {
+		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
 		};
-		this.ws.onclose = () =>{
+		ws_.onclose = () =>{
 			console.log(`토너먼트 웹소켓 종료`);
 		};
-		this.ws.onmessage = (event) => {
+		ws_.onmessage = (event) => {
 			// console.log(event);
 			const data = JSON.parse(event.data);
 			if (data.type) {	// 토너먼트 컨트롤
@@ -151,6 +158,9 @@ let Game = class {
 				}
 			}
 		};
+		connectSocket(this.wsUrl, ws_);
+		this.ws = getcurrentSocket();
+		this.key.initWs(getcurrentSocket());
 	}
 }
 export {Game};

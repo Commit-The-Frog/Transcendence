@@ -1,38 +1,39 @@
-import { useRef } from "../core/myreact/myreact"
+import { useRef } from "../core/myreact/myreact.js"
 
 const useSocekt = () => {
     const socketRef = useRef(null);
 
-    const connectSocket = (url, {onOpen, onError, onClose, onMessage }) => {
+    const connectSocket = (url, {onopen, onerror, onclose, onmessage }) => {
         if (socketRef.current) {
             socketRef.current.close();
         }
         const socket = new WebSocket(url);
+        socketRef.current = socket;
         socket.onopen = () => {
-            socketRef.current = socket;
-            if (onOpen) {
-                onOpen();
+            if (onopen) {
+                onopen();
             }
             console.log('WebSocket 연결됨');
         }
 
         socket.onerror = () => {
-            if (onError) {
-                onError();
+            if (onerror) {
+                onerror();
             }
             console.log('WebSocket 에러');
             socket.close();
+            socketRef.current = null;
         }
         socket.onclose = () => {
-            if (onClose) {
-                onClose();
+            if (onclose) {
+                onclose();
             }
             console.log('WebSocket 닫았어');
             socketRef.current = null;
         }
         socket.onmessage = (event) => {
-            if (onMessage) {
-                onMessage(event);
+            if (onmessage) {
+                onmessage(event);
             }
         }
     }
@@ -43,7 +44,11 @@ const useSocekt = () => {
           socketRef.current = null;
         }
     };
-    return {connectSocket, disconnectSocket, socketRef}
+
+    const getcurrentSocket = () => {
+        return socketRef.current;
+    }
+    return {connectSocket, disconnectSocket, getcurrentSocket}
 }
 
-export {connectSocket, disconnectSocket, socketRef, useSocekt};
+export const {connectSocket, disconnectSocket,getcurrentSocket} = useSocekt();

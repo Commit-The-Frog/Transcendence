@@ -1,5 +1,6 @@
 import { useEffect } from "../core/myreact/myreact.js";
 import { changeUrl } from "../utils/changeUrl.js";
+import { connectSocket } from "../utils/useSocket.js";
 
 const PingPongLobby = () => {
     useEffect(()=>{
@@ -21,7 +22,8 @@ const pingpnogWsHandler = () => {
     else if (type == 2)	typeForBe = 'tournament';
 
     const wsUrl = `wss://${window.location.host}/ws/game/lobby?type=${typeForBe}`;
-    const ws = new WebSocket(wsUrl);
+    // const ws = new WebSocket(wsUrl);
+    const ws = {};
 
     ws.onopen = (event) => {
         console.log("GameQueue WebSocket 오픈");
@@ -46,6 +48,8 @@ const pingpnogWsHandler = () => {
         console.log('err');
         // 에러 났을때 
 	};
+
+    connectSocket(wsUrl, ws);
 }
 
 export default PingPongLobby;
