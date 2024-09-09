@@ -26,7 +26,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         if match_name and user_id:
             self.match_group_name = f'versus_{match_name}'
             self.player = Player(user_id)
-            if not self.player.get_db_object():
+            if not await self.player.get_db_object():
                 await self.close()
                 return
             await self.channel_layer.group_add(
@@ -99,7 +99,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if tournament_name and user_id:
             self.tournament_group_name = f'tournament_{tournament_name}'
             self.player = Player(user_id)
-            if not self.player.get_db_object():
+            if not await self.player.get_db_object():
                 await self.close()
             await self.channel_layer.group_add(
                 self.tournament_group_name, self.channel_name
