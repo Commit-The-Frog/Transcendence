@@ -8,6 +8,7 @@ logger = logging.getLogger('transendense')
 class Player:
     def __init__(self, userid):
         self.__id = userid
+        self.__nickname = None
         self.__db_object = None
         self.__is_ready = False
         self.__score = 0
@@ -17,6 +18,7 @@ class Player:
             'downPressed' : False,
         }
         self.__connected = True
+
 
     def get_id(self):
         return self.__id
@@ -64,12 +66,16 @@ class Player:
         self.__input['upPressed'] = False
         self.__input['downPressed'] = False
 
+    def get_nickname(self):
+        return self.__nickname
+
     async def get_db_object(self):
         if self.__db_object:
             return self.__db_object
         try:
             self.__db_object = await sync_to_async(Userdb.objects.get)(user_id=self.__id)
             logger.info(f'{self.__id} saved as {self.__db_object.id}')
+            self.__nickname = self.__db_object.nickname
         except Userdb.DoesNotExist:
             logger.info(f'{self.__id} does not exist')
         except Userdb.MultipleObjectsReturned:
