@@ -18,6 +18,7 @@ class Game:
         2 : 'game over',
         3 : 'error'
     }
+    max_score = 5
     def __init__(self, game_id, tournament_id:str=None):
         self.id = game_id
         self.tournament_id = tournament_id
@@ -26,7 +27,7 @@ class Game:
         self.__ball = Ball((Game.canvas_width - 15) / 2, (Game.canvas_height - 15) / 2)
         self.__left_paddle = Paddle(50, (Game.canvas_height - 100) / 2)
         self.__right_paddle = Paddle(Game.canvas_width - 50 - 10, (Game.canvas_height - 100) / 2)
-        self.winner = None
+        self.winner: Player = None
 
     async def start(self):
         channel_layer = get_channel_layer()
@@ -54,10 +55,13 @@ class Game:
             logger.info(f'{self.id} Game Error End')
             if self.players[0].is_connected():
                 self.winner = self.players[0]
+                self.players[0].set_score(Game.max_score)
             elif self.players[1].is_connected():
+                self.players[1].set_score(Game.max_score)
                 self.winner = self.players[1]
             else:
                 self.winner = self.players[0]
+                self.players[0].set_score(Game.max_score)
             await self.__send_message(channel_layer)
 
     def add_player(self, player):
@@ -115,10 +119,10 @@ class Game:
                     self.__ball.dy += self.__left_paddle.dy * Ball.cof
                     self.__ball.dy = min(Ball.ball_speed_max, self.__ball.dy)
 
-        if self.players[0].get_score() >= 5:
+        if self.players[0].get_score() >= Game.max_score:
             self.winner = self.players[0]
             self.status = 2
-        if self.players[1].get_score() >= 5:
+        if self.players[1].get_score() >= Game.max_score:
             self.winner = self.players[1]
             self.status = 2
 
