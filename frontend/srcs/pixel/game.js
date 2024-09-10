@@ -1,7 +1,8 @@
+import myAxios from "../core/myaxios/myAxios.js";
 import { Player } from "./player.js";
 
 class Game {
-    constructor(canvasId, leftPlayerName, rightPlayerName) {
+    constructor(canvasId, leftPlayerName, rightPlayerName, istournament = false) {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         this.backgroundImage = new Image();
@@ -15,7 +16,6 @@ class Game {
         this.setupKeyboardListeners();
         this.gameOver = false;
         this.winner = "";
-        this.winPlayer = "";
         this.leftPlayerName = leftPlayerName;  // 왼쪽 플레이어 이름
         this.rightPlayerName = rightPlayerName; 
         this.onGameOverCallback = null;
@@ -24,6 +24,9 @@ class Game {
         this.startButton = document.getElementById("startButton"); // startButton을 게임 객체에서 관리
         this.showInitialBackground();
         this.setupStartButton(); // 버튼 설정
+        this.istournament = true;
+        this.data = {
+        }
     }
 
     showInitialBackground() {
@@ -111,15 +114,28 @@ class Game {
 
             if (this.leftPlayer.lives === 0) {
                 this.winner = this.rightPlayerName;
-                this.winPlayer = "right";
+                this.rightPlayer.setWin(true);
             } else {
                 this.winner = this.leftPlayerName;
-                this.winPlayer = "left";
+                this.leftPlayer.setWin(true);
             }
             if (this.gameOver) {
                 this.endGame();
             }
         }
+    }
+
+    recordGame() {
+        const data = {};
+        const playerL = {};
+        const playerR = {};
+        playerL.nickname = this.leftPlayerName;
+        playerL.winner = this.leftPlayer.getWin();
+        playerR.nickname = this.rightPlayerName;
+        playerR.winner = this.rightPlayer.getWin();
+        data.playerL = playerL;
+        data.playerR = playerR;
+        return data;
     }
 
     update() {
@@ -153,11 +169,12 @@ class Game {
         this.isRunning = false;
         this.render();
         setTimeout(()=>{
+            this.postData();
             this.displayWinner();
             if (this.onGameOverCallback) {
                 this.onGameOverCallback(this.winner);
             }
-        }, 3000);
+        }, 1500);
     }
 
     onGameOverCallback(callback) {
@@ -232,6 +249,23 @@ class Game {
 
     handleKeyUp = (event) => {
         this.keys[event.key] = false;
+    }
+
+    postData = () => {
+        if (this.istournament) {
+            return ;
+        }
+        const url = `https://${window.env.SERVER_IP}/match`;
+        const data = this.recordGame();
+        data.istournament = this.istournament;
+        data.game = 'pixel';
+        myAxios.post(url, data)
+        .then((data)=>{
+            console.log(data);
+        })
+        .catch((err)=> {
+            console.log(err);
+        })
     }
 
 }

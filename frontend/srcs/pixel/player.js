@@ -17,6 +17,7 @@ class Player {
         this.lifeImageSrc = '/pixel/pixel_heart.png';
         this.lifeImages = [];
         this.maxBullets = 30;
+        this.win = false;
 
         for (let i = 0; i < this.lives; i++) {
             const lifeImage = new Image();
@@ -84,6 +85,12 @@ class Player {
     moveWithFixedDirection(direction, fixedDirection) {
         this.move(direction);
         this.facingRight = fixedDirection;
+    }
+    setWin(win) {
+        this.win = true;
+    }
+    getWin() {
+        return this.win;
     }
 }
 

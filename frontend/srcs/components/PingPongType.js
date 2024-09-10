@@ -92,7 +92,7 @@ export const playerInputChecker = (game, type, item_mode, remote = false) => {
     // const params = window.location.pathname.split("/");
     // const params2 = params[2];
 
-    url.pathname += remote ? '/lobby' : '/start';
+    url.pathname += '/start';
     url.searchParams.set('type', type);
     if (remote) {
         changeUrl(url);

@@ -1,7 +1,8 @@
 import { Canvas } from './canvas.js';
 import { UserInterface } from './userInterface.js';
 import { Key } from './key.js';
-import { connectSocket, getcurrentSocket } from '../../utils/useSocket.js';
+// import { connectSocket, getcurrentSocket } from '../../utils/useSocket.js';
+import  useSocket  from '../../utils/useSocket.js';
 
 let timer = 0;
 
@@ -51,6 +52,7 @@ let Game = class {
 	renderStart = (gameData) => {
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ui.drawGameStartScreen(this.myTurn, [gameData.playerL, gameData.playerR]);
+		console.log(this.myTurn)
 	}
 	/*
 		game 진행 렌더링
@@ -97,6 +99,7 @@ let Game = class {
 		};
 		ws_.onmessage = (event) => {
 			const data = JSON.parse(event.data);
+			console.log(data);
 			if (data.status) {
 				this.myTurn = true;
 				this.key.myTurn = true;
@@ -110,9 +113,9 @@ let Game = class {
 				}
 			}
 		}
-		connectSocket(this.wsUrl, ws_);
-		this.ws = getcurrentSocket();
-		this.key.initWs(getcurrentSocket());
+		useSocket().connectSocket(this.wsUrl, ws_);
+		this.ws = useSocket().getcurrentSocket();
+		this.key.initWs(useSocket().getcurrentSocket());
 
 	}
 	initTournament = () => {
@@ -138,7 +141,7 @@ let Game = class {
 				if (data.type == 'tour_waiting') {
 					this.renderSchedule(data.players);
 				} else if (data.type == 'game1' || data.type == 'game2' || data.type == 'final') {
-					console.log(`${data.type} incoming~~`);
+					// console.log(data);
 					console.log(data.playerL + ' ' + this.nickname);
 					if (data.playerL === this.nickname || data.playerR === this.nickname) {
 						this.myTurn = true;
@@ -150,7 +153,8 @@ let Game = class {
 				this.gameStatus = data.status;
 				if (data.status == 'waiting') {
 					this.renderStart(data);
-					if (this.myTurn) this.key.sendSpaceKeyEventToWsOnce();
+					//if (this.myTurn) this.key.sendSpaceKeyEventToWsOnce();
+					this.key.sendSpaceKeyEventToWsOnce();
 				} else if (data.status == 'in progress') {
 					this.renderGame(data);
 				} else if (data.status == 'game over') {

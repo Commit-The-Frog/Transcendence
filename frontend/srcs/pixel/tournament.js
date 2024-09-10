@@ -1,5 +1,5 @@
 import { Game } from "./game.js";
-
+import myAxios from "../core/myaxios/myAxios.js"
 class Tournament {
     constructor(canvasId, playerNames) {
         this.canvasId = canvasId;
@@ -9,6 +9,10 @@ class Tournament {
         this.currentRound = 0;
         this.currentGame = null; 
         this.timeoutId = null;
+        this.data = {
+            istournament : true,
+            gmae : 'pixel',
+        };
     }
 
     startRound(roundNumber, playerA, playerB) {
@@ -17,18 +21,37 @@ class Tournament {
         if (this.currentGame) {
             this.currentGame.stop();
         }
-        this.currentGame = new Game(this.canvasId, playerA, playerB);
+        this.currentGame = new Game(this.canvasId, playerA, playerB, true);
 
         this.currentGame.onGameOver((winner) => {
             console.log(`Round ${roundNumber} winner: ${winner}`);
             this.roundWinners.push(winner);
             if (roundNumber === 1) {
+                this.data.round1 = this.currentGame.recordGame();
                 this.startSecondRound();
             }
             if (this.roundWinners.length === 2) {
+                this.data.round2 = this.currentGame.recordGame();
                 this.startFinalRound();
             }
+            if (roundNumber === 3) {
+                this.data.round3 = this.currentGame.recordGame();
+                this.postData();
+            }
         });
+    }
+
+    postData() {
+        const url = `https://${window.env.SERVER_IP}/match`
+        const data = this.data;
+        console.log(data);
+        myAxios.post(url, data)
+        .then((data)=>{
+            console.log(data);
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
     }
 
     startTournament() {
@@ -57,6 +80,7 @@ class Tournament {
         this.currentRound = 0;
         console.log("토너먼트가 중단되고 초기화되었습니다.");
     }
+
 }
 
 export {Tournament};

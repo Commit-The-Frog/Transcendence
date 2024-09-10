@@ -3,6 +3,8 @@ import { App } from "./App.js";
 
 const $app = document.querySelector(".App");
 
+var currSocket = null;
+
 render($app, App);
 window.addEventListener('popstate', _render);
 window.addEventListener('DOMContentLoaded', _render);
