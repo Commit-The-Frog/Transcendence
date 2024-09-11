@@ -65,6 +65,32 @@ button:active {
     justify-content: space-between;
 }
 
+.notfound404 {
+    font-weight: 800;
+    font-style:oblique;
+    font-size: 100px;
+}
+
+.notfound {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notfoundimgWrapper {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+}
+
+.notfoundimgWrapper img {
+    width: 800px;
+    height: auto;
+}
+
 .routingBtnWrapper button {
     line-height: 45px;
     background-color: white;

@@ -1,5 +1,8 @@
 import { useEffect } from "../core/myreact/myreact.js";
+import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { run } from "../game/remote/run.js";
+import { languageState } from "../recoil/languageState.js";
+import translations from "../translations.js";
 import useSocket from "../utils/useSocket.js";
 
 const PingPongRemoteGame = () => {
@@ -11,7 +14,7 @@ const PingPongRemoteGame = () => {
     },undefined,'remotegamerun');
     return `
         <div class="pingpongremotegame">
-            <div id="pingpongwaitmodal"> ㄱㅣ다려 🙏</div>
+            <div id="pingpongwaitmodal"> ${translations[getRecoilValue(languageState)]?.wait}</div>
             <canvas id="remotePingpong" width="800" height="600"></canvas>
         </div>
     `

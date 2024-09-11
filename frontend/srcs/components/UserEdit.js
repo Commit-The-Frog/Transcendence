@@ -35,6 +35,7 @@ const UserEdit = ({onClose, data, setData}) => {
         const imageInput = document.getElementById('profileimg-input');
         const image = imageInput?.files[0];
         const formData = new FormData();
+        // const url = `https://${window.env.SERVER_IP}/user`;
         const url = `https://${window.env.SERVER_IP}/user`;
         if (image) {
             formData.append('profile_image', image);
@@ -42,14 +43,15 @@ const UserEdit = ({onClose, data, setData}) => {
         formData.append('nickname',nick?.value);
         myAxios.post(url, formData)
         .then((res)=>{
+            onClose();
             userinfoGetter(setData);
         })
         .catch((err)=>{
             if (err.status === 406) {
-                showToastHandler(err.statusText);
+                showToastHandler(err.data.error);
+                return ;
             }
         })
-        onClose();
     }
 
     const userNameInputHandler = (event) => {

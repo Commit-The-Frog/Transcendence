@@ -3,7 +3,7 @@ import { useEffect, useState } from "../core/myreact/myreact.js"
 import { changeUrl } from "../utils/changeUrl.js";
 import UserFreindsSearch from "./UserFreindsSearch.js"
 
-export default function UserFriends ({btnnum, userId}) {
+export default function UserFriends ({ userId}) {
     const [friends, setFriends] = useState([], 'friends');
     const url = userId !== 'user' ? `https://${window.env.SERVER_IP}/user/friend?id=${userId}` : `https://${window.env.SERVER_IP}/user/friend`
     useEffect(()=>{
@@ -15,6 +15,7 @@ export default function UserFriends ({btnnum, userId}) {
             console.log(e);
         })
     }, [userId],'userHFreindsFetch')
+
     return `
     <div class="userFriends">
         ${UserFreindsSearch()}

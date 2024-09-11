@@ -36,9 +36,14 @@ class Tournament {
             }
             if (roundNumber === 3) {
                 this.data.round3 = this.currentGame.recordGame();
-                this.postData();
             }
         });
+
+        if (roundNumber === 3) {
+            this.currentGame.onGameOverPrev(()=>{
+                this.postData();
+            })
+        }
     }
 
     postData() {
