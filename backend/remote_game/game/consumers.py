@@ -27,7 +27,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.player = None
             if match_name and user_id:
                 self.match_group_name = f'versus_{match_name}'
-                self.player = Player(user_id)
+                self.player = Player(user_id, self.channel_name)
                 if not await self.player.get_db_object():
                     await self.close()
                     return
