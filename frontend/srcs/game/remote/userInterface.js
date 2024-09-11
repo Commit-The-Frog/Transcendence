@@ -34,13 +34,13 @@ let UserInterface = class {
 		this.ctx.lineTo(this.width/2+50, this.height/2+150);
 		this.ctx.stroke();
 		// vs 텍스트
-		this.ctx.font = `42px sans-serif`;
+		this.ctx.font = `42px Matemasie`;
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('VS', this.width/2, this.height/2+15);
 		// 상단 상태정보
 		this.ctx.fillText(status, this.width/2, 50, 500);
 		// 1번 플레이어
-		this.ctx.font = `25px sans-serif`;
+		this.ctx.font = `25px Matemasie`;
 		if (nicknames[0])
 			this.ctx.fillText(nicknames[0], this.width/2-250, this.height/2-150, 100);
 		// 2번 플레이어
@@ -57,11 +57,11 @@ let UserInterface = class {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
-		this.ctx.font = `40px sans-serif`;
+		this.ctx.font = `40px Matemasie`;
 		this.ctx.fillStyle = 'white';
 		this.ctx.textAlign = 'center';
 		// vs 텍스트
-		this.ctx.font = `42px sans-serif`;
+		this.ctx.font = `42px Matemasie`;
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('VS', this.width/2, this.height/2);
 		// 1번 플레이어
@@ -82,7 +82,7 @@ let UserInterface = class {
 			else
 				this.ctx.fillText('waiting', this.width/2+250, this.height/2+100, 100);
 		}
-		this.ctx.font = `30px sans-serif`;
+		this.ctx.font = `30px Matemasie`;
 		if (myTurn)
 			this.ctx.fillText('PRESS SPACE BTN', this.width / 2, this.height * 4 / 5, 1000);
 	}
@@ -91,11 +91,11 @@ let UserInterface = class {
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
 
-		this.ctx.font = '50px sans-serif';
+		this.ctx.font = '50px Matemasie';
 		this.ctx.fillStyle = 'white';
 		this.ctx.textAlign = 'center';
 		this.ctx.fillText('GAME OVER', this.width / 2, this.height / 3, 1000);
-		this.ctx.font = '30px sans-serif';
+		this.ctx.font = '30px Matemasie';
 		this.ctx.fillText(`player ${winner} win!`, this.width / 2, this.height * 3/ 5, 1000);
 		this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.sin(opacity)})`;
 		if (type == 1)
@@ -111,10 +111,10 @@ let UserInterface = class {
 		this.ctx.stroke();
 	}
 	drawScoreAndNickname = (playerL, playerR) => {
-		this.ctx.font = `30px sans-serif`;
+		this.ctx.font = `30px Matemasie`;
 		this.ctx.fillText(playerL.nickname, this.width / 4 + 20, 100, 1000);
 		this.ctx.fillText(playerR.nickname, this.width * 3 / 4 - 48, 100, 1000);
-		this.ctx.font = `48px sans-serif`;
+		this.ctx.font = `48px Matemasie`;
 		this.ctx.fillText(playerL.score, this.width / 4 + 20, 160, 100);
 		this.ctx.fillText(playerR.score, this.width * 3 / 4 - 48, 160, 100);
 	}

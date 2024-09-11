@@ -2,6 +2,7 @@
 @import url('style/userinfo.css');
 @import url('style/pingpong.css');
 @import url('style/pixel.css');
+@import url('https://fonts.googleapis.com/css2?family=Matemasie&family=Tiny5&display=swap');
 
 :root{
     --default-bg-color : #c8a1e0;
