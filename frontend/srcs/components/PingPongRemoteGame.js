@@ -47,7 +47,6 @@ const pingpnogWsHandler = () => {
     }
 
     ws.onclose = (event) => {
-        console.log(event);
         console.log('close');
     }
 	ws.onerror = (error) => {
