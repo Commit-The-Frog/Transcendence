@@ -1,0 +1,122 @@
+.pixel {
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 0px;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+}
+
+.pixelContentbox {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 80%;
+}
+
+.pixelSelectContainer {
+    height: 300px;
+    margin-left: 50px;
+}
+
+.pixeltypeBtnWrapper2 {
+    margin-bottom: 20px;
+}
+
+.pixelSelectbox {
+}
+
+.pixelSelect button{
+    padding: 3px 6px 3px 6px;
+    border-radius: 2px;
+    background-color: var(--btn-color-pink3);
+    margin-right: 5px;
+}
+
+.pixelSelect input {
+    border-radius: 2px;
+    border: 1px solid black;
+    background: white;
+    background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
+}
+.pixelSelect p {
+    margin: 0;
+}
+
+.pixelgPlayerMsg {
+    font-size: 15px;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 3px;
+    color: white;
+}
+
+.newjeansimgWrapper {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    height: 100%;
+}
+
+.newjeansimgWrapper img {
+    max-width: 450px;
+    height: auto;
+    margin-left: 30px;
+    margin-bottom: 100px;
+    bottom: -10px;
+    left: 20px;
+}
+
+
+.pixelSelect {
+    width: 800px;
+    height: 600px;
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+    /* background-image: url("/pixel/pixel_background.jpg"); */
+    background-size: cover; 
+    background-repeat: no-repeat; /* 이미지가 반복되지 않도록 설정 */
+    background-position: center; /* 이미지를 가운데 정렬 */
+    position: relative;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+#pixelgameCanvas {
+    align-items: center;
+    justify-content: center;
+}
+
+#startButton {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 5px 10px 5px 10px;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* 캔버스 위에 보이도록 설정 */
+    border-radius: 2px;
+    background-color: #fdb8e1;
+  }
+
+  .pixelHanniWrapper {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+  .pixelHanniWrapper img {
+    height: 500px;
+    width: auto;
+  }
+
+  .pixelDanielleWrapper {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+  .pixelDanielleWrapper img {
+    height: 500px;
+    width: auto;
+  }

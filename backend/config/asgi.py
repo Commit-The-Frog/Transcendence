@@ -28,8 +28,6 @@ application = ProtocolTypeRouter(
         "http": django_asgi_app,
         "websocket": AllowedHostsOriginValidator(
             AuthMiddlewareStack(
-                # JWT 토큰 검증 미들웨어
-                # JWTAuthMiddleware,
                 URLRouter(websocket_urlpatterns),
             )
         ),
