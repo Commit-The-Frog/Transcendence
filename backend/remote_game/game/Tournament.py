@@ -10,6 +10,18 @@ from asgiref.sync import sync_to_async
 import logging
 logger = logging.getLogger('transcendence')
 
+
+async def send_ready_msg(player1: Player, player2: Player):
+    if player1:
+        await player1.privmsg({
+            'get_ready': True
+        })
+    if player2:
+        await player2.privmsg({
+            'get_ready': True
+        })
+
+
 class Tournament:
     def __init__(self, tournament_id):
         logger.info(f'{tournament_id} started')
@@ -65,6 +77,7 @@ class Tournament:
                 'playerR': self.players[1].get_nickname(),
             }
         })
+        await send_ready_msg(self.players[0], self.players[1])
         quarter_final_fst = asyncio.create_task(self.games[0].start())
         await quarter_final_fst
         quarter_final_fst_model = models.Game(
@@ -87,6 +100,7 @@ class Tournament:
                 'playerR': self.players[3].get_nickname(),
             }
         })
+        await send_ready_msg(self.players[2], self.players[3])
         quarter_final_snd = asyncio.create_task(self.games[1].start())
         await quarter_final_snd
         quarter_final_snd_model = models.Game(
@@ -111,6 +125,7 @@ class Tournament:
                 'playerR': "" if not self.games[1].winner else self.games[1].winner.get_nickname(),
             }
         })
+        await send_ready_msg(self.games[0].winner, self.games[1].winner)
         final = asyncio.create_task(self.games[2].start())
         await final
         final_model = models.Game(

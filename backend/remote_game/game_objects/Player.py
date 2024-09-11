@@ -1,13 +1,15 @@
 import logging
 
+from channels.layers import get_channel_layer
 from user.models import Userdb
 from asgiref.sync import sync_to_async
 
 logger = logging.getLogger('transendense')
 
 class Player:
-    def __init__(self, userid):
+    def __init__(self, userid, socket_id):
         self.__id = userid
+        self.socket_id = socket_id
         self.__nickname = None
         self.__db_object = None
         self.__is_ready = False
@@ -81,3 +83,13 @@ class Player:
         except Userdb.MultipleObjectsReturned:
             logger.info(f'{self.__id} has multiple users')
         return self.__db_object
+
+    async def privmsg(self, message):
+        channel_layer = get_channel_layer()
+        await channel_layer.send(
+            self.socket_id,
+            {
+                'type': 'game_update',
+                'data': message,
+            }
+        )
