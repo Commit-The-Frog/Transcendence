@@ -43,7 +43,8 @@ let Key = class {
 	}
 	sendKeyEventToWs = () => {
 		// 키정보 서버에 전송
-		if (this.myTurn && this.ws) {
+		//if (this.myTurn && this.ws) {
+		if (this.ws) {
 			const keyInfo = JSON.stringify( {
 				type: 'update',
 				key: {
@@ -55,7 +56,7 @@ let Key = class {
 		}
 	}
 	sendSpaceKeyEventToWsOnce = () => {
-		// 스페이스 버튼 서버에 전송(1번만)
+		
 		const keyReact = setInterval(() => {
 			if (this.spacePressed) {
 				const ready = {type: 'ready'};
