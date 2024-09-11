@@ -162,9 +162,9 @@ let Game = class {
 				}
 			}
 		};
-		connectSocket(this.wsUrl, ws_);
-		this.ws = getcurrentSocket();
-		this.key.initWs(getcurrentSocket());
+		useSocket().connectSocket(this.wsUrl, ws_);
+		this.ws = useSocket().getcurrentSocket();
+		this.key.initWs(useSocket().getcurrentSocket());
 	}
 }
 export {Game};
