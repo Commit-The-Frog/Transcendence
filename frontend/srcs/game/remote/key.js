@@ -56,17 +56,6 @@ let Key = class {
 		}
 	}
 	sendSpaceKeyEventToWsOnce = () => {
-		// 스페이스 버튼 서버에 전송(1번만)
-		// while(1) {
-		// 	if (this.spacePressed) {
-		// 		const ready = {type: 'ready'};
-		// 		let readyData = JSON.stringify(ready);
-		// 		this.ws.send(readyData);
-		// 		console.log('서버에 스베이스바 레디버튼 전송');
-		// 		break;
-		// 		// clearInterval(keyReact);
-		// 	}
-		// }
 		
 		const keyReact = setInterval(() => {
 			if (this.spacePressed) {
