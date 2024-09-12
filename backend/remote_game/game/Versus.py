@@ -43,8 +43,9 @@ class Versus:
         game_model = models.Game(
             left_user= await self.players[0].get_db_object(),
             right_user= await self.players[1].get_db_object(),
-            left_score=self.players[0].get_score(),
-            right_score=self.players[1].get_score()
+            left_win=self.players[0].get_score() == Game.max_score,
+            right_win=self.players[1].get_score() == Game.max_score,
+            type='pingpong'
         )
         try:
             await sync_to_async(game_model.save)(force_insert=False, force_update=False, using=None, update_fields=None)

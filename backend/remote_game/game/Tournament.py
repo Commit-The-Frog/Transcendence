@@ -83,8 +83,9 @@ class Tournament:
         quarter_final_fst_model = models.Game(
             left_user= await self.players[0].get_db_object(),
             right_user= await self.players[1].get_db_object(),
-            left_score=self.players[0].get_score(),
-            right_score=self.players[1].get_score(),
+            left_win=self.players[0].get_score() == Game.max_score,
+            right_win=self.players[1].get_score() == Game.max_score,
+            type='pingpong'
         )
         await asyncio.sleep(3)
         self.games[1] = Game(self.id)
@@ -106,8 +107,9 @@ class Tournament:
         quarter_final_snd_model = models.Game(
             left_user= await self.players[2].get_db_object(),
             right_user= await self.players[3].get_db_object(),
-            left_score=self.players[2].get_score(),
-            right_score=self.players[3].get_score(),
+            left_win=self.players[2].get_score() == Game.max_score,
+            right_win=self.players[3].get_score() == Game.max_score,
+            type='pingpong'
         )
         await asyncio.sleep(3)
         self.games[2] = Game(self.id)
@@ -131,8 +133,9 @@ class Tournament:
         final_model = models.Game(
             left_user= await self.games[2].players[0].get_db_object(),
             right_user= await self.games[2].players[1].get_db_object(),
-            left_score=self.games[2].players[0].get_score(),
-            right_score=self.games[2].players[1].get_score(),
+            left_win=self.games[2].players[0].get_score() == Game.max_score,
+            right_win=self.games[2].players[0].get_score() == Game.max_score,
+            type='pingpong'
         )
         await channel_layer.group_send(
             self.id,
