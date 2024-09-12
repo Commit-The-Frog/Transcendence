@@ -21,12 +21,12 @@ export default function UserProfile ( {
         setEditOpen(false);
     }
     useEffect(()=>{
-        if (data?.host) {
-            setHost(true);
-        }
-        if (data?.friend) {
-            setFriend(true);
-        }
+        // if (data?.host) {
+        //     setHost(true);
+        // }
+        // if (data?.friend) {
+        //     setFriend(true);
+        // }
     },undefined,'userhost');
 
     const friendAddHandler = () => {
@@ -60,12 +60,12 @@ export default function UserProfile ( {
             </div>
             </div>
             ${
-                host ?
+                data?.host ?
                 `<button class="userInfoEdit userEditOpenHandler"> ${translations[getRecoilValue(languageState)]?.edit} </button>` :
                 ``
             }
             ${
-               (!host && !friend) ?`<button class="userInfoEdit friendAddHandler">subscribe</button>` :
+               (!data?.host && !data?.friend) ?`<button class="userInfoEdit friendAddHandler">subscribe</button>` :
                 ``
             }
         </div>

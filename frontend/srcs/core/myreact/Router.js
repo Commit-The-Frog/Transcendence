@@ -6,6 +6,7 @@ import Twofa from "../../pages/Twofa.js";
 import Pixel from "../../pages/Pixel.js";
 import useSocket from "../../utils/useSocket.js";
 import NotFound from "../../pages/NotFound.js";
+import { connectAccessSocket, getSocket } from "../../utils/accessSocket.js";
 
 export function Router() {
 
@@ -29,6 +30,12 @@ const parsed = parseUrl(path, routes);
 const beforeRoutingDisconnectGmaeSocket = (route) => {
     if (route != "/pingpong/remote/start") {
         useSocket().disconnectSocket();
+    }
+    if (route != "/twofa" && route != "/") {
+        if (getSocket() === null) {
+            // const url = `https://${window.env.SERVER_IP}/ws/access`
+            // connectAccessSocket(url);
+        }
     }
 }
 
