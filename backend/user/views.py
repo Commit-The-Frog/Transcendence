@@ -97,7 +97,7 @@ class FriendView(View):
                 user_data = {
                     'user_id': target['friend'].get('user_id'),
                     'nickname': target['friend'].get('nickname'),
-                    'status': True,
+                    'status': target['friend'].get('status'),
                 }
                 data_list.append(user_data)
         except Userdb.DoesNotExist:
@@ -165,7 +165,7 @@ class SearchView(View):
                     user_data = {
                         'id': target.user_id,
                         'nick': target.nickname,
-                        'status': True,
+                        'status': target.status,
                     }
                     data_list.append(user_data)
         except Userdb.DoesNotExist:
