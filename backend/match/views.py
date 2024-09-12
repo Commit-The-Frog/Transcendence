@@ -124,7 +124,7 @@ class MatchListView(View):
             data_list = data_list + self.get_pixel_tournament_dataset(pixel_tournament_list)
             data_list = data_list + self.get_pvp_dataset(pvp_list)
             data_list = data_list + self.get_pixel_pvp_dataset(pixel_pvp_list)
-            sorted_data = sorted(data_list, key=lambda x: datetime.strptime(x['sort_date'], '%Y-%m-%dT%H:%M:%S.%f%z'))
+            sorted_data = sorted(data_list, key=lambda x: datetime.strptime(x['sort_date'], '%Y-%m-%dT%H:%M:%S.%f%z'), reverse=True)
             for item in sorted_data:
                 del item['sort_date']
         except Userdb.DoesNotExist:
