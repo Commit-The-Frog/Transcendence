@@ -28,5 +28,5 @@ urlpatterns = [
     path('login/', include("login.urls")),
     path('user', include("user.urls")),
     path('user/', include("user.urls")),
-    # path('match/', include("match.urls")),
+    path('match', include("match.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -90,7 +90,7 @@ class CallbackView(View):
         random_number = random.randint(0, 999999)
         html_content = render_to_string('mailform.html', {
             'user_name': request.session.get('api_nick'),
-            'verification_code': random_number,
+            'verification_code': f'{random_number:06}',
             'app_name': '민지 하니 다니엘 해린 혜인 and 럭키성윤',
         })
         send_mail(

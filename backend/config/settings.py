@@ -19,7 +19,7 @@ os.environ['MLFLOW_TRACKING_INSECURE_TLS'] = 'true'
 
 env = environ.Env(
     # 기본 설정 값 (옵션)
-    DEBUG=(bool, False)
+    DEBUG=(bool, True)
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
