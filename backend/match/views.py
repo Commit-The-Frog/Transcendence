@@ -132,3 +132,36 @@ class MatchListView(View):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         return JsonResponse(sorted_data, safe=False, status=200)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            host_id = request.session.get('api_id')
+            host_instance_id = Userdb.objects.get(user_id=host_id).id
+            json_data = json.loads(request.body)
+            if json_data.get('istournament'):
+                game_data = None * 3
+                for game_number in range(1, 4):  # game1, game2, game3에 대한 반복
+                    game_key = f'round{game_number}'  # 'game1', 'game2', 'game3' 생성
+                    game = json_data.get(game_key)
+                    game_data[game_number] = PixelGame(user_id=host_instance_id, type='pixel',
+                                                       left_user=game.get('playerL').get('nickname'),
+                                                       left_win=game.get('playerL').get('win'),
+                                                       right_user=game.get('playerR').get('nickname'),
+                                                       right_win=game.get('playerR').get('win'))
+                    game_data[game_number].save()
+                tournament_data = PixelTournament(game1=game_data[1], game2=game_data[2], game3=game_data[3])
+                tournament_data.save()
+            else:
+                game_data = PixelGame(user_id=host_instance_id, type='pixel',
+                                                   left_user=json_data.get('playerL').get('nickname'),
+                                                   left_win=json_data.get('playerL').get('win'),
+                                                   right_user=json_data.get('playerR').get('nickname'),
+                                                   right_win=json_data.get('playerR').get('win'))
+                game_data.save()
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Userdb.DoesNotExist:
+            return JsonResponse({'error': 'User not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+        return JsonResponse({'message': 'Match updated successfully'}, status=200)
