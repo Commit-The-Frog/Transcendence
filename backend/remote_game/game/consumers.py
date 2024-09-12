@@ -115,7 +115,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             self.player = None
             if tournament_name and user_id:
                 self.tournament_group_name = f'tournament_{tournament_name}'
-                self.player = Player(user_id)
+                self.player = Player(user_id, self.channel_name)
                 if not await self.player.get_db_object():
                     await self.close()
                 await self.channel_layer.group_add(
