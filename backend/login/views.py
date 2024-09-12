@@ -36,6 +36,21 @@ def CheckValidAT(view_func):
     return _wrapped_view
 
 
+class LoginCheckView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.COOKIES.get('refresh_token')
+            request.session['previous_url'] = request.META.get('PATH_INFO')
+            if not refresh_token:
+                return JsonResponse({'No refresh token'}, status=401)
+            UntypedToken(refresh_token)
+            return JsonResponse({'Fine'}, status=200)
+        except (InvalidToken, TokenError) as e:
+            return JsonResponse({'No refresh token'}, status=401)
+        except Exception as e:
+            return JsonResponse({'Unknown error'}, status=401)
+
+
 class LogoutView(View):
     def get(self, request):
         try:
@@ -71,7 +86,7 @@ class RefreshView(View):
             prev = request.session.get('previous_url')
             response = redirect(prev)
             response.set_cookie('access_token', new_access_token, httponly=True, samesite='Lax')
-            response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/login/refresh/')
+            response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/login/')
         except (InvalidToken, TokenError) as e:
             return redirect(settings.API_URL)
         except Exception as e:

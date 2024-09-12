@@ -136,27 +136,28 @@ class MatchListView(View):
     def post(self, request, *args, **kwargs):
         try:
             host_id = request.session.get('api_id')
-            host_instance_id = Userdb.objects.get(user_id=host_id).id
+            host_instance = Userdb.objects.get(user_id=host_id)
             json_data = json.loads(request.body)
             if json_data.get('istournament'):
-                game_data = None * 3
+                game_list = []
                 for game_number in range(1, 4):  # game1, game2, game3에 대한 반복
                     game_key = f'round{game_number}'  # 'game1', 'game2', 'game3' 생성
                     game = json_data.get(game_key)
-                    game_data[game_number] = PixelGame(user_id=host_instance_id, type='pixel',
+                    game_data = PixelGame(user_id=host_instance, type='pixel',
                                                        left_user=game.get('playerL').get('nickname'),
-                                                       left_win=game.get('playerL').get('win'),
+                                                       left_win=game.get('playerL').get('winner'),
                                                        right_user=game.get('playerR').get('nickname'),
-                                                       right_win=game.get('playerR').get('win'))
-                    game_data[game_number].save()
-                tournament_data = PixelTournament(game1=game_data[1], game2=game_data[2], game3=game_data[3])
+                                                       right_win=game.get('playerR').get('winner'))
+                    game_data.save()
+                    game_list.append(game_data)
+                tournament_data = PixelTournament(game1=game_list[0], game2=game_list[1], game3=game_list[2])
                 tournament_data.save()
             else:
-                game_data = PixelGame(user_id=host_instance_id, type='pixel',
+                game_data = PixelGame(user_id=host_instance, type='pixel',
                                                    left_user=json_data.get('playerL').get('nickname'),
-                                                   left_win=json_data.get('playerL').get('win'),
+                                                   left_win=json_data.get('playerL').get('winner'),
                                                    right_user=json_data.get('playerR').get('nickname'),
-                                                   right_win=json_data.get('playerR').get('win'))
+                                                   right_win=json_data.get('playerR').get('winner'))
                 game_data.save()
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
