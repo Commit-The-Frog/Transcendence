@@ -33,8 +33,8 @@ const beforeRoutingDisconnectGmaeSocket = (route) => {
     }
     if (route != "/twofa" && route != "/") {
         if (getSocket() === null) {
-            // const url = `https://${window.env.SERVER_IP}/ws/access`
-            // connectAccessSocket(url);
+            const url = `wss://${window.location.host}/ws/user/status`
+            connectAccessSocket(url);
         }
     }
 }

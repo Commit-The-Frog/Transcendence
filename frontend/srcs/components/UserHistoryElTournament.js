@@ -6,10 +6,10 @@ const UserHistoryElTournament = ({el}) => {
         </div>
         <div class="matchHistoryTournament">
              <div class="matchHistoryRound1">
-                <div class="historyplayer historyplayerself ${el?.round1?.playerL?.win ? `winner` : `loser`}">
+                <div class="historyplayer historyplayerself ${el?.round1?.playerL?.win  ? `winner` : `loser`}">
                     <p>${el?.round1?.playerL?.nickname}</p>
                 </div>
-                <div class="historyplayer historyplayeropponent ${el?.round1?.playerR?.win ? `winner` : `loser`}">
+                <div class="historyplayer historyplayeropponent ${el?.round1?.playerR?.win  ? `winner` : `loser`}">
                     <p>${el?.round1?.playerR?.nickname}</p>
                 </div>
              </div>
@@ -25,10 +25,10 @@ const UserHistoryElTournament = ({el}) => {
              <div>
                  ${el?.round3?.playerL?.win ? '🥇' : '&nbsp&nbsp&nbsp&nbsp'}
              </div>
-                <div class="historyplayer historyplayerself ${el?.round1?.playerL?.win ? `winner` : `loser`}">
+                <div class="historyplayer historyplayerself ${el?.round3?.playerL?.win  ? `winner` : `loser`}">
                        <p>${el?.round3.playerL?.nickname}</p>
                    </div>
-                   <div class="historyplayer historyplayeropponent ${el?.round1?.playerR?.win ? `winner` : `loser`}">
+                   <div class="historyplayer historyplayeropponent ${el?.round3?.playerR?.win  ? `winner` : `loser`}">
                        <p>${el?.round3?.playerR?.nickname}</p>
                    </div>
                    <div>
@@ -37,10 +37,10 @@ const UserHistoryElTournament = ({el}) => {
                 </div>
                 
              <div class="matchHistoryRound2">
-                <div class="historyplayer historyplayerself ${el?.round1?.playerL?.win ? `winner` : `loser`}">
+                <div class="historyplayer historyplayerself ${el?.round2?.playerL?.win ? `winner` : `loser`}">
                     <p>${el?.round2?.playerL?.nickname}</p>
                 </div>
-                <div class="historyplayer historyplayeropponent ${el?.round1?.playerR?.win ? `winner` : `loser`}">
+                <div class="historyplayer historyplayeropponent ${el?.round2?.playerR?.win  ? `winner` : `loser`}">
                     <p>${el?.round2?.playerR?.nickname}</p>
                 </div>
             </div>

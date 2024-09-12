@@ -2,7 +2,7 @@ import { Header } from "../components/Header.js";
 import UserHub from "../components/UserHub.js";
 import UserProfile from "../components/UserProfile.js";
 import myAxios from "../core/myaxios/myAxios.js";
-import { useEffect, useState } from "../core/myreact/myreact.js";
+import { _render, render, useEffect, useState } from "../core/myreact/myreact.js";
 import { changeUrl } from "../utils/changeUrl.js";
 import { getLastUrlSegment } from "../utils/getLastUrlSegment.js";
 
@@ -37,7 +37,7 @@ export function User({params}) {
     const lastSegment = segments.pop() || segments.pop();
     useEffect(()=>{
         userinfoGetter(setData);
-    },[lastSegment],'userinfofetch')
+    },[window.location.pathname],'userinfofetch');
     return `
     <div class="userInfo">
         ${Header()}

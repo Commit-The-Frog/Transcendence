@@ -1,4 +1,4 @@
-import { useEffect, useState } from "../core/myreact/myreact.js"
+import { _render, useEffect, useState } from "../core/myreact/myreact.js"
 import { getRecoilValue } from "../core/myrecoil/myrecoil.js"
 import { languageState } from "../recoil/languageState.js"
 import translations from "../translations.js"
@@ -7,12 +7,11 @@ import { bindEventHandler } from "../utils/bindEventHandler.js";
 import Modal from "./Modal.js";
 import { getLastUrlSegment } from "../utils/getLastUrlSegment.js";
 import myAxios from "../core/myaxios/myAxios.js";
+import { userinfoGetter } from "../pages/User.js";
 export default function UserProfile ( {
     data, setData
 }){
     const [editOpen, setEditOpen] = useState(false, 'editopen');
-    const [host, setHost] = useState(false,'ishost');
-    const [friend, setFriend] = useState(false, 'isFriend');
     const userEditOpenHandler = () => {
         setEditOpen(true);
     }
@@ -20,21 +19,12 @@ export default function UserProfile ( {
     const closeHandler = () => {
         setEditOpen(false);
     }
-    useEffect(()=>{
-        // if (data?.host) {
-        //     setHost(true);
-        // }
-        // if (data?.friend) {
-        //     setFriend(true);
-        // }
-    },undefined,'userhost');
-
     const friendAddHandler = () => {
         const id = getLastUrlSegment();
         const url = `https://${window.env.SERVER_IP}/user/friend`;
         myAxios.post(url,{ user_id : id})
         .then((res) =>{
-            setFriend(true);
+            userinfoGetter(setData);
         })
         .catch((el)=>{
             console.log(el);

@@ -15,7 +15,7 @@ const UserHistoryElPvp = ({el}) => {
                  <p>${el?.playerR?.nickname}</p>
              </div>
              <div>
-                 ${el?.playerR?.nickname ? '&nbsp&nbsp&nbsp&nbsp' : '🥇'}
+                 ${el?.playerR?.win ? '🥇' : '&nbsp&nbsp&nbsp&nbsp' }
              </div>
          </div>
          <div class="matchgame">
