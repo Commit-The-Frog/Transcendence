@@ -86,13 +86,9 @@ class MatchListView(View):
 
     def get_pvp_dataset(self, pvp_list):
         data_list = []
-        print('test', file=sys.stderr)
         for instance in pvp_list:
-            print('in', file=sys.stderr)
             pvp_data = {}
-            print('test', file=sys.stderr)
             p_game_data = GameSerializer(instance).data
-            print('ser', file=sys.stderr)
             pvp_data['sort_date'] = str(p_game_data['pub_date'])
             pvp_data['date'] = str(p_game_data['pub_date'].split('T')[0])
             pvp_data['istournament'] = False
@@ -104,7 +100,6 @@ class MatchListView(View):
     def get(self, request, *args, **kwargs):
         try:
             target_id = request.GET.get('id')
-            print(target_id, file=sys.stderr)
             if target_id is None or not target_id.isdigit():
                 return JsonResponse({'error': 'Invalid id'}, status=404)
             target_instance_id = Userdb.objects.get(user_id=target_id).id
@@ -125,21 +120,10 @@ class MatchListView(View):
             pixel_pvp_list = pixel_game_list.exclude(id__in=pixel_tournament_game_ids)
             # tournament_list 순회하면서 데이터 적재 이떄 시간은 game1을 기준으로 작성
             # 시간을 넣어놔야 나중에 PVP와 비교 가능~
-            print(tournament_list, file=sys.stderr)
-            print('@@@@@', file=sys.stderr)
-            print(pixel_tournament_list, file=sys.stderr)
-            print('@@@@@', file=sys.stderr)
-            print(pvp_list, file=sys.stderr)
-            print('@@@@@', file=sys.stderr)
-            print(pixel_pvp_list, file=sys.stderr)
             data_list = self.get_tournament_dataset(tournament_list)
-            print('@@@@@1', file=sys.stderr)
             data_list = data_list + self.get_pixel_tournament_dataset(pixel_tournament_list)
-            print('@@@@@2', file=sys.stderr)
             data_list = data_list + self.get_pvp_dataset(pvp_list)
-            print('@@@@@3', file=sys.stderr)
             data_list = data_list + self.get_pixel_pvp_dataset(pixel_pvp_list)
-            print('@@@@@4', file=sys.stderr)
             sorted_data = sorted(data_list, key=lambda x: datetime.strptime(x['sort_date'], '%Y-%m-%dT%H:%M:%S.%f%z'))
             for item in sorted_data:
                 del item['sort_date']

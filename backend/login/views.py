@@ -134,7 +134,7 @@ class CallbackView(View):
             request.session['api_id'] = data_response['id']
             request.session['api_nick'] = data_response['login']
             self.send_test_email(data_response['email'], request)
-            response = redirect('https://localhost/twofa')
+            response = redirect(f'https://{settings.SERVER_IP}/twofa')
             session_id = request.COOKIES.get('sessionid')
             response.set_cookie('sessionid', session_id, max_age=1209600, path='/', httponly=True, samesite='Lax')
             return response

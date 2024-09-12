@@ -274,6 +274,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # 발신자 이메일 계정�
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 기본 발신자 이메일 주소
 
 HOME_URL = env('HOME_URL')
+SERVER_IP = env('SERVER_IP')
 
 MEDIA_URL = '/user/profile_images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'user/profile_images')
