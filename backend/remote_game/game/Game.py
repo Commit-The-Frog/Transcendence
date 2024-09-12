@@ -3,6 +3,7 @@ from channels.layers import get_channel_layer
 from remote_game.game_objects.Ball import Ball
 from remote_game.game_objects.Paddle import Paddle
 from remote_game.game_objects.Player import Player
+import remote_game.Exceptions
 # import time
 
 import logging
@@ -31,27 +32,29 @@ class Game:
 
     async def start(self):
         channel_layer = get_channel_layer()
-        while len(self.players) < 2:
-            await asyncio.sleep(0.5)
-        while len(self.players) >= 2 and (not self.players[0].get_is_ready() or not self.players[1].get_is_ready()): #waiting
-            if not self.players[0].is_connected() or not self.players[1].is_connected():
-                break
+        try:
+            cnt = 0
+            while len(self.players) < 2:
+                await asyncio.sleep(0.5)
+                cnt += 0.5
+                if cnt > 10:
+                    raise remote_game.Exceptions.TimeoutException()
+            while not (self.players[0].get_is_ready() and self.players[1].get_is_ready()): #waiting
+                if not self.players[0].is_connected() or not self.players[1].is_connected():
+                    raise remote_game.Exceptions.GameAbnormalStopException()
+                await self.__send_message(channel_layer)
+                await asyncio.sleep(1)
             await self.__send_message(channel_layer)
-            await asyncio.sleep(1)
-        await self.__send_message(channel_layer)
-        if len(self.players) >= 2 and self.players[0].is_connected() and self.players[1].is_connected():
             logger.info(f'{self.id} Game Now Start')
             self.status = 1
-        else:
-            self.status = 3
-        while self.status == 1: # game is in progress
-            await self.__send_message(channel_layer)
-            self.__calculate()
-            await asyncio.sleep(1/100)
-        if self.status == 2:
+            while self.status == 1: # game is in progress
+                await self.__send_message(channel_layer)
+                self.__calculate()
+                await asyncio.sleep(1/100)
             logger.info(f'{self.id} Game End')
             await self.__send_message(channel_layer)
-        else: # game over by connection lost
+        except remote_game.Exceptions.GameAbnormalStopException:
+            self.status = 3
             logger.info(f'{self.id} Game Error End')
             if self.players[0].is_connected():
                 self.winner = self.players[0]
@@ -70,8 +73,7 @@ class Game:
 
     def __calculate(self):
         if not self.players[0].is_connected() or not self.players[1].is_connected():
-            self.status = 3
-            return
+            raise remote_game.Exceptions.GameAbnormalStopException()
         if self.players[0].get_input()['upPressed']:
             self.__left_paddle.dy = min(-Paddle.vInit, self.__left_paddle.dy - self.__left_paddle.accel)
         if self.players[0].get_input()['downPressed']:
