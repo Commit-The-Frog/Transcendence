@@ -18,6 +18,7 @@ class UserStateConsumer(AsyncWebsocketConsumer):
             user.status = True
             user_dict[self.user_id] += 1
             await sync_to_async(user.save)()
+            await self.accept()
         except Exception as e:
             logger.error(f'{e} Error!!')
             await self.close()
