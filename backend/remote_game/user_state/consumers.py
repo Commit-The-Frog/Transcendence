@@ -1,7 +1,7 @@
 import asyncio
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from backend.user.models import Userdb
+from user.models import Userdb
 from asgiref.sync import sync_to_async
 import logging
 from collections import defaultdict
