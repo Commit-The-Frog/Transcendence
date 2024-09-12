@@ -5,7 +5,7 @@ class Userdb(models.Model):
     user_id = models.CharField(max_length=10)
     nickname = models.CharField(max_length=10)
     profile_image = models.ImageField(default='profile_images/default.png')
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=False)
 
 
 class Friends(models.Model):

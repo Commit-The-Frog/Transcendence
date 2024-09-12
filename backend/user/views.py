@@ -117,6 +117,8 @@ class FriendView(View):
             json_data = json.loads(request.body)
             friend_id = json_data.get('user_id')
             friend_instance = Userdb.objects.get(user_id=friend_id)
+            if Friends.objects.filter(user=host_instance, friend=friend_instance).count() != 0:
+                return JsonResponse({'notice': 'Already friend'}, status=406)
             insert_data = Friends(user=host_instance, friend=friend_instance)
             insert_data.save()
         except json.JSONDecodeError:
