@@ -5,6 +5,8 @@ import Pingpong from "../../pages/Pingpong.js";
 import Twofa from "../../pages/Twofa.js";
 import Pixel from "../../pages/Pixel.js";
 import useSocket from "../../utils/useSocket.js";
+import NotFound from "../../pages/NotFound.js";
+import { connectAccessSocket, getSocket } from "../../utils/accessSocket.js";
 
 export function Router() {
 
@@ -27,9 +29,13 @@ const parsed = parseUrl(path, routes);
 
 const beforeRoutingDisconnectGmaeSocket = (route) => {
     if (route != "/pingpong/remote/start") {
-        console.log(route);
-        console.log(useSocket().getcurrentSocket());
         useSocket().disconnectSocket();
+    }
+    if (route != "/twofa" && route != "/") {
+        if (getSocket() === null) {
+            const url = `wss://${window.location.host}/ws/user/status`
+            connectAccessSocket(url);
+        }
     }
 }
 
@@ -41,8 +47,8 @@ if (parsed) {
         return routes[route]({params : params});
     }
     else
-        return `<div> 404 not found </div>`
+        return `${NotFound()}`
     } else {
-        return `<div> 404 not found </div>`
+        return `${NotFound()}`
     }
 }

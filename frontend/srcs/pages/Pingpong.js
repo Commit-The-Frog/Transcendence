@@ -38,7 +38,6 @@ const Pingpong = () => {
     bindEventHandler('click', "pingpongLocalHandler", pingpongLocalHandler);
     bindEventHandler('click', "pingpongRemoteHandler",pingpongRemoteHandler);
 
-    //params파싱해와야함...
     const innerComponent = pingpongParamRoute();
     return `
     <div class="pingpong">

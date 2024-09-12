@@ -34,11 +34,14 @@ class Tournament {
                 this.data.round2 = this.currentGame.recordGame();
                 this.startFinalRound();
             }
-            if (roundNumber === 3) {
+        });
+
+        if (roundNumber === 3) {
+            this.currentGame.onGameOverPrev(()=>{
                 this.data.round3 = this.currentGame.recordGame();
                 this.postData();
-            }
-        });
+            })
+        }
     }
 
     postData() {
@@ -78,7 +81,6 @@ class Tournament {
         this.players = [];
         this.roundWinners = [];
         this.currentRound = 0;
-        console.log("토너먼트가 중단되고 초기화되었습니다.");
     }
 
 }

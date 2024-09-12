@@ -1,6 +1,6 @@
 
 import LanguageBtn from "../components/LanguageBtn.js";
-import { getRecoilValue, useRecoilState, useRecoilValue } from "../core/myrecoil/myrecoil.js";
+import { getRecoilValue, } from "../core/myrecoil/myrecoil.js";
 import { languageState } from "../recoil/languageState.js";
 import translations from "../translations.js";
 import { bindEventHandler } from "../utils/bindEventHandler.js";
@@ -24,7 +24,7 @@ const Twofa = () => {
         })
         .catch((error)=>{
             if (error.status === 401) {
-                showToastHandler(' 다시 입력해봐 🥺');
+                showToastHandler(translations[getRecoilValue(languageState)].retrytwofa);
             }
             console.log(error);
         })

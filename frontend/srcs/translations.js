@@ -24,7 +24,9 @@ const translations = {
         name : 'name',
         file : 'file',
         imagelimit : 'Please upload an image smaller than 1MB.',
-        pixel : 'pixel'
+        pixel : 'pixel',
+        retrytwofa : 'Try typing it again 🥺',
+        wait : 'wait 🖐🏻'
     },
     ko: {
         login: '로그인',
@@ -51,7 +53,9 @@ const translations = {
         name : '이름',
         file : '파일',
         imagelimit : '1MB미만의 이미지만 업로드해주세요 ',
-        pixel : '픽셀'
+        pixel : '픽셀',
+        retrytwofa : '다시 입력해봐 🥺',
+        wait : '기다려 🖐🏻'
     },
     fr: {
         login: 'connexion',
@@ -78,7 +82,9 @@ const translations = {
         name : 'pseudo',
         file : 'fichier',
         imagelimit : 'Veuillez télécharger une image de moins de 1 Mo.',
-        pixel : 'pixel'
+        pixel : 'pixel',
+        retrytwofa : `Réessaye de l'écrire 🥺`,
+        wait : `Attends 🖐🏻`
     }
 };
 

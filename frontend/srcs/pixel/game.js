@@ -19,12 +19,13 @@ class Game {
         this.leftPlayerName = leftPlayerName;  // 왼쪽 플레이어 이름
         this.rightPlayerName = rightPlayerName; 
         this.onGameOverCallback = null;
+        this.onGameOverPrevDisplay = null;
         this.countdown = 3;  // 3초 카운트다운
         this.countdownInterval = null;  // 카운트다운 타이머
         this.startButton = document.getElementById("startButton"); // startButton을 게임 객체에서 관리
         this.showInitialBackground();
         this.setupStartButton(); // 버튼 설정
-        this.istournament = true;
+        this.istournament = istournament;
         this.data = {
         }
     }
@@ -168,6 +169,9 @@ class Game {
     endGame() {
         this.isRunning = false;
         this.render();
+        if (this.onGameOverPrevDisplay) {
+            this.onGameOverPrevDisplay();
+        }
         setTimeout(()=>{
             this.postData();
             this.displayWinner();
@@ -175,6 +179,10 @@ class Game {
                 this.onGameOverCallback(this.winner);
             }
         }, 1500);
+    }
+
+    onGameOverPrev(callback) {
+        this.onGameOverPrevDisplay = callback;
     }
 
     onGameOverCallback(callback) {
@@ -252,6 +260,7 @@ class Game {
     }
 
     postData = () => {
+        console.log(this.istournament);
         if (this.istournament) {
             return ;
         }
@@ -259,6 +268,7 @@ class Game {
         const data = this.recordGame();
         data.istournament = this.istournament;
         data.game = 'pixel';
+        console.log(data);
         myAxios.post(url, data)
         .then((data)=>{
             console.log(data);
