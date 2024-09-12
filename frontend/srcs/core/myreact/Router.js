@@ -7,6 +7,8 @@ import Pixel from "../../pages/Pixel.js";
 import useSocket from "../../utils/useSocket.js";
 import NotFound from "../../pages/NotFound.js";
 import { connectAccessSocket, getSocket } from "../../utils/accessSocket.js";
+import { changeUrl } from "../../utils/changeUrl.js";
+import myAxios from "../myaxios/myAxios.js";
 
 export function Router() {
 
@@ -27,11 +29,42 @@ const routes = {
 const path = window.location.pathname;
 const parsed = parseUrl(path, routes);
 
+const islogin = async () => {
+    const url = `https://${window.env.SERVER_IP}/login/islogin`;
+    return myAxios.get(url)
+    .then(()=>{
+        return true;
+    })
+    .catch((err)=>{
+        if (err.status === 401) {
+            return false;
+        }
+        return true;
+    })
+    // try {
+    //     const url = `https://${window.env.SERVER_IP}/login/islogin`;
+    //     await myAxios.get(url);
+    //     return true;
+    // }catch {
+    //     return false;
+    // }
+}
+
+
 const beforeRoutingDisconnectGmaeSocket = (route) => {
     if (route != "/pingpong/remote/start") {
         useSocket().disconnectSocket();
     }
+}
+const connectStatusSocket = (route) => {
     if (route != "/twofa" && route != "/") {
+        (async () => {
+            const isLoggedIn = await islogin();
+            if (!isLoggedIn) {
+                changeUrl("/");
+                return ;
+            } 
+        })();
         if (getSocket() === null) {
             const url = `wss://${window.location.host}/ws/user/status`
             connectAccessSocket(url);
@@ -44,6 +77,7 @@ if (parsed) {
     const {route , params} = parsed;
     if (routes[route]) {
         beforeRoutingDisconnectGmaeSocket(route);
+        connectStatusSocket(route);
         return routes[route]({params : params});
     }
     else
