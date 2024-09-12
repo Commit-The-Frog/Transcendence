@@ -134,7 +134,7 @@ class Tournament:
             left_user= await self.games[2].players[0].get_db_object(),
             right_user= await self.games[2].players[1].get_db_object(),
             left_win=self.games[2].players[0].get_score() == Game.max_score,
-            right_win=self.games[2].players[0].get_score() == Game.max_score,
+            right_win=self.games[2].players[1].get_score() == Game.max_score,
             type='pingpong'
         )
         await channel_layer.group_send(
