@@ -22,11 +22,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("game/", include("remote_game.urls")),
-    path("admin/", admin.site.urls),
-    path('login', include("login.urls")),
-    path('login/', include("login.urls")),
-    path('user', include("user.urls")),
-    path('user/', include("user.urls")),
-    path('match', include("match.urls")),
+    path("api/game", include("remote_game.urls")),
+    path("api/admin", admin.site.urls),
+    path('api/login', include("login.urls")),
+    path('api/user', include("user.urls")),
+    path('api/match', include("match.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

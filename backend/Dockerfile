@@ -31,17 +31,14 @@ COPY .. .
 # 의존성 설치
 RUN pip install -r requirements.txt \
     && chmod +w user/profile_images \
-    && python manage.py makemigrations \
-    && python manage.py migrate
-
+    && chmod +x tools/entrypoint.sh
 # Redis를 백엔드로 사용하기 위해 환경 변수 설정 (필요시)
 #ENV DJANGO_SETTINGS_MODULE=config.settings
-
-# 장고 static 파일 수집
-RUN python manage.py collectstatic --noinput
 
 # 서버에 사용할 포트 노출
 EXPOSE 8000
 
+ENTRYPOINT ["./tools/entrypoint.sh"]
+
 # Redis 서버 실행, Daphne ASGI 서버 실행
-CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 config.asgi:application
+#CMD redis-server --daemonize yes && daphne -b 0.0.0.0 -p 8000 config.asgi:application

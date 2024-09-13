@@ -13,10 +13,11 @@ services:
       - media_data:/app
     networks:
       - app-network
-    ports:
-      - "8000:8000"  # Django 기본 포트
+    depends_on:
+      - db
     env_file:
-      - ./backend/.env  # 환경 변수 파일이 있다면 명시적으로 로드
+      - ./backend/.env
+    init: true
 
   frontend:
     container_name: frontend
@@ -26,8 +27,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - app-network
-    ports:
-      - "3000:3000"  # Node.js 기본 포트
+    init: true
 
   nginx:
     build: ./nginx
@@ -38,6 +38,23 @@ services:
       - media_data:/app
     networks:
       - app-network
+    init: true
+
+  db:
+    build: ./db
+    networks:
+      - app-network
+    env_file:
+      - ./backend/.env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U Newjeans" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    init: true
+
 
 networks:
   app-network:
@@ -45,3 +62,4 @@ networks:
 
 volumes:
   media_data:
+  pgdata:
