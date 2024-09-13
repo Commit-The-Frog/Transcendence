@@ -28,7 +28,7 @@ environ.Env.read_env(env_path)
 
 SECRET_KEY = 'django-insecure-(iy0b)(0c3(799oq^65h+3_85_rv8_(r#wv$ngybi_h8dked9&'
 
-DEBUG = True
+DEBUG = False
 
 SECURE_SSL_REDIRECT = False
 
