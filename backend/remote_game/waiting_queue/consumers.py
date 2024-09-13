@@ -61,3 +61,7 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             await self.close(code=1000)
         except Exception as e:
             logger.error(f'{e} exception in waiting queue consumer match found')
+
+    async def queue_error(self, event):
+        await self.send(text_data=json.dumps(event))
+        await self.close()

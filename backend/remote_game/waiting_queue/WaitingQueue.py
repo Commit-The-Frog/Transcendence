@@ -15,6 +15,17 @@ class WaitingQueue:
         if user_id in self.users:
             logger.debug(f'WAITING QUEUE: {channel_name} is already waiting')
             self.users.move_to_end(user_id, last=True)
+            channel_layer = get_channel_layer()
+            await channel_layer.send(
+                self.users[user_id],
+                {
+                    'type': 'queue_error',
+                    'data': {
+                        'status':'error',
+                        'message': 'duplicated register'
+                    }
+                }
+            )
         self.users[user_id] = channel_name
 
     def is_running(self):
@@ -32,7 +43,11 @@ class WaitingQueue:
                         channel_name,
                         {
                             "type": "match_found",
-                            "match_name": f'{match_name}'
+                            # 'data': {
+                            #     'status':'success',
+                            #     'message':f'{match_name}'
+                            # },
+                            "match_name": f'{match_name}',
                         }
                     )
             await asyncio.sleep(1)
