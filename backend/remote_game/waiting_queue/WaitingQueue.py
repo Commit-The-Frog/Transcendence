@@ -25,9 +25,9 @@ class WaitingQueue:
         channel_layer = get_channel_layer()
         while True:
             if len(self.users) >= self.size:
+                match_name = uuid.uuid4()
                 for _ in range(self.size):
                     user_id, channel_name = self.users.popitem(last=False)
-                    match_name = uuid.uuid4()
                     await channel_layer.send(
                         channel_name,
                         {
