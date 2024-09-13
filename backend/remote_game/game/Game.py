@@ -25,6 +25,7 @@ class Game:
         self.tournament_id = tournament_id
         self.status = 0
         self.players: dict[int, Player] = {}
+        self.disconnected_players: list[str] = []
         self.__ball = Ball((Game.canvas_width - 15) / 2, (Game.canvas_height - 15) / 2)
         self.__left_paddle = Paddle(50, (Game.canvas_height - 100) / 2)
         self.__right_paddle = Paddle(Game.canvas_width - 50 - 10, (Game.canvas_height - 100) / 2)
@@ -57,12 +58,16 @@ class Game:
             self.status = 3
             logger.info(f'{self.id} Game Error End')
             if self.players[0].is_connected():
+                self.disconnected_players.append(self.players[1].get_nickname())
                 self.winner = self.players[0]
                 self.players[0].set_score(Game.max_score)
             elif self.players[1].is_connected():
+                self.disconnected_players.append(self.players[0].get_nickname())
                 self.players[1].set_score(Game.max_score)
                 self.winner = self.players[1]
             else:
+                self.disconnected_players.append(self.players[0].get_nickname())
+                self.disconnected_players.append(self.players[1].get_nickname())
                 self.winner = self.players[0]
                 self.players[0].set_score(Game.max_score)
             await self.__send_message(channel_layer)
@@ -217,6 +222,7 @@ class Game:
                 'data' : {
                     'status': Game.game_status[self.status],
                     'winner': self.winner.get_nickname() if self.winner else "",
+                    'disconnected_players': self.disconnected_players,
                 }
             }
         await channel_layer.group_send(self.id, message)
