@@ -37,18 +37,17 @@ def CheckValidAT(view_func):
 
 
 class LoginCheckView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         try:
             refresh_token = request.COOKIES.get('refresh_token')
-            request.session['previous_url'] = request.META.get('PATH_INFO')
             if not refresh_token:
-                return JsonResponse({'No refresh token'}, status=401)
+                return JsonResponse({'status': 'No refresh token'}, status=401)
             UntypedToken(refresh_token)
-            return JsonResponse({'Fine'}, status=200)
+            return JsonResponse({'status': 'Fine'}, status=200)
         except (InvalidToken, TokenError) as e:
-            return JsonResponse({'No refresh token'}, status=401)
+            return JsonResponse({'status': 'No refresh token'}, status=401)
         except Exception as e:
-            return JsonResponse({'Unknown error'}, status=401)
+            return JsonResponse({'status': 'Unknown error'}, status=401)
 
 
 class LogoutView(View):
@@ -61,7 +60,9 @@ class LogoutView(View):
             refresh.blacklist()
             response = redirect(settings.HOME_URL)
             response.delete_cookie('access_token')
-            response.delete_cookie('refresh_token')
+            response.delete_cookie('refresh_token', path='/api/login')
+            response.delete_cookie('sessionid')
+            request.session.delete()
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         return response
@@ -86,7 +87,7 @@ class RefreshView(View):
             prev = request.session.get('previous_url')
             response = redirect(prev)
             response.set_cookie('access_token', new_access_token, httponly=True, samesite='Lax')
-            response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/login/')
+            response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/api/login')
         except (InvalidToken, TokenError) as e:
             return redirect(settings.API_URL)
         except Exception as e:
@@ -194,7 +195,7 @@ class SecondAuthView(View):
                 refresh_token = str(refresh)
                 response = JsonResponse({'id': user_id}, status=200)
                 response.set_cookie('access_token', access_token, httponly=True, samesite='Lax')
-                response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/login/refresh/')
+                response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/api/login')
             else:
                 response = JsonResponse({'error': '2fa auth failed'}, status=401)
             return response
