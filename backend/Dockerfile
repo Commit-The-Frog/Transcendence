@@ -26,7 +26,7 @@ RUN apk add --no-cache redis
 RUN pip install --upgrade pip setuptools wheel
 
 # 프로젝트의 의존성 파일 복사
-COPY .. .
+COPY . .
 
 # 의존성 설치
 RUN pip install -r requirements.txt \
