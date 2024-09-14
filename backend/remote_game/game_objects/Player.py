@@ -72,16 +72,10 @@ class Player:
         return self.__nickname
 
     async def get_db_object(self):
-        if self.__db_object:
-            return self.__db_object
-        try:
+        if not self.__db_object:
             self.__db_object = await sync_to_async(Userdb.objects.get)(user_id=self.__id)
             logger.info(f'{self.__id} saved as {self.__db_object.id}')
             self.__nickname = self.__db_object.nickname
-        except Userdb.DoesNotExist:
-            logger.info(f'{self.__id} does not exist')
-        except Userdb.MultipleObjectsReturned:
-            logger.info(f'{self.__id} has multiple users')
         return self.__db_object
 
     async def privmsg(self, message):

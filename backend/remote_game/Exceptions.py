@@ -10,3 +10,5 @@ class GameAbnormalStopException(RemoteGameException):
 class FullMatchException(RemoteGameException):
     pass
 
+class TimeoutException(RemoteGameException):
+    pass

@@ -18,14 +18,15 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             query_string = self.scope['query_string'].decode('utf-8')
             query_params = urllib.parse.parse_qs(query_string)
             self.que_type = query_params.get('type', [None])[0]
+            self.user_id = self.scope['session'].get('api_id')
             if not GameWaitingQueue.is_running():  # Assuming you have a way to check if it's already running
                 asyncio.create_task(GameWaitingQueue.start())
             if not TournamentWaitingQueue.is_running():
                 asyncio.create_task(TournamentWaitingQueue.start())
             if self.que_type == '1vs1':
-                await GameWaitingQueue.put(self.channel_name)
+                await GameWaitingQueue.put(self.user_id, self.channel_name)
             elif self.que_type == 'tournament':
-                await TournamentWaitingQueue.put(self.channel_name)
+                await TournamentWaitingQueue.put(self.user_id, self.channel_name)
             await self.accept()
         except Exceptions.RemoteGameException as e:
             logger.error(f'{e} exception in waiting queue consumer connect')
@@ -45,9 +46,9 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         try:
             if self.que_type == '1vs1':
-                await GameWaitingQueue.delete_from_queue(self.channel_name)
+                await GameWaitingQueue.delete_from_queue(self.user_id)
             elif self.que_type == 'tournament':
-                await TournamentWaitingQueue.delete_from_queue(self.channel_name)
+                await TournamentWaitingQueue.delete_from_queue(self.user_id)
         except Exceptions.RemoteGameException as e:
             logger.error(f'{e} exception in waiting queue consumer disconnect')
         except Exception as e:
@@ -60,3 +61,7 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             await self.close(code=1000)
         except Exception as e:
             logger.error(f'{e} exception in waiting queue consumer match found')
+
+    async def queue_error(self, event):
+        await self.send(text_data=json.dumps(event))
+        await self.close()

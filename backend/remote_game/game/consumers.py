@@ -96,10 +96,15 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.match_group_name in versus_dict.keys():
             versus_dict.pop(self.match_group_name)
 
-    async def game_timeout(self, event):
-        logger.debug(f'{self.match_group_name} game timed out')
+    async def game_abnormal(self, msg):
+        logger.debug(f'{self.match_group_name} game abnormal exit')
         if self.match_group_name in versus_dict.keys():
             versus_dict.pop(self.match_group_name)
+        message_json = json.dumps({
+            'status': 'error',
+            'message': msg
+        })
+        await self.send(text_data=message_json)
         await self.close()
 
 class TournamentConsumer(AsyncWebsocketConsumer):
@@ -138,11 +143,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 self.tournament.add_player(self.player)
             else:
                 await self.close(1000)
-        except Exceptions.RemoteGameException as e:
-            await self.send(f'{e}')
-            await self.send('Socket Connection Closed')
-            await self.close()
-            logger.error(f'{e} exception in tournament consumer connect')
         except Exception as e:
             await self.send('UNEXPECTED EXCEPTION')
             await self.send('Socket Connection Closed')
@@ -184,8 +184,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.tournament_group_name in tournament_dict.keys():
             tournament_dict.pop(self.tournament_group_name)
 
-    async def game_timeout(self, event):
-        logger.debug(f'{self.tournament_group_name} game timed out')
+    async def game_abnormal(self, msg):
+        logger.debug(f'{self.tournament_group_name} game abnormal exit')
         if self.tournament_group_name in versus_dict.keys():
             versus_dict.pop(self.tournament_group_name)
+        message_json = json.dumps({
+            'status': 'error',
+            'message': msg
+        })
+        await self.send(text_data=message_json)
         await self.close()
