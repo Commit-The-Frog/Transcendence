@@ -23,10 +23,11 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             self.que_type = query_params.get('type', [None])[0]
             self.user_id = self.scope['session'].get('api_id')
             session = self.scope['session']
-            # session['previous_url'] = '' # 정확한 previous_url 설정 필요
+            session['previous_url'] = '/pingpong/remote' # 정확한 previous_url 설정 필요
             await database_sync_to_async(session.save)()
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
+            await self.accept()
             if not access_token:
                 raise InvalidToken()
             UntypedToken(access_token)
@@ -38,7 +39,6 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
                 await GameWaitingQueue.put(self.user_id, self.channel_name)
             elif self.que_type == 'tournament':
                 await TournamentWaitingQueue.put(self.user_id, self.channel_name)
-            await self.accept()
         except Exceptions.RemoteGameException as e:
             logger.error(f'{e} exception in waiting queue consumer connect')
             await self.send(f'{e}')
@@ -46,10 +46,10 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             await self.close()
         except (TokenError, InvalidToken) as e:
             logger.error(f'{e} exception in game consumer connect')
-            # await self.send(text_data=json.dumps({
-            #     'type': 'redirect',
-            #     'url': '',
-            # }))
+            await self.send(text_data=json.dumps({
+                'type': 'redirect',
+                'url': 'api/login/refresh',
+            }))
             await self.close()
         except Exception as e:
             logger.error(f'UNEXPECTED EXCEPTION >> {e} exception in waiting queue consumer connect <<')

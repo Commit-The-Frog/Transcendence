@@ -28,7 +28,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             match_name = query_params.get('match_name', [None])[0]
             user_id = self.scope['session'].get('api_id')
             session = self.scope['session']
-            # session['previous_url'] = '' # 정확한 previous_url 설정 필요
+            session['previous_url'] = '/pingpong/remote' # 정확한 previous_url 설정 필요
             await database_sync_to_async(session.save)()
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
@@ -36,6 +36,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 raise InvalidToken()
             UntypedToken(access_token)
             self.player = None
+            await self.accept()
             if match_name and user_id:
                 self.match_group_name = f'versus_{match_name}'
                 self.player = Player(user_id, self.channel_name)
@@ -45,7 +46,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_add(
                     self.match_group_name, self.channel_name
                 )
-                await self.accept()
             else:
                 await self.close()
                 return
@@ -64,10 +64,10 @@ class GameConsumer(AsyncWebsocketConsumer):
                 await self.close(1000)
         except (TokenError, InvalidToken) as e:
             logger.error(f'{e} exception in game consumer connect')
-            # await self.send(text_data=json.dumps({
-            #     'type': 'redirect',
-            #     'url': '',
-            # }))
+            await self.send(text_data=json.dumps({
+                'type': 'redirect',
+                'url': 'api/login/refresh',
+            }))
             await self.close()
         except Exceptions.RemoteGameException as e:
             logger.error(f'{e} exception in game consumer connect')
@@ -136,7 +136,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             tournament_name = query_params.get('match_name', [None])[0]
             user_id = self.scope['session'].get('api_id')
             session = self.scope['session']
-            # session['previous_url'] = '' # 정확한 previous_url 설정 필요
+            session['previous_url'] = '/pingpong/remote' # 정확한 previous_url 설정 필요
             await database_sync_to_async(session.save)()
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
@@ -171,10 +171,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 await self.close(1000)
         except (TokenError, InvalidToken) as e:
             logger.error(f'{e} exception in game consumer connect')
-            # await self.send(text_data=json.dumps({
-            #     'type': 'redirect',
-            #     'url': '',
-            # }))
+            await self.send(text_data=json.dumps({
+                'type': 'redirect',
+                'url': 'api/login/refresh',
+            }))
             await self.close()
         except Exception as e:
             await self.send('UNEXPECTED EXCEPTION')
