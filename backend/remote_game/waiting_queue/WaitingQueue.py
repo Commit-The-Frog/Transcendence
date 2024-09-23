@@ -43,11 +43,11 @@ class WaitingQueue:
                         channel_name,
                         {
                             "type": "match_found",
-                            # 'data': {
-                            #     'status':'success',
-                            #     'message':f'{match_name}'
-                            # },
-                            "match_name": f'{match_name}',
+                            'data': {
+                                'type':'match_name',
+                                'match_name':f'{match_name}'
+                            },
+                            # "match_name": f'{match_name}',
                         }
                     )
             await asyncio.sleep(1)
