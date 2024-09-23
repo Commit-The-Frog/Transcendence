@@ -10,7 +10,7 @@ import { connectAccessSocket, getSocket } from "../../utils/accessSocket.js";
 import { changeUrl } from "../../utils/changeUrl.js";
 import myAxios from "../myaxios/myAxios.js";
 
-export function  Router() {
+export function Router() {
 
 const routes = {
     "/" : Home,
@@ -63,21 +63,21 @@ const beforeRoutingDisconnectGmaeSocket = (route) => {
         useSocket().disconnectSocket();
     }
 }
-const connectStatusSocket = async (route) => {
+const connectStatusSocket = (route) => {
     if (route != "/twofa" && route != "/") {
-        const isLoggedIn = await islogin(); // islogin을 기다림
-        if (!isLoggedIn) {
-            changeUrl("/");
-            return;
-        }
-
-        // 로그인 체크 후 소켓 연결 시도
+        (async () => {
+            const isLoggedIn = await islogin();
+            if (!isLoggedIn) {
+                changeUrl("/");
+                return ;
+            } 
+        })();
         if (getSocket() === null) {
-            const url = `wss://${window.location.host}/ws/user/status`;
+            const url = `wss://${window.location.host}/ws/user/status`
             connectAccessSocket(url);
         }
     }
-};
+}
 
 
 if (parsed) {
