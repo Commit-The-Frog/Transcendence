@@ -12,8 +12,7 @@ import myAxios from "../myaxios/myAxios.js";
 import { useEffect, useState } from "./myreact.js";
 
 export function Router() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);  // 로그인 상태
-    const [loading, setLoading] = useState(true);         // 로딩 상태
+    const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
 const routes = {
     "/" : Home,
@@ -51,7 +50,6 @@ const islogin = async () => {
     try {
         await myAxios.get(url);
         setIsLoggedIn(true);
-        //return true;
     } catch (err) {
         if (err.status === 401) {
             const refreshed = await refresh();
@@ -61,41 +59,27 @@ const islogin = async () => {
                 setIsLoggedIn(false);
                 changeUrl("/");
             }
-            //return refreshed;
         }
-        console.log('혹시..?');
         // setIsLoggedIn(false);
         // changeUrl("/");
-        //return false;
     }
 }
 
 
-const beforeRoutingDisconnectGmaeSocket = (route) => {
-   //if (route != "/pingpong/remote/start") {
+const beforeRoutingDisconnectGmaeSocket = () => {
         useSocket().disconnectSocket();
-    //}
 }
-const connectStatusSocket = (route) => {
-    //if (route != "/twofa" && route != "/") {
-        // (async () => {
-        //     const isLoggedIn = await islogin();
-        //     if (!isLoggedIn) {
-        //         changeUrl("/");
-        //         return ;
-        //     } 
-        // })();
+const connectStatusSocket = () => {
         if (getSocket() === null) {
             const url = `wss://${window.location.host}/ws/user/status`
             connectAccessSocket(url);
         }
-    //}
 }
 
     useEffect(()=>{
         console.log(parsed);
         if (parsed) {
-            const {route , params} = parsed;
+            const {route} = parsed;
             if (route != "/pingpong/remote/start") {
                 beforeRoutingDisconnectGmaeSocket();
             }
@@ -109,8 +93,6 @@ const connectStatusSocket = (route) => {
     if (parsed) {
         const {route , params} = parsed;
         if (routes[route] && (isLoggedIn ||route === "/" || route === "/twofa")) {
-            // beforeRoutingDisconnectGmaeSocket(route);
-            // connectStatusSocket(route);
             return routes[route]({params : params});
         } else if (routes[route] && !isLoggedIn) {
             return `<div>로그인중..</div>`
