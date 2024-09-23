@@ -86,7 +86,7 @@ let UserInterface = class {
 		if (myTurn)
 			this.ctx.fillText('PRESS SPACE BTN', this.width / 2, this.height * 4 / 5, 1000);
 	}
-	drawGameOverScreen = (type, opacity, winner) => {
+	drawGameOverScreen = (type, opacity, winner, disc_user, error) => {
 		opacity /= 100;
 		this.ctx.fillStyle = 'black';
 		this.ctx.fillRect(0, 0, this.width, this.height);
@@ -98,10 +98,15 @@ let UserInterface = class {
 		this.ctx.font = '30px Matemasie';
 		this.ctx.fillText(`player ${winner} win!`, this.width / 2, this.height * 3/ 5, 1000);
 		this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.sin(opacity)})`;
-		if (type == 1)
-			this.ctx.fillText(`PRESS 'SPACE' TO GO BACK HOME`, this.width / 2, this.height * 4 / 5, 1000);
-		else if (type == 2)
-			this.ctx.fillText(`PRESS 'SPACE' TO NEXT GAME`, this.width / 2, this.height * 4 / 5, 1000);
+		if (!error) {
+			if (type == 1)
+				this.ctx.fillText(`PRESS 'SPACE' TO GO BACK HOME`, this.width / 2, this.height * 4 / 5, 1000);
+			else if (type == 2)
+				this.ctx.fillText(`PRESS 'SPACE' TO NEXT GAME`, this.width / 2, this.height * 4 / 5, 1000);
+		} else {
+			this.ctx.fillStyle = 'red';
+			this.ctx.fillText(`${disc_user} has disconnected`, this.width / 2, this.height * 4 / 5, 1000);
+		}
 	}
 	drawHalfLine = () => {
 		this.ctx.beginPath();
