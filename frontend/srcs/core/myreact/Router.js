@@ -12,7 +12,8 @@ import myAxios from "../myaxios/myAxios.js";
 import { useEffect, useState } from "./myreact.js";
 
 export function Router() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [validTwofa, setValidTowfa] = useState(false);
 
 const routes = {
     "/" : Home,
@@ -51,6 +52,7 @@ const islogin = async () => {
         await myAxios.get(url);
         setIsLoggedIn(true);
     } catch (err) {
+        console.log(err);
         if (err.status === 401) {
             const refreshed = await refresh();
             if (refreshed) {
@@ -76,8 +78,23 @@ const connectStatusSocket = () => {
         }
 }
 
+const checkValidTwofa = async () => {
+    const url = `https://${window.env.SERVER_IP}/login/check2fa`; // 추후 변경
+    try {
+        await myAxios.get(url);
+        setValidTowfa(true);
+    } catch (err) {
+        console.log(err);
+        if (err.status === 401) {
+            setValidTowfa(false);
+            changeUrl("/");
+        }
+        // setIsLoggedIn(false);
+        // changeUrl("/");
+    }
+}
+
     useEffect(()=>{
-        console.log(parsed);
         if (parsed) {
             const {route} = parsed;
             if (route != "/pingpong/remote/start") {
@@ -87,14 +104,20 @@ const connectStatusSocket = () => {
                 islogin();
                 connectStatusSocket();
             }
+            // if (route == "/twofa") {
+            //     checkValidTwofa();
+            // }
         }
 
     },undefined,'rotuerbefore');
     if (parsed) {
         const {route , params} = parsed;
-        if (routes[route] && (isLoggedIn ||route === "/" || route === "/twofa")) {
+        if (routes[route] && (isLoggedIn ||route === "/" || (route === "/twofa" && validTwofa))) {
             return routes[route]({params : params});
-        } else if (routes[route] && !isLoggedIn) {
+        } else if (route === "/twofa" && !validTwofa) {
+            return `<div>유효사항 체크중...</div>`
+        }
+         else if (routes[route] && !isLoggedIn) {
             return `<div>로그인중..</div>`
         }
     }
