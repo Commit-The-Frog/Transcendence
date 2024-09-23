@@ -3,6 +3,8 @@ import { UserInterface } from './userInterface.js';
 import { Key } from './key.js';
 // import { connectSocket, getcurrentSocket } from '../../utils/useSocket.js';
 import  useSocket  from '../../utils/useSocket.js';
+import { showToastHandler } from '../../utils/showToast.js';
+import { changeUrl } from '../../utils/changeUrl.js';
 
 let timer = 0;
 
@@ -100,7 +102,10 @@ let Game = class {
 		ws_.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			console.log(data);
-			if (data.status) {
+			if (data.type === 'refresh') {
+				changeUrl("/pingpong/remote");
+			}
+			else if (data.status) {
 				this.myTurn = true;
 				this.key.myTurn = true;
 				if (data.status == 'waiting') {
@@ -129,6 +134,8 @@ let Game = class {
 		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
+			showToastHandler('에러났어 ㅡㅡ');
+			changeUrl('')
 		};
 		ws_.onclose = () =>{
 			console.log(`토너먼트 웹소켓 종료`);
@@ -136,7 +143,10 @@ let Game = class {
 		ws_.onmessage = (event) => {
 			// console.log(event);
 			const data = JSON.parse(event.data);
-			if (data.type) {	// 토너먼트 컨트롤
+			if (data.type === 'refresh') {
+				changeUrl("/pingpong/remote");
+			}
+			else if (data.type) {	// 토너먼트 컨트롤
 				this.tourStatus = data.type;
 				if (data.type == 'tour_waiting') {
 					this.renderSchedule(data.players);

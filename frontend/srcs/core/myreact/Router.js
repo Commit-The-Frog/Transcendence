@@ -29,8 +29,8 @@ const routes = {
 const path = window.location.pathname;
 const parsed = parseUrl(path, routes);
 
-const islogin = async () => {
-    const url = `https://${window.env.SERVER_IP}/login/islogin`;
+const refresh = async () => {
+    const url = `https://${window.env.SERVER_IP}/login/refresh`;
     return myAxios.get(url)
     .then(()=>{
         return true;
@@ -41,13 +41,20 @@ const islogin = async () => {
         }
         return true;
     })
-    // try {
-    //     const url = `https://${window.env.SERVER_IP}/login/islogin`;
-    //     await myAxios.get(url);
-    //     return true;
-    // }catch {
-    //     return false;
-    // }
+}
+
+const islogin = async () => {
+    const url = `https://${window.env.SERVER_IP}/login/islogin`;
+    try {
+        await myAxios.get(url);
+        return true;
+    } catch (err) {
+        if (err.status === 401) {
+            const refreshed = await refresh();
+            return refreshed;
+        }
+        return false;
+    }
 }
 
 
