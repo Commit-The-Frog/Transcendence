@@ -97,6 +97,7 @@ class MatchListView(View):
             data_list.append(pvp_data)
         return data_list;
 
+    @CheckValidAT
     def get(self, request, *args, **kwargs):
         try:
             target_id = request.GET.get('id')
@@ -128,11 +129,12 @@ class MatchListView(View):
             for item in sorted_data:
                 del item['sort_date']
         except Userdb.DoesNotExist:
-            return JsonResponse({'error': 'Host not found'}, status=404)
+            return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         return JsonResponse(sorted_data, safe=False, status=200)
 
+    @CheckValidAT
     def post(self, request, *args, **kwargs):
         try:
             host_id = request.session.get('api_id')

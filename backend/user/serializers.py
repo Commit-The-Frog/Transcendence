@@ -7,7 +7,7 @@ class UserdbSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Userdb
-        fields = ('user_id', 'nickname', 'profile_image', 'status')
+        fields = ('user_id', 'nickname', 'profile_image', 'use_2fa', 'status')
 
 class FriendsSerializer(serializers.ModelSerializer):
     user = UserdbSerializer()
