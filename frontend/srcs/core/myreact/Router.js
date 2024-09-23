@@ -9,8 +9,11 @@ import NotFound from "../../pages/NotFound.js";
 import { connectAccessSocket, getSocket } from "../../utils/accessSocket.js";
 import { changeUrl } from "../../utils/changeUrl.js";
 import myAxios from "../myaxios/myAxios.js";
+import { useEffect, useState } from "./myreact.js";
 
 export function Router() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);  // 로그인 상태
+    const [loading, setLoading] = useState(true);         // 로딩 상태
 
 const routes = {
     "/" : Home,
@@ -47,49 +50,71 @@ const islogin = async () => {
     const url = `https://${window.env.SERVER_IP}/login/islogin`;
     try {
         await myAxios.get(url);
-        return true;
+        setIsLoggedIn(true);
+        //return true;
     } catch (err) {
         if (err.status === 401) {
             const refreshed = await refresh();
-            return refreshed;
+            if (refreshed) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+                changeUrl("/");
+            }
+            //return refreshed;
         }
-        return false;
+        console.log('혹시..?');
+        // setIsLoggedIn(false);
+        // changeUrl("/");
+        //return false;
     }
 }
 
 
 const beforeRoutingDisconnectGmaeSocket = (route) => {
-    if (route != "/pingpong/remote/start") {
+   //if (route != "/pingpong/remote/start") {
         useSocket().disconnectSocket();
-    }
+    //}
 }
 const connectStatusSocket = (route) => {
-    if (route != "/twofa" && route != "/") {
-        (async () => {
-            const isLoggedIn = await islogin();
-            if (!isLoggedIn) {
-                changeUrl("/");
-                return ;
-            } 
-        })();
+    //if (route != "/twofa" && route != "/") {
+        // (async () => {
+        //     const isLoggedIn = await islogin();
+        //     if (!isLoggedIn) {
+        //         changeUrl("/");
+        //         return ;
+        //     } 
+        // })();
         if (getSocket() === null) {
             const url = `wss://${window.location.host}/ws/user/status`
             connectAccessSocket(url);
         }
-    }
+    //}
 }
 
+    useEffect(()=>{
+        console.log(parsed);
+        if (parsed) {
+            const {route , params} = parsed;
+            if (route != "/pingpong/remote/start") {
+                beforeRoutingDisconnectGmaeSocket();
+            }
+            if (route != "/twofa" && route != "/") {
+                islogin();
+                connectStatusSocket();
+            }
+        }
 
-if (parsed) {
-    const {route , params} = parsed;
-    if (routes[route]) {
-        beforeRoutingDisconnectGmaeSocket(route);
-        connectStatusSocket(route);
-        return routes[route]({params : params});
+    },undefined,'rotuerbefore');
+    if (parsed) {
+        const {route , params} = parsed;
+        if (routes[route] && (isLoggedIn ||route === "/" || route === "/twofa")) {
+            // beforeRoutingDisconnectGmaeSocket(route);
+            // connectStatusSocket(route);
+            return routes[route]({params : params});
+        } else if (routes[route] && !isLoggedIn) {
+            return `<div>로그인중..</div>`
+        }
     }
-    else
-        return `${NotFound()}`
-    } else {
-        return `${NotFound()}`
-    }
+    return `${NotFound()}`
 }

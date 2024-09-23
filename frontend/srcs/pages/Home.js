@@ -16,7 +16,7 @@ export function Home() {
     const loginHandler = function() {
         // login handler
         //console.log(`${window.env.SERVER_IP}`)
-        window.location.href = `http://${window.env.SERVER_IP}/login`;
+        window.location.href = `https://${window.env.SERVER_IP}/login`;
         //changeUrl("/userinfo/1");
     }
     bindEventHandler('click', "homeLoginBtn", loginHandler);
