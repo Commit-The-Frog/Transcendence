@@ -76,7 +76,7 @@ let Game = class {
 		if (!error)
 			this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner, null, false);
 		else
-			this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner, gameData.disconnected_user, true);
+			this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner, gameData.disconnected_player, true);
 	}
 
 
