@@ -29,11 +29,11 @@ class GameConsumer(AsyncWebsocketConsumer):
             user_id = self.scope['session'].get('api_id')
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
+            await self.accept()
             if not access_token:
                 raise InvalidToken()
             UntypedToken(access_token)
             self.player = None
-            await self.accept()
             if match_name and user_id:
                 self.match_group_name = f'versus_{match_name}'
                 self.player = Player(user_id, self.channel_name)
@@ -136,6 +136,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             await database_sync_to_async(session.save)()
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
+            await self.accept()
             if not access_token:
                 raise InvalidToken()
             UntypedToken(access_token)
@@ -148,7 +149,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_add(
                     self.tournament_group_name, self.channel_name
                 )
-                await self.accept()
             else:
                 await self.close()
                 return
