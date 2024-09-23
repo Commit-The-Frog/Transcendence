@@ -22,9 +22,6 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             query_params = urllib.parse.parse_qs(query_string)
             self.que_type = query_params.get('type', [None])[0]
             self.user_id = self.scope['session'].get('api_id')
-            session = self.scope['session']
-            session['previous_url'] = '/pingpong/remote' # 정확한 previous_url 설정 필요
-            await database_sync_to_async(session.save)()
             cookies = self.scope.get('cookies', {})
             access_token = cookies.get('access_token')
             await self.accept()
@@ -47,8 +44,7 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
         except (TokenError, InvalidToken) as e:
             logger.error(f'{e} exception in game consumer connect')
             await self.send(text_data=json.dumps({
-                'type': 'redirect',
-                'url': 'api/login/refresh',
+                'type': 'refresh'
             }))
             await self.close()
         except Exception as e:
