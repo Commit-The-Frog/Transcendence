@@ -1,5 +1,5 @@
 window.env = {
-    SERVER_IP: "localhost/api",
-    SERVER_WS: "localhost",
-    SERVER_IP_NOAPI: "localhost"
+    SERVER_IP: "10.12.3.3/api",
+    SERVER_WS: "10.12.3.3",
+    SERVER_IP_NOAPI: "10.12.3.3"
 };
