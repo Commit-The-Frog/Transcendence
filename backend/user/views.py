@@ -1,9 +1,11 @@
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views import View
 from login.views import CheckValidAT
 from .serializers import UserdbSerializer, FriendsSerializer
 from .models import Userdb, Friends
 from PIL import Image, UnidentifiedImageError
+from django.conf import settings
 import json
 
 import sys
@@ -15,7 +17,7 @@ class UserView(View):
         try:
             host_id = request.session.get('api_id')
             if host_id is None:
-                return JsonResponse({'error': 'Host not found'}, status=404)
+                return redirect(settings.HOME_URL)
             target_id = request.GET.get('id')
             if target_id is not None and not target_id.isdigit():
                 return JsonResponse({'error': 'Invalid id'}, status=404)
@@ -36,6 +38,7 @@ class UserView(View):
                 'profile_image': target_dict['profile_image'],
                 'host': is_host,
                 'friend': is_friend,
+                'use_2fa': target_dict['use_2fa'],
             }
         except Userdb.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
@@ -51,8 +54,11 @@ class UserView(View):
             host_db = Userdb.objects.get(user_id=host_id)
             new_nickname = request.POST.get('nickname')
             new_profile_image = request.FILES.get('profile_image')
+            new_use_2fa = request.POST.get('use_2fa')
             target_data = {}
-            if new_nickname != request.session.get('api_nick'):
+            if new_use_2fa:
+                target_data['use_2fa'] = new_use_2fa;
+            if new_nickname != host_db.nickname:
                 if Userdb.objects.filter(nickname=new_nickname).count() == 0:
                     target_data['nickname'] = new_nickname
                 else:
@@ -68,9 +74,6 @@ class UserView(View):
                 serializer.save()
             else:
                 return JsonResponse({'error': serializer.errors}, status=404)
-            host_db.save()
-            if new_nickname:
-                request.session['api_nick'] = new_nickname
         except Userdb.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
         except UnidentifiedImageError:
@@ -101,7 +104,7 @@ class FriendView(View):
                 }
                 data_list.append(user_data)
         except Userdb.DoesNotExist:
-            return JsonResponse({'error': 'Host not found'}, status=404)
+            return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
@@ -130,6 +133,7 @@ class FriendView(View):
 
         return JsonResponse({'message': 'User updated successfully'}, status=200)
 
+    @CheckValidAT
     def delete(self, request, *args, **kwars):
         try:
             host_id = request.session.get('api_id')
@@ -169,7 +173,7 @@ class SearchView(View):
                     }
                     data_list.append(user_data)
         except Userdb.DoesNotExist:
-            return JsonResponse({'error': 'Host not found'}, status=404)
+            return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 

@@ -12,8 +12,8 @@ from user.serializers import UserdbSerializer
 from user.models import Userdb
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import os
 import sys
-import random
 import requests
 
 
@@ -22,13 +22,13 @@ def CheckValidAT(view_func):
     def _wrapped_view(self, request, *args, **kwargs):
         try:
             access_token = request.COOKIES.get('access_token')
-            request.session['previous_url'] = request.META.get('PATH_INFO')
+            # request.session['previous_url'] = request.META.get('PATH_INFO')
             if not access_token:
-                return redirect(settings.REFRESH_URL)
+                return JsonResponse({'message': 'No Token'}, status=401) # 401로 보내고 refresh는 at rt 갱신한 토큰만 보내기
             UntypedToken(access_token)
             response = view_func(self, request, *args, **kwargs)
         except (InvalidToken, TokenError) as e:
-            return redirect(settings.REFRESH_URL)
+            return JsonResponse({'message': 'Invalid Token'}, status=401) # 401로 보내고 refresh는 at rt 갱신한 토큰만 보내기
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
         return response
@@ -36,16 +36,38 @@ def CheckValidAT(view_func):
     return _wrapped_view
 
 
+def is_token_valid(token):
+    try:
+        UntypedToken(token)
+        return True  # 유효한 토큰
+    except (InvalidToken, TokenError):
+        return False  # 유효하지 않은 토큰
+
+
+def UpdateToken(request, refresh_token):
+    UntypedToken(refresh_token)
+    refresh = RefreshToken(refresh_token)
+    refresh.blacklist()
+    username = request.session.get('api_id')
+    user, created = User.objects.get_or_create(username=username)
+    if created:
+        user.save()
+    new_refresh_token = RefreshToken.for_user(user)
+    new_access_token = str(new_refresh_token.access_token)
+    refresh_token = str(new_refresh_token)
+    return new_access_token, refresh_token
+
+
 class LoginCheckView(View):
     def get(self, request):
         try:
-            refresh_token = request.COOKIES.get('refresh_token')
-            if not refresh_token:
-                return JsonResponse({'status': 'No refresh token'}, status=401)
-            UntypedToken(refresh_token)
+            access_token = request.COOKIES.get('access_token')
+            if not access_token:
+                return JsonResponse({'status': 'No tokens'}, status=401)
+            UntypedToken(access_token)
             return JsonResponse({'status': 'Fine'}, status=200)
         except (InvalidToken, TokenError) as e:
-            return JsonResponse({'status': 'No refresh token'}, status=401)
+            return JsonResponse({'status': 'Token expired'}, status=401)
         except Exception as e:
             return JsonResponse({'status': 'Unknown error'}, status=401)
 
@@ -74,22 +96,15 @@ class RefreshView(View):
             refresh_token = request.COOKIES.get('refresh_token')
             if not refresh_token:
                 return redirect(settings.API_URL)
-            UntypedToken(refresh_token)
-            refresh = RefreshToken(refresh_token)
-            refresh.blacklist()
-            username = request.session.get('api_id')
-            user, created = User.objects.get_or_create(username=username)
-            if created:
-                user.save()
-            refresh = RefreshToken.for_user(user)
-            new_access_token = str(refresh.access_token)
-            refresh_token = str(refresh)
-            prev = request.session.get('previous_url')
-            response = redirect(prev)
+            new_access_token, new_refresh_token = UpdateToken(request, refresh_token)
+            # prev = request.session.get('previous_url')
+            # response = redirect(prev)
+            response = JsonResponse({'message': 'Fine'}, status=200)
             response.set_cookie('access_token', new_access_token, httponly=True, samesite='Lax')
-            response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/api/login')
+            response.set_cookie('refresh_token', new_refresh_token, httponly=True, samesite='Lax', path='/api/login')
         except (InvalidToken, TokenError) as e:
-            return redirect(settings.API_URL)
+            # return redirect(settings.API_URL)
+            return JsonResponse({'message': 'Invalid Token'}, status=401)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
@@ -103,7 +118,7 @@ class ApiLoginView(View):
 
 class CallbackView(View):
     def send_test_email(self, recipient, request):
-        random_number = random.randint(0, 999999)
+        random_number = int.from_bytes(os.urandom(3), 'big') % 1000000
         html_content = render_to_string('mailform.html', {
             'user_name': request.session.get('api_nick'),
             'verification_code': f'{random_number:06}',
@@ -149,6 +164,19 @@ class CallbackView(View):
             data_response = self.get_api_data(client_id, client_secret, code, redirect_uri)
             request.session['api_id'] = data_response['id']
             request.session['api_nick'] = data_response['login']
+            user_list = Userdb.objects.filter(user_id=data_response['id'])
+            if user_list.count():
+                user_instance = user_list[0]
+                print(user_instance, file=sys.stderr)
+                if not user_instance.use_2fa:
+                    user, created = User.objects.get_or_create(username=data_response['login'])
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+                    refresh_token = str(refresh)
+                    response = redirect(f'https://{settings.SERVER_IP}/user/{data_response["id"]}')
+                    response.set_cookie('access_token', access_token, httponly=True, samesite='Lax')
+                    response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/api/login')
+                    return response
             self.send_test_email(data_response['email'], request)
             response = redirect(f'https://{settings.SERVER_IP}/twofa')
             session_id = request.COOKIES.get('sessionid')

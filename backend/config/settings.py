@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -211,7 +211,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     # 'PUT',
     # 'PATCH',
-    # 'DELETE',
+    'DELETE',
     # 'OPTIONS',
 ]
 
