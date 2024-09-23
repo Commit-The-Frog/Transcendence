@@ -3,6 +3,7 @@ import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { run } from "../game/remote/run.js";
 import { languageState } from "../recoil/languageState.js";
 import translations from "../translations.js";
+import { changeUrl } from "../utils/changeUrl.js";
 import useSocket from "../utils/useSocket.js";
 
 const PingPongRemoteGame = () => {
@@ -37,12 +38,17 @@ const pingpnogWsHandler = () => {
     }
 
     ws.onmessage = (event) => {
-        const matchName = event.data;
         const modal = document.getElementById("pingpongwaitmodal");
-        console.log(`서버로부터 매치 UUID 수신 : ${matchName}`);
-
-        if (event.data) {
+        const data = JSON.parse(event.data);
+        console.log(data);
+        if (data?.type === 'refresh') {
+            // socket 연결 끊고, 다시 로딩
+            changeUrl("/pingpong/remote"); // toast 띄울수 있는지 확인...아니면 모달.!
+        }
+        else if (data?.type === "match_name") {
             modal.style.display = "none";
+            const matchName = data.match_name;
+            console.log(`서버로부터 매치 UUID 수신 : ${matchName}`);
             run (matchName);
             //const url = `/pingpong/remote/start?type=${type}&match_name=${matchName}`;
             //changeUrl(url);
