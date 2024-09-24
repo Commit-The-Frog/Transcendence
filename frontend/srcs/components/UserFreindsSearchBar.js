@@ -21,7 +21,6 @@ const UserFriendsSearchModal = ({onClose}) => {
             clearTimeout(timeoutRef.current);
         }
         if (value === "") {
-            searchFriendsResult.innerHTML = `누구 찾아 👀`;
             currentFocus = -1;
         } else {
             const url = `https://${window.env.SERVER_IP}/user/search?nick=${value}`;
@@ -43,7 +42,6 @@ const UserFriendsSearchModal = ({onClose}) => {
                 addActive(items);              
             })
             .catch((err)=>{
-                searchFriendsResult.innerHTML = `그런이름 없어요 🙏`;
                 currentFocus = -1;
             })
         }
