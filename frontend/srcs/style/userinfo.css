@@ -18,6 +18,18 @@
     padding: 30px;
     border-radius: 20px;
     border: 1px solid black;
+    position: relative;
+}
+
+.userProfile .logoutBtn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border-radius: 4px;
+    padding: 3px 6px 3px 6px;
+    font-size: 12px;
+    border: 1px solid var(--btn-color-pink);
+    color: #808080;
 }
 
 .userInfoWrapper1 {
@@ -567,4 +579,64 @@
 
 .pixelEl {
     background-color: #f1daff62;
+}
+
+.twofaSelect {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+  }
+  
+  /* 숨겨진 체크박스 */
+  .switch input {
+    display: none;
+  }
+  
+  /* 토글 스위치 슬라이더 */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--btn-color-pink3);
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  /* 슬라이더의 동그라미 */
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* 체크된 상태에서 슬라이더 색상과 위치 변경 */
+.twofaSelect input:checked + .slider {
+    background-color: #ccc;
+  }
+  
+.twofaSelect input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+.twofaSelect p{
+    width: 50px;
+    line-height: 30px;
+    padding-left: 10px;
+    margin: 0;
+    color: #808080;
 }
