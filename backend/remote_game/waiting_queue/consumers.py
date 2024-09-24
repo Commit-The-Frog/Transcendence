@@ -60,9 +60,9 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, code):
         try:
             if self.que_type == '1vs1':
-                await GameWaitingQueue.delete_from_queue(self.user_id)
+                await GameWaitingQueue.delete_from_queue(self.user_id, self.channel_name)
             elif self.que_type == 'tournament':
-                await TournamentWaitingQueue.delete_from_queue(self.user_id)
+                await TournamentWaitingQueue.delete_from_queue(self.user_id, self.channel_name)
         except Exceptions.RemoteGameException as e:
             logger.error(f'{e} exception in waiting queue consumer disconnect')
         except Exception as e:
@@ -77,5 +77,5 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             logger.error(f'{e} exception in waiting queue consumer match found')
 
     async def queue_error(self, event):
-        await self.send(text_data=json.dumps(event))
+        await self.send(text_data=json.dumps(event['data']))
         await self.close()

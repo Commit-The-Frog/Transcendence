@@ -52,7 +52,8 @@ class WaitingQueue:
                     )
             await asyncio.sleep(1)
 
-    async def delete_from_queue(self, user):
+    async def delete_from_queue(self, user, channel_name):
         if user in self.users:
-            self.users.pop(user)
-            logger.info(f'WAITING QUEUE: {user} has been deleted')
+            if self.users[user] == channel_name:
+                self.users.pop(user)
+                logger.info(f'WAITING QUEUE: {user} has been deleted')

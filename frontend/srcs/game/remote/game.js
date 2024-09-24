@@ -68,12 +68,15 @@ let Game = class {
 	/*
 		game 종료 화면 렌더링
 	*/
-	renderGameOver = (gameData) => {
+	renderGameOver = (gameData, error) => {
 		console.log('game 종료');
 		this.myTurn = false;
 		this.key.myTurn = false;
 		timer++;
-		this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner);
+		if (!error)
+			this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner, null, false);
+		else
+			this.ui.drawGameOverScreen(1, (timer * 2) % 360, gameData.winner, gameData.disconnected_player, true);
 	}
 
 
@@ -114,8 +117,9 @@ let Game = class {
 				} else if (data.status == 'in progress') {
 					this.renderGame(data);
 				} else if (data.status == 'game over') {
-					this.renderGameOver(data);
-				}
+					this.renderGameOver(data, false);
+				} else if (data.status == 'error')
+					this.renderGameOver(data, true);
 			}
 		}
 		useSocket().connectSocket(this.wsUrl, ws_);
@@ -169,7 +173,9 @@ let Game = class {
 				} else if (data.status == 'in progress') {
 					this.renderGame(data);
 				} else if (data.status == 'game over') {
-					this.renderGameOver(data);
+					this.renderGameOver(data, false);
+				} else if (data.status == 'error') {
+					this.renderGameOver(data, true);
 				}
 			}
 		};

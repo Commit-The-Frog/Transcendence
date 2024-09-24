@@ -110,13 +110,13 @@ class GameConsumer(AsyncWebsocketConsumer):
         if self.match_group_name in versus_dict.keys():
             versus_dict.pop(self.match_group_name)
 
-    async def game_abnormal(self, msg):
+    async def game_abnormal(self, event):
         logger.debug(f'{self.match_group_name} game abnormal exit')
         if self.match_group_name in versus_dict.keys():
             versus_dict.pop(self.match_group_name)
         message_json = json.dumps({
             'status': 'error',
-            'message': msg
+            'message': event['data']
         })
         await self.send(text_data=message_json)
         await self.close()
@@ -168,8 +168,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         except (TokenError, InvalidToken) as e:
             logger.error(f'{e} exception in game consumer connect')
             await self.send(text_data=json.dumps({
-                'type': 'redirect',
-                'url': 'api/login/refresh',
+                'type': 'refresh',
             }))
             await self.close()
         except Exception as e:
@@ -213,13 +212,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.tournament_group_name in tournament_dict.keys():
             tournament_dict.pop(self.tournament_group_name)
 
-    async def game_abnormal(self, msg):
+    async def game_abnormal(self, event):
         logger.debug(f'{self.tournament_group_name} game abnormal exit')
         if self.tournament_group_name in versus_dict.keys():
             versus_dict.pop(self.tournament_group_name)
         message_json = json.dumps({
             'status': 'error',
-            'message': msg
+            'message': event['data']
         })
         await self.send(text_data=message_json)
         await self.close()

@@ -43,7 +43,7 @@ const pingpnogWsHandler = () => {
         console.log(data);
         if (data?.type === 'refresh') {
             modal.innerText = "error";
-        } else if (data?.data?.status === "error") {
+        } else if (data?.status === "error") {
             console.log("error");
             modal.innerText = "error";
         }
