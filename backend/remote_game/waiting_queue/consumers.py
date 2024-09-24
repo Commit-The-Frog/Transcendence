@@ -77,5 +77,5 @@ class WaitingQueueConsumer(AsyncWebsocketConsumer):
             logger.error(f'{e} exception in waiting queue consumer match found')
 
     async def queue_error(self, event):
-        await self.send(text_data=json.dumps(event))
+        await self.send(text_data=json.dumps(event['data']))
         await self.close()
