@@ -1,9 +1,12 @@
 from django.http import JsonResponse
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.views import View
 from login.views import CheckValidAT
+from match.serializers import GameSerializer
 from .serializers import UserdbSerializer, FriendsSerializer
 from .models import Userdb, Friends
+from match.models import Game
 from PIL import Image, UnidentifiedImageError
 from django.conf import settings
 import json
@@ -12,6 +15,27 @@ import sys
 
 
 class UserView(View):
+    def get_win_rate(self, target_db):
+        game_list = Game.objects.filter(Q(left_user=target_db.id) | Q(right_user=target_db.id))
+        total = 0
+        win = 0
+        for game in game_list:
+            data = GameSerializer(game).data
+            total += 1
+            if data['left_user'] == target_db.id:
+                win += data['left_win']
+            else:
+                win += data['right_win']
+        if total == 0:
+            win_rate = 0
+        else:
+            win_rate = win / total * 100
+        int_part = int(win_rate)
+        dec_part = win_rate - int_part
+        if dec_part >= 0.5:
+            int_part += 1
+        return int_part
+
     @CheckValidAT
     def get(self, request, *args, **kwargs):
         try:
@@ -29,16 +53,17 @@ class UserView(View):
             if is_host is False and Friends.objects.filter(user=Userdb.objects.get(user_id=host_id),
                                     friend=Userdb.objects.get(user_id=target_id)).count() == 0:
                 is_friend = False
+            win_rate = self.get_win_rate(target_db)
             target_dict = target_db.__dict__
             user_data = {
                 'user_id': target_dict['user_id'],
                 'nickname': target_dict['nickname'],
                 'status': target_dict['status'],
-                # 'profile_image': f'login/{target_db.profile_image.url}',
                 'profile_image': target_dict['profile_image'],
                 'host': is_host,
                 'friend': is_friend,
                 'use_2fa': target_dict['use_2fa'],
+                'win_rate': win_rate,
             }
         except Userdb.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)

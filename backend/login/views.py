@@ -58,6 +58,17 @@ def UpdateToken(request, refresh_token):
     return new_access_token, refresh_token
 
 
+class Check2faView(View):
+    def get(self, request):
+        try:
+            is_progress = request.session.get('2fa_progress')
+            if not is_progress:
+                return JsonResponse({'status': 'Wrong access'}, status=401)
+            return JsonResponse({'status': 'Fine'}, status=200)
+        except Exception as e:
+            return JsonResponse({'status': 'Unknown error'}, status=401)
+
+
 class LoginCheckView(View):
     def get(self, request):
         try:
@@ -77,17 +88,17 @@ class LogoutView(View):
         try:
             refresh_token = request.COOKIES.get('refresh_token')
             if not refresh_token:
-                return redirect(settings.API_URL)
+                return JsonResponse({'status': 'success'}, status=200)
             refresh = RefreshToken(refresh_token)
             refresh.blacklist()
-            response = redirect(settings.HOME_URL)
+            response = JsonResponse({'status': 'success'}, status=200)
             response.delete_cookie('access_token')
             response.delete_cookie('refresh_token', path='/api/login')
             response.delete_cookie('sessionid')
             request.session.delete()
+            return response
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-        return response
 
 
 class RefreshView(View):
@@ -95,20 +106,16 @@ class RefreshView(View):
         try:
             refresh_token = request.COOKIES.get('refresh_token')
             if not refresh_token:
-                return redirect(settings.API_URL)
+                return JsonResponse({'message': 'No Token'}, status=401)
             new_access_token, new_refresh_token = UpdateToken(request, refresh_token)
-            # prev = request.session.get('previous_url')
-            # response = redirect(prev)
             response = JsonResponse({'message': 'Fine'}, status=200)
             response.set_cookie('access_token', new_access_token, httponly=True, samesite='Lax')
             response.set_cookie('refresh_token', new_refresh_token, httponly=True, samesite='Lax', path='/api/login')
+            return response
         except (InvalidToken, TokenError) as e:
-            # return redirect(settings.API_URL)
             return JsonResponse({'message': 'Invalid Token'}, status=401)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-
-        return response
 
 
 class ApiLoginView(View):
@@ -180,6 +187,7 @@ class CallbackView(View):
             self.send_test_email(data_response['email'], request)
             response = redirect(f'https://{settings.SERVER_IP}/twofa')
             session_id = request.COOKIES.get('sessionid')
+            request.session['2fa_progress'] = True
             response.set_cookie('sessionid', session_id, max_age=1209600, path='/', httponly=True, samesite='Lax')
             return response
         except Exception as e:
@@ -221,6 +229,7 @@ class SecondAuthView(View):
                 refresh = RefreshToken.for_user(user)
                 access_token = str(refresh.access_token)
                 refresh_token = str(refresh)
+                request.session['2fa_progress'] = False
                 response = JsonResponse({'id': user_id}, status=200)
                 response.set_cookie('access_token', access_token, httponly=True, samesite='Lax')
                 response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='Lax', path='/api/login')
