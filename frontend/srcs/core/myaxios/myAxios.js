@@ -34,7 +34,7 @@ class MyAxios {
           credentials,
         };
     
-        if (method !== 'GET' && method !== 'DELETE') {
+        if (method !== 'GET' ) {
             fetchOptions.body = data instanceof FormData ? data : JSON.stringify(data);
         }
     
@@ -81,8 +81,8 @@ class MyAxios {
     put(url, data = {}, config = {}) {
         return this.request({...config, url, method : 'PUT', data});
     }
-    delete(url, config = {}) {
-        return this.request({...config, url, method : 'DELETE'});
+    delete(url, data = {}, config = {}) {
+        return this.request({...config, url, method : 'DELETE', data});
     }
 }
 

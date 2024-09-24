@@ -39,12 +39,28 @@ export default function UserProfile ( {
         });
     }
 
+    const unfollowHandler = () => {
+        const url = `https://${window.env.SERVER_IP}/user/friend`;
+        const id = getLastUrlSegment();
+        myAxios.delete(url,{ user_id : id})
+        .then((res) =>{
+            userinfoGetter(setData);
+        })
+        .catch((el)=>{
+            console.log(el);
+        })
+    }
+
     bindEventHandler('click', "userEditOpenHandler", userEditOpenHandler);
     bindEventHandler('click', "friendAddHandler", friendAddHandler);
     bindEventHandler('click', "logoutHandler", logoutHandler);
+    bindEventHandler('click', "unfollowHandler", unfollowHandler);
     return `
     <div class="userProfile">
-        <button class="logoutBtn logoutHandler">logout</button>
+        ${
+            data?.host ?
+            `<button class="logoutBtn logoutHandler">${translations[getRecoilValue(languageState)]?.logout} </button>` : ``
+        }
         <div class="userProfileImgNameWrapper">
         <div class="userProfileImgNameWrapper2">
             <div class="userProfileImgWrapper">
@@ -64,8 +80,11 @@ export default function UserProfile ( {
                 ``
             }
             ${
-               (!data?.host && !data?.friend) ?`<button class="userInfoEdit friendAddHandler">subscribe</button>` :
+               (!data?.host && !data?.friend) ?`<button class="userInfoEdit friendAddHandler">${translations[getRecoilValue(languageState)]?.follow} </button>` :
                 ``
+            }
+            ${
+                (!data?.host && data?.friend) ? `<button class="userInfoEdit unfollowHandler">${translations[getRecoilValue(languageState)]?.unfollow} </button>` : ``
             }
         </div>
     </div>

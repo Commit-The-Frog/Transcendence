@@ -26,7 +26,10 @@ const translations = {
         imagelimit : 'Please upload an image smaller than 1MB.',
         pixel : 'pixel',
         retrytwofa : 'Try typing it again 🥺',
-        wait : 'wait 🖐🏻'
+        wait : 'wait 🖐🏻',
+        follow : 'follow',
+        unfollow : 'unfollow',
+        logout : 'logout'
     },
     ko: {
         login: '로그인',
@@ -55,7 +58,10 @@ const translations = {
         imagelimit : '1MB미만의 이미지만 업로드해주세요 ',
         pixel : '픽셀',
         retrytwofa : '다시 입력해봐 🥺',
-        wait : '기다려 🖐🏻'
+        wait : '기다려 🖐🏻',
+        follow : '친추',
+        unfollow : '친삭',
+        logout : '로그아웃'
     },
     fr: {
         login: 'connexion',
@@ -84,7 +90,10 @@ const translations = {
         imagelimit : 'Veuillez télécharger une image de moins de 1 Mo.',
         pixel : 'pixel',
         retrytwofa : `Réessaye de l'écrire 🥺`,
-        wait : `Attends 🖐🏻`
+        wait : `Attends 🖐🏻`,
+        follow : 'suivre',
+        unfollow : 'désuivre',
+        logout : 'déconnexion'
     }
 };
 
