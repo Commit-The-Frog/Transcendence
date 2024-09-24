@@ -54,7 +54,7 @@ let Game = class {
 	renderStart = (gameData) => {
 		this.canvas.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ui.drawGameStartScreen(this.myTurn, [gameData.playerL, gameData.playerR]);
-		console.log(this.myTurn)
+		//console.log(this.myTurn)
 	}
 	/*
 		game 진행 렌더링
@@ -104,7 +104,7 @@ let Game = class {
 		};
 		ws_.onmessage = (event) => {
 			const data = JSON.parse(event.data);
-			console.log(data);
+			//console.log(data);
 			if (data.type === 'refresh') {
 				changeUrl("/pingpong/remote");
 			}
@@ -164,7 +164,7 @@ let Game = class {
 					}
 				}
 			} else if (this.count == 1 && data.status) {
-				console.log(data.status)
+				//console.log(data.status)
 				this.gameStatus = data.status;
 				if (data.status == 'waiting') {
 					this.renderStart(data);

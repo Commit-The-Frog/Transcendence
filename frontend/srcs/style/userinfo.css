@@ -28,7 +28,8 @@
     border-radius: 4px;
     padding: 3px 6px 3px 6px;
     font-size: 12px;
-    border: 1px solid var(--btn-color-pink3);
+    border: 1px solid var(--btn-color-pink);
+    color: #808080;
 }
 
 .userInfoWrapper1 {

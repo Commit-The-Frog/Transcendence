@@ -32,47 +32,20 @@ const routes = {
 const path = window.location.pathname;
 const parsed = parseUrl(path, routes);
 
-const refresh = async () => {
-    const url = `https://${window.env.SERVER_IP}/login/refresh`;
-    return myAxios.get(url)
-    .then(()=>{
-        return true;
-    })
-    .catch((err)=>{
-        if (err.status === 401) {
-            return false;
-        }
-        return true;
-    })
-}
-
 const islogin = async (route) => {
     const url = `https://${window.env.SERVER_IP}/login/islogin`;
-    try {
-        await myAxios.get(url);
-        setIsLoggedIn(true);
-        if (route === "/") {
-            changeUrl("/user");
-        }
-    } catch (err) {
-        console.log(err);
-        if (err.status === 401 && route !== "/") {
-            const refreshed = await refresh();
-            if (refreshed) {
-                setIsLoggedIn(true);
-                // if (route === "/") {
-                //     changeUrl("/user");
-                // }
-            } else {
-                setIsLoggedIn(false);
-                // if (route !== "/") {
-                    changeUrl("/");
-                // }
+    myAxios.get(url)
+        .then((res)=>{
+            setIsLoggedIn(true);
+            if (route === "/") {
+                changeUrl("/user");
             }
-        }
-        // setIsLoggedIn(false);
-        // changeUrl("/");
-    }
+        })
+        .catch((err)=>{
+            if (route !== "/") {
+                changeUrl("/");
+            }
+        })
 }
 
 
@@ -88,18 +61,15 @@ const connectStatusSocket = () => {
 
 const checkValidTwofa = async () => {
     const url = `https://${window.env.SERVER_IP}/login/check2fa`; // 추후 변경
-    try {
-        await myAxios.get(url);
+    myAxios.get(url)
+    .then(()=>{
         setValidTowfa(true);
-    } catch (err) {
-        console.log(err);
+    })
+    .catch((err)=>{
         if (err.status === 401) {
             setValidTowfa(false);
-            changeUrl("/");
         }
-        // setIsLoggedIn(false);
-        // changeUrl("/");
-    }
+    })
 }
 
     useEffect(()=>{
@@ -115,22 +85,22 @@ const checkValidTwofa = async () => {
             if (route === "/") {
                 islogin(route);
             }
-            // if (route == "/twofa") {
-            //     checkValidTwofa();
-            // }
+            if (route == "/twofa") {
+                checkValidTwofa();
+            }
         }
 
     },undefined,'rotuerbefore');
     if (parsed) {
         const {route , params} = parsed;
-        if (routes[route] && (isLoggedIn ||route === "/" || (route === "/twofa" /*&& validTwofa*/))) {
+        if (routes[route] && (isLoggedIn ||route === "/" || (route === "/twofa" && validTwofa))) {
             return routes[route]({params : params});
         }
-        // else if (route === "/twofa" && !validTwofa) {
-        //     return `<div>유효사항 체크중...</div>`
-        // }
+        else if (route === "/twofa" && !validTwofa) {
+            return `${NotFound()}`
+        }
          else if (routes[route] && !isLoggedIn) {
-            return `<div>로그인중..</div>`
+            return `<div></div>`
         }
     }
     return `${NotFound()}`

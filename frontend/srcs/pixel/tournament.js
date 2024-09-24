@@ -47,7 +47,6 @@ class Tournament {
     postData() {
         const url = `https://${window.env.SERVER_IP}/match`
         const data = this.data;
-        console.log(data);
         myAxios.post(url, data)
         .then((data)=>{
             console.log(data);

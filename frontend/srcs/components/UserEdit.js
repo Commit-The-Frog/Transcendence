@@ -42,7 +42,6 @@ const UserEdit = ({onClose, data, setData}) => {
             formData.append('profile_image', image);
         }
         formData.append('nickname',nick?.value);
-        console.log(toggle, toggle.checked);
         formData.append('use_2fa', !(toggle.checked));
         myAxios.post(url, formData)
         .then((res)=>{

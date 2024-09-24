@@ -1,36 +1,61 @@
+import refresh from "../../utils/refresh.js";
+
 class MyAxios {
     constructor() {
         this.defaultHeaders = {
             'Content-Type' : 'application/json',
         };
+        this.interceptors = {
+          request: [],
+          response: [],
+      };
     }
+    addInterceptor(type, fulfilled, rejected) {
+      if (type === 'request') {
+          this.interceptors.request.push({ fulfilled, rejected });
+      } else if (type === 'response') {
+          this.interceptors.response.push({ fulfilled, rejected });
+      }
+  }
     async request(options) {
+      let config = {
+        ...options,
+        headers : {...this.defaultHeaders, ...options.headers}
+      }
+      for (const interceptor of this.interceptors.request) {
+        try {
+            config = await interceptor.fulfilled(config);
+        } catch (error) {
+            if (interceptor.rejected) {
+                return interceptor.rejected(error);
+            }
+            return Promise.reject(error);
+        }
+    }
         const {
           url,
           method = 'GET',
-          headers = {},
           params = {},
           data = null,
-          timeout = 0,
           responseType = 'json',
           credentials = 'include', // 원래 axios에서는 기본값이 same-origin이지만, myaxios에서는 편의를 위해 include로 구현함
         } = options;
-    
+   
+        
         let queryString = '';
         if (Object.keys(params).length > 0) {
           queryString = '?' + new URLSearchParams(params).toString();
         }
         const fullUrl = url + queryString;
     
-        const combineHeaders = { ...this.defaultHeaders, ...headers };
         
         if (data instanceof FormData) {
-            delete combineHeaders['Content-Type']; // FormData일 때는 Content-Type 제거
+            delete config.headers['Content-Type']; // FormData일 때는 Content-Type 제거
         }
     
         const fetchOptions = {
           method,
-          headers: combineHeaders,
+          headers: config.headers,
           credentials,
         };
     
@@ -41,13 +66,31 @@ class MyAxios {
         // 비동기 요청 시작
         try {
           const response = await fetch(fullUrl, fetchOptions);
-          return this._handleResponse(response, responseType);
+
+          // 응답 인터셉터
+          let modifiedResponse = await this._handleResponse(response, responseType, config);
+            for (const interceptor of this.interceptors.response) {
+                try {
+                    modifiedResponse = await interceptor.fulfilled(modifiedResponse);
+                } catch (error) {
+                    if (interceptor.rejected) {
+                        return interceptor.rejected(error);
+                    }
+                    return Promise.reject(error);
+                }
+            }
+          return modifiedResponse;
         } catch (error) {
+          for (const interceptor of this.interceptors.response) {
+              if (interceptor.rejected) {
+                  return interceptor.rejected(error);
+              }
+          }
           return Promise.reject(error);
         }
       }
 
-      async _handleResponse(response, responseType) {
+      async _handleResponse(response, responseType, config) {
         const parseResponse = {
           json: () => response.json(),
           text: () => response.text(),
@@ -61,6 +104,7 @@ class MyAxios {
             status: response.status,
             statusText: response.statusText,
             data,
+            config
           });
         }
     
@@ -70,6 +114,7 @@ class MyAxios {
           status: response.status,
           statusText: response.statusText,
           headers: response.headers,
+          config : config,
         };
       }
     get(url, config = {}) {
@@ -86,4 +131,23 @@ class MyAxios {
     }
 }
 
-export default new MyAxios();
+const myAxios = new MyAxios();
+
+
+myAxios.addInterceptor('response',
+  (response) => {
+      return response},
+  async (error) => {
+      const originalRequest = error.config;
+      if (error.status === 401 && !originalRequest._retry && !originalRequest.skipAuthRefresh) {
+          originalRequest._retry = true;
+          const refreshSuccess = await refresh();
+          if (refreshSuccess) {
+              return myAxios.request(originalRequest);
+          }
+      }
+      return Promise.reject(error);
+  }
+)
+
+export default myAxios;

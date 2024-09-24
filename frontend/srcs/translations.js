@@ -29,7 +29,8 @@ const translations = {
         wait : 'wait 🖐🏻',
         follow : 'follow',
         unfollow : 'unfollow',
-        logout : 'logout'
+        logout : 'logout',
+        winlate : 'pingpong win late',
     },
     ko: {
         login: '로그인',
@@ -61,7 +62,8 @@ const translations = {
         wait : '기다려 🖐🏻',
         follow : '친추',
         unfollow : '친삭',
-        logout : '로그아웃'
+        logout : '로그아웃',
+        winlate : '핑퐁 승률',
     },
     fr: {
         login: 'connexion',
@@ -93,7 +95,8 @@ const translations = {
         wait : `Attends 🖐🏻`,
         follow : 'suivre',
         unfollow : 'désuivre',
-        logout : 'déconnexion'
+        logout : 'déconnexion',
+        winlate : 'Taux de Victoire au Ping-Pong',
     }
 };
 

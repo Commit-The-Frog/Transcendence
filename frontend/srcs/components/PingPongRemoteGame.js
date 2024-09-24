@@ -40,7 +40,6 @@ const pingpnogWsHandler = () => {
     ws.onmessage = (event) => {
         const modal = document.getElementById("pingpongwaitmodal");
         const data = JSON.parse(event.data);
-        console.log(data);
         if (data?.type === 'refresh') {
             modal.innerText = "error";
         } else if (data?.status === "error") {
