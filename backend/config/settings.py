@@ -198,30 +198,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://10.12.3.6:8000',
-    'http://10.12.4.6:3001',
-]
-
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-    # 'PUT',
-    # 'PATCH',
-    'DELETE',
-    # 'OPTIONS',
-]
-
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'authorization',
-    'x-csrftoken',
-    'x-requested-with',
-]
-
 DJANGO_DEFAULT_SESSION_LIFETIME = timedelta(weeks=2)
 
 # OAuth env - login.views
@@ -246,3 +222,28 @@ SERVER_IP = env('SERVER_IP')
 
 MEDIA_URL = '/user/profile_images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'user/profile_images')
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    f'http://{SERVER_IP}:8000',
+    f'http://{SERVER_IP}:3001',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    # 'PUT',
+    # 'PATCH',
+    'DELETE',
+    # 'OPTIONS',
+]
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+    'x-requested-with',
+]
