@@ -40,6 +40,37 @@
     justify-content: center;
     position: relative;
 }
+.userInfoWrapper2 {
+    margin-left: 20px;
+}
+
+.userInfoWrapper2 .winRate {
+    color: #808080;
+    margin: 0;
+    margin-bottom: 4px;
+}
+
+.winRateBarWrapper {
+    border: 1px solid var(--btn-color-pink);
+    border-radius: 2px;
+    width: 200px;
+    height: 25px;
+    position: relative;
+}
+.winRateBarWrapper p {
+    position: absolute;
+    z-index: 1;
+    left: 5px;
+}
+
+.winRateBarWrapper .winRateBar {
+    position: absolute;
+}
+
+.userInfoWrapper2 .winRateBar {
+    background-color: var(--btn-color-pink3);
+    height: 25px;
+}
 
 .HaerinWrapper img {
     position: absolute;

@@ -5,6 +5,7 @@ import translations from "../translations.js";
 import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { languageState } from "../recoil/languageState.js";
 import { notvalidNickMsg, shake, isValidNick } from "../utils/notvalidNick.js";
+import { showToastHandler } from "../utils/showToast.js";
 
 const PingpongType = () => {
     const [mode, setMode] = useState(1, 'pingpongmode');
@@ -106,6 +107,10 @@ export const playerInputChecker = (game, type, item_mode, remote = false) => {
         shake(player2);
         return ;
     }
+    if (player1?.value === player2?.value) {
+        showToastHandler(`${translations[getRecoilValue(languageState)]?.duplicatenick}`);
+        return ;
+    }
     if (item_mode != undefined) {
         url.searchParams.set('item_mode', item_mode);
     }
@@ -118,6 +123,16 @@ export const playerInputChecker = (game, type, item_mode, remote = false) => {
         }
         if (!isValidNick(player4?.value)) {
             shake(player4);
+            return ;
+        }
+
+        if (player1?.value === player2?.value || 
+            player1?.value === player3?.value ||
+            player1?.value === player4?.value ||
+            player2?.value === player3?.value ||
+            player2?.value === player4?.value ||
+            player3?.value === player4?.value ) {
+            showToastHandler(`${translations[getRecoilValue(languageState)]?.duplicatenick}`);
             return ;
         }
         url.searchParams.set('player3', player3?.value);

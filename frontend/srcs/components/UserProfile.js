@@ -51,6 +51,13 @@ export default function UserProfile ( {
         })
     }
 
+    useEffect(()=>{
+        const winRateBar = document.getElementById("winRateBar");
+        winRateBar.style.width = `${data.win_rate}%`;
+        console.log(data.win_rate);
+        console.log(winRateBar.style);
+    },undefined,'userwinrate');
+
     bindEventHandler('click', "userEditOpenHandler", userEditOpenHandler);
     bindEventHandler('click', "friendAddHandler", friendAddHandler);
     bindEventHandler('click', "logoutHandler", logoutHandler);
@@ -70,6 +77,18 @@ export default function UserProfile ( {
                 <div class="userInfoWrapper2">
                     <div>
                     <p class="username">${data?.nick ? data.nick : ''}</p>
+                    </div>
+                    <div>
+                    <p class="winRate">
+                    ${translations[getRecoilValue(languageState)]?.winrate}
+                    </p>
+                    <div class="winRateBarWrapper">
+                        <p class="winRate winRateReal">
+                        ${data?.win_rate !== undefined ? data?.win_rate : '0'} %
+                        </p>
+                        <div class="winRateBar" id="winRateBar" >
+                        </div>
+                    </div>
                     </div>
                 </div>
             </div>

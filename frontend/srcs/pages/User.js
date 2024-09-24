@@ -22,6 +22,7 @@ export const userinfoGetter = ( setData) => {
             host : data.host,
             friend : data.friend,
             use_2fa : data.use_2fa
+            ,...data,
         });
     })
     .catch((e)=>{
@@ -49,7 +50,7 @@ export function User({params}) {
             <div class="userInfoWrapper">
                 ${UserProfile({data : data, setData : setData})}
                 <div class="userHubWrapper">
-                    ${UserHub({userId : lastSegment})}
+                    ${UserHub({userId : lastSegment, data})}
                 </div>
             </div>
             <div class="danielleWrapper">

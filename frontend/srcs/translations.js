@@ -30,7 +30,8 @@ const translations = {
         follow : 'follow',
         unfollow : 'unfollow',
         logout : 'logout',
-        winlate : 'pingpong win late',
+        winrate : 'pingpong win late',
+        duplicatenick : 'duplicate nickname',
     },
     ko: {
         login: '로그인',
@@ -63,7 +64,8 @@ const translations = {
         follow : '친추',
         unfollow : '친삭',
         logout : '로그아웃',
-        winlate : '핑퐁 승률',
+        winrate : '핑퐁 승률',
+        duplicatenick : '중복된 닉네임',
     },
     fr: {
         login: 'connexion',
@@ -96,7 +98,8 @@ const translations = {
         follow : 'suivre',
         unfollow : 'désuivre',
         logout : 'déconnexion',
-        winlate : 'Taux de Victoire au Ping-Pong',
+        winrate : 'Taux de Victoire au Ping-Pong',
+        duplicatenick : 'Pseudo en double',
     }
 };
 
