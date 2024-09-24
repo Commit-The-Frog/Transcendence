@@ -8,6 +8,7 @@ import Modal from "./Modal.js";
 import { getLastUrlSegment } from "../utils/getLastUrlSegment.js";
 import myAxios from "../core/myaxios/myAxios.js";
 import { userinfoGetter } from "../pages/User.js";
+import { changeUrl } from "../utils/changeUrl.js";
 export default function UserProfile ( {
     data, setData
 }){
@@ -30,12 +31,20 @@ export default function UserProfile ( {
             console.log(el);
         })
     }
-
+    const logoutHandler = () => {
+        const url = `https://${window.env.SERVER_IP}/login/logout`;
+        myAxios.get(url)
+        .then(()=>{
+            changeUrl("/");
+        });
+    }
 
     bindEventHandler('click', "userEditOpenHandler", userEditOpenHandler);
     bindEventHandler('click', "friendAddHandler", friendAddHandler);
+    bindEventHandler('click', "logoutHandler", logoutHandler);
     return `
     <div class="userProfile">
+        <button class="logoutBtn logoutHandler">logout</button>
         <div class="userProfileImgNameWrapper">
         <div class="userProfileImgNameWrapper2">
             <div class="userProfileImgWrapper">

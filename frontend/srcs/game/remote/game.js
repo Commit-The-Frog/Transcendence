@@ -134,8 +134,8 @@ let Game = class {
 		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
-			showToastHandler('에러났어 ㅡㅡ');
-			changeUrl('')
+			changeUrl("/pingpong/remote");
+			// showToastHandler('에러났어 ㅡㅡ');
 		};
 		ws_.onclose = () =>{
 			console.log(`토너먼트 웹소켓 종료`);
@@ -145,6 +145,7 @@ let Game = class {
 			const data = JSON.parse(event.data);
 			if (data.type === 'refresh') {
 				changeUrl("/pingpong/remote");
+				// showToastHandler('에러났어 ㅡㅡ');
 			}
 			else if (data.type) {	// 토너먼트 컨트롤
 				this.tourStatus = data.type;

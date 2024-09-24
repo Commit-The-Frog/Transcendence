@@ -1,6 +1,6 @@
 import myAxios from "../core/myaxios/myAxios.js";
 import { _render, useEffect } from "../core/myreact/myreact.js";
-import { getRecoilValue, useRecoilState } from "../core/myrecoil/myrecoil.js";
+import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { userinfoGetter } from "../pages/User.js";
 import { languageState } from "../recoil/languageState.js";
 import translations from "../translations.js";
@@ -33,6 +33,7 @@ const UserEdit = ({onClose, data, setData}) => {
             return ;
         }
         const imageInput = document.getElementById('profileimg-input');
+        const toggle = document.getElementById("toggleSwitch");
         const image = imageInput?.files[0];
         const formData = new FormData();
         // const url = `https://${window.env.SERVER_IP}/user`;
@@ -41,6 +42,8 @@ const UserEdit = ({onClose, data, setData}) => {
             formData.append('profile_image', image);
         }
         formData.append('nickname',nick?.value);
+        console.log(toggle, toggle.checked);
+        formData.append('use_2fa', !(toggle.checked));
         myAxios.post(url, formData)
         .then((res)=>{
             onClose();
@@ -61,9 +64,12 @@ const UserEdit = ({onClose, data, setData}) => {
     }
 
     useEffect(()=>{
-        const profileinput =  document.getElementById("username-input")
+        const profileinput =  document.getElementById("username-input");
+        const toggle = document.getElementById("toggleSwitch");
         if (profileinput)
             profileinput.value = data?.nick ? data?.nick : '';
+        if (toggle)
+            toggle.checked = data?.use_2fa !== undefined ? !(data?.use_2fa) : false;
     },undefined,'userEditData');
 
     bindEventHandler('change', "profileImgInputHandler", profileImgInputHandler);
@@ -80,6 +86,13 @@ const UserEdit = ({onClose, data, setData}) => {
                 <input type="file" id="profileimg-input" accept=".jpg, .jpeg, .png" class="profileimgInput profileImgInputHandler"/>
             </div>
             <div class="usernameInputWrapper">
+            <form class="twofaSelect">
+            <p>2FA</p>
+            <label class="switch">
+                <input type="checkbox" id="toggleSwitch" class="2fatoggle">
+                <span class="slider"></span>
+            </label>
+        </form>
                 <label for="username-input" class="usernameInputLabel">${translations[getRecoilValue(languageState)]?.name}</label>
                 <input type="text" id="username-input" class="profileusername userNameInputHandler" />
                 <p class="userinputMsg pingpongPlayerMsg">&nbsp;</p>

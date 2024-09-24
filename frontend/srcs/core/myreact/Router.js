@@ -46,20 +46,28 @@ const refresh = async () => {
     })
 }
 
-const islogin = async () => {
+const islogin = async (route) => {
     const url = `https://${window.env.SERVER_IP}/login/islogin`;
     try {
         await myAxios.get(url);
         setIsLoggedIn(true);
+        if (route === "/") {
+            changeUrl("/user");
+        }
     } catch (err) {
         console.log(err);
-        if (err.status === 401) {
+        if (err.status === 401 && route !== "/") {
             const refreshed = await refresh();
             if (refreshed) {
                 setIsLoggedIn(true);
+                // if (route === "/") {
+                //     changeUrl("/user");
+                // }
             } else {
                 setIsLoggedIn(false);
-                changeUrl("/");
+                // if (route !== "/") {
+                    changeUrl("/");
+                // }
             }
         }
         // setIsLoggedIn(false);
@@ -104,6 +112,9 @@ const checkValidTwofa = async () => {
                 islogin();
                 connectStatusSocket();
             }
+            if (route === "/") {
+                islogin(route);
+            }
             // if (route == "/twofa") {
             //     checkValidTwofa();
             // }
@@ -112,11 +123,12 @@ const checkValidTwofa = async () => {
     },undefined,'rotuerbefore');
     if (parsed) {
         const {route , params} = parsed;
-        if (routes[route] && (isLoggedIn ||route === "/" || (route === "/twofa" && validTwofa))) {
+        if (routes[route] && (isLoggedIn ||route === "/" || (route === "/twofa" /*&& validTwofa*/))) {
             return routes[route]({params : params});
-        } else if (route === "/twofa" && !validTwofa) {
-            return `<div>유효사항 체크중...</div>`
         }
+        // else if (route === "/twofa" && !validTwofa) {
+        //     return `<div>유효사항 체크중...</div>`
+        // }
          else if (routes[route] && !isLoggedIn) {
             return `<div>로그인중..</div>`
         }

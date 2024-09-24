@@ -20,7 +20,8 @@ export const userinfoGetter = ( setData) => {
             img : data.profile_image,
             id : data.user_id,
             host : data.host,
-            friend : data.friend
+            friend : data.friend,
+            use_2fa : data.use_2fa
         });
     })
     .catch((e)=>{

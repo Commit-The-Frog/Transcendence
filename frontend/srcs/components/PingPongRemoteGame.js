@@ -42,16 +42,16 @@ const pingpnogWsHandler = () => {
         const data = JSON.parse(event.data);
         console.log(data);
         if (data?.type === 'refresh') {
-            // socket 연결 끊고, 다시 로딩
-            changeUrl("/pingpong/remote"); // toast 띄울수 있는지 확인...아니면 모달.!
+            modal.innerText = "error";
+        } else if (data?.data?.status === "error") {
+            console.log("error");
+            modal.innerText = "error";
         }
         else if (data?.type === "match_name") {
             modal.style.display = "none";
             const matchName = data.match_name;
             console.log(`서버로부터 매치 UUID 수신 : ${matchName}`);
             run (matchName);
-            //const url = `/pingpong/remote/start?type=${type}&match_name=${matchName}`;
-            //changeUrl(url);
         }
     }
 
