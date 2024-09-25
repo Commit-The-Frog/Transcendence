@@ -260,7 +260,7 @@ class Game {
     }
 
     postData = () => {
-        console.log(this.istournament);
+        //console.log(this.istournament);
         if (this.istournament) {
             return ;
         }
@@ -268,10 +268,8 @@ class Game {
         const data = this.recordGame();
         data.istournament = this.istournament;
         data.game = 'pixel';
-        console.log(data);
         myAxios.post(url, data)
         .then((data)=>{
-            console.log(data);
         })
         .catch((err)=> {
             console.log(err);

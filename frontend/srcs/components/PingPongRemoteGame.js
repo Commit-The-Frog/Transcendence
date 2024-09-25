@@ -57,7 +57,6 @@ const pingpnogWsHandler = () => {
         console.log('close');
     }
 	ws.onerror = (error) => {
-        console.log(error);
         console.log('err');
         // 에러 났을때 
 	};

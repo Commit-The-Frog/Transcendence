@@ -161,7 +161,7 @@ let Game = class {
 					this.renderSchedule(data.players);
 				} else if (data.type == 'game1' || data.type == 'game2' || data.type == 'final') {
 					// console.log(data);
-					console.log(data.playerL + ' ' + this.nickname);
+					//console.log(data.playerL + ' ' + this.nickname);
 					if (data.playerL === this.nickname || data.playerR === this.nickname) {
 						this.myTurn = true;
 						this.key.myTurn = true;

@@ -20,7 +20,6 @@ let timer = 0;
 
 let Game = class {
 	constructor(type, nickname, itemList) {
-		console.log(itemList)
 		this.tourRound = 1;
 		this.winners = [];
 		this.nickname = nickname;
