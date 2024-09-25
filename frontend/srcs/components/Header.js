@@ -9,12 +9,12 @@ export function Header () {
     const clickHeaderMyPageHandler = () => {
         const id =  localStorage.getItem('user_id');
         if (!id) {
-            changeUrl(`/`);
-        }
-        changeUrl(`/user/${id}`);
+            changeUrl(`/user`);
+        }else
+            changeUrl(`/user/${id}`);
     }
     const clickHeaderPingPongHandler = () => {
-        changeUrl("/pingpong");
+        changeUrl("/pingpong/local");
     }
     const clickHeaderPixelHandler = () => {
         changeUrl("/pixel");

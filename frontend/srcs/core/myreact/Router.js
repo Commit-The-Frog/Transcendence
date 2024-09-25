@@ -19,7 +19,6 @@ const routes = {
     "/" : Home,
     "/user/:id" : User,
     "/user" : User,
-    "/pingpong" : Pingpong,
     "/pingpong/remote" : Pingpong,
     "/pingpong/remote/start" : Pingpong,
     "/pingpong/local" : Pingpong,
@@ -42,6 +41,7 @@ const islogin = async (route) => {
             }
         })
         .catch((err)=>{
+            setIsLoggedIn(false);
             if (route !== "/") {
                 changeUrl("/");
             }
@@ -82,10 +82,10 @@ const checkValidTwofa = async () => {
                 islogin();
                 connectStatusSocket();
             }
-            if (route === "/") {
+            else if (route === "/") {
                 islogin(route);
             }
-            if (route == "/twofa") {
+            else if (route == "/twofa") {
                 checkValidTwofa();
             }
         }

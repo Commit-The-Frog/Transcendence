@@ -3,7 +3,6 @@ import { getRecoilValue } from "../core/myrecoil/myrecoil.js";
 import { run } from "../game/remote/run.js";
 import { languageState } from "../recoil/languageState.js";
 import translations from "../translations.js";
-import { changeUrl } from "../utils/changeUrl.js";
 import useSocket from "../utils/useSocket.js";
 
 const PingPongRemoteGame = () => {
