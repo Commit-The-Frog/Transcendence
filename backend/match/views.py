@@ -128,6 +128,7 @@ class MatchListView(View):
             sorted_data = sorted(data_list, key=lambda x: datetime.strptime(x['sort_date'], '%Y-%m-%dT%H:%M:%S.%f%z'), reverse=True)
             for item in sorted_data:
                 del item['sort_date']
+            sorted_data = sorted_data[:10]
         except Userdb.DoesNotExist:
             return JsonResponse({'error': 'User not found'}, status=404)
         except Exception as e:
