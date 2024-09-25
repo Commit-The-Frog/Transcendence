@@ -97,8 +97,11 @@ let Game = class {
 		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
+			changeUrl("/pingpong/remote");
+			this.key.removeKeyEventHandler();
 		};
 		ws_.onclose = () =>{
+			this.key.removeKeyEventHandler();
 			console.log(`토너먼트 웹소켓 종료`);
 		};
 		ws_.onmessage = (event) => {
@@ -137,10 +140,12 @@ let Game = class {
 		ws_.onerror = (error) => {
 			console.log(`토너먼트 웹소켓 에러 발생`);
 			console.log(error);
+			this.key.removeKeyEventHandler();
 			changeUrl("/pingpong/remote");
 			// showToastHandler('에러났어 ㅡㅡ');
 		};
 		ws_.onclose = () =>{
+			this.key.removeKeyEventHandler();
 			console.log(`토너먼트 웹소켓 종료`);
 		};
 		ws_.onmessage = (event) => {

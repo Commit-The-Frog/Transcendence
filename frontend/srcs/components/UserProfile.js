@@ -54,8 +54,6 @@ export default function UserProfile ( {
     useEffect(()=>{
         const winRateBar = document.getElementById("winRateBar");
         winRateBar.style.width = `${data.win_rate}%`;
-        console.log(data.win_rate);
-        console.log(winRateBar.style);
     },undefined,'userwinrate');
 
     bindEventHandler('click', "userEditOpenHandler", userEditOpenHandler);

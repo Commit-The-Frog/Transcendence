@@ -97,6 +97,7 @@ let Game = class {
 		this.interval = setInterval(this.renderGame, 7);
 	}
 	end = (winner) => {
+		this.key.removeKeyEventHandler();
 		clearInterval(this.interval);
 		this.interval = setInterval(() => {
 			this.renderGameOver(winner.nickname);
