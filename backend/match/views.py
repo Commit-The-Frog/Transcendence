@@ -102,7 +102,7 @@ class MatchListView(View):
         try:
             target_id = request.GET.get('id')
             if target_id is None:
-                target_id = request.session.get('api_id')
+                target_id = str(request.session.get('api_id'))
             if not target_id.isdigit():
                 return JsonResponse({'error': 'Invalid id'}, status=404)
             target_instance_id = Userdb.objects.get(user_id=target_id).id
