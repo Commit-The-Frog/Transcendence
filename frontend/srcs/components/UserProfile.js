@@ -35,6 +35,7 @@ export default function UserProfile ( {
         const url = `https://${window.env.SERVER_IP}/login/logout`;
         myAxios.get(url)
         .then(()=>{
+            localStorage.clear();
             changeUrl("/");
         });
     }

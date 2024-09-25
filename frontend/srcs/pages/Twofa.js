@@ -18,9 +18,9 @@ const Twofa = () => {
             credentials : 'include'
         })
         .then((data)=>{
-            const {id} = data.data;
-            localStorage.setItem('user_id', id);
-            changeUrl(`/user/${id}`);
+            // const {id} = data.data;
+            // localStorage.setItem('user_id', id);
+            changeUrl(`/user`);
         })
         .catch((error)=>{
             if (error.status === 401) {
