@@ -41,6 +41,10 @@ let Key = class {
 		document.addEventListener("keydown", this.keyDownHandler, false);
 		document.addEventListener("keyup", this.keyUpHandler, false);
 	}
+	removeKeyEventHandler() {
+		document.removeEventListener("keydown", this.keyDownHandler, false);
+		document.removeEventListener("keyup", this.keyUpHandler, false);
+	}
 	sendKeyEventToWs = () => {
 		// 키정보 서버에 전송
 		//if (this.myTurn && this.ws) {

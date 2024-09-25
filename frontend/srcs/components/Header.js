@@ -6,6 +6,7 @@ import { changeUrl } from "../utils/changeUrl.js";
 import LanguageBtn from "./LanguageBtn.js";
 
 export function Header () {
+    const params = window.location.pathname.split("/");
     const clickHeaderMyPageHandler = () => {
         const id =  localStorage.getItem('user_id');
         if (!id) {
@@ -29,9 +30,14 @@ export function Header () {
             <button class="clickHeaderPingPongHandler"> ${translations[getRecoilValue(languageState)]?.pingpong} </button>
             <button class="clickHeaderPixelHandler"> ${translations[getRecoilValue(languageState)]?.pixel} </button>
         </div>
-        <div class="languageBtnWrapper1">
-            ${LanguageBtn()}
-        </div>
+        ${
+            params[1] === "user" ?
+            `
+            <div class="languageBtnWrapper1">
+                ${LanguageBtn()}
+            </div>
+            ` : ``
+        }
     </div>
     `
 }

@@ -56,6 +56,11 @@ let Key = class {
 	setKeyEventHandler() {
 		document.addEventListener("keydown", this.keyDownHandler, false);
 		document.addEventListener("keyup", this.keyUpHandler, false);
+	
+	}
+	removeKeyEventHandler() {
+		document.removeEventListener("keydown", this.keyDownHandler, false);
+		document.removeEventListener("keyup", this.keyUpHandler, false);
 	}
 }
 
