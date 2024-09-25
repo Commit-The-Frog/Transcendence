@@ -1,6 +1,5 @@
 import myAxios from "../core/myaxios/myAxios.js";
 import { useEffect, useState } from "../core/myreact/myreact.js"
-import { changeUrl } from "../utils/changeUrl.js";
 import UserFreindsSearch from "./UserFreindsSearch.js"
 
 export default function UserFriends ({ userId, data}) {

@@ -10,17 +10,12 @@ const pingpongParamRoute = () => {
     const params = window.location.pathname.split('/');
     const params2 = params[2];
     const params3 = params[3];
-    if (!params2) {
-        changeUrl('/pingpong/local');
-        return ;
-    } else if ((params2 === 'local' || params2 === 'remote') && !params3){
+    if ((params2 === 'local' || params2 === 'remote') && !params3){
         return PingPongSelectBox;
     } else if (params2 === 'local' && params3 === "start") {
         return PingPongLocalGame;
     } else if (params2 === 'remote' && params3 === "start") {
         return PingPongRemoteGame;   
-    } else if ((params2 === 'remote') && params3 === "lobby") {
-        return PingPongLobby;
     }
     else {
         changeUrl('/not-found');

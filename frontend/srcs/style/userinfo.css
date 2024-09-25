@@ -25,11 +25,13 @@
     position: absolute;
     right: 20px;
     top: 20px;
-    border-radius: 4px;
-    padding: 3px 6px 3px 6px;
     font-size: 12px;
-    border: 1px solid var(--btn-color-pink);
+    border: none;
     color: #808080;
+}
+
+.userProfile .logoutBtn:hover {
+    color: red;
 }
 
 .userInfoWrapper1 {
@@ -41,7 +43,7 @@
     position: relative;
 }
 .userInfoWrapper2 {
-    margin-left: 20px;
+    margin-left: 30px;
 }
 
 .userInfoWrapper2 .winRate {
@@ -69,7 +71,7 @@
 
 .userInfoWrapper2 .winRateBar {
     background-color: var(--btn-color-pink3);
-    height: 25px;
+    height: 100%;
 }
 
 .HaerinWrapper img {
@@ -93,10 +95,10 @@
 
 .userInfo .userProfileImgWrapper {
     display: flex;
-    justify-content :space-between;
+    justify-content :center;
     align-items: center;
-    height: 160px;
-    width: 160px;
+    height: 153px;
+    width: 153px;
     border-radius: 50%;
     background-color: white;
     border: 2px solid black;
@@ -142,7 +144,7 @@
 .userInfo .userInfoEdit {
     position: relative;
     right: 0;
-    margin-right: 100px;
+    margin-right: 50px;
     width: 80px;
     height: 40px;
     background: linear-gradient(to bottom,  var(--default-bg-color2) 50%, var(--default-bg-color) 100%);
@@ -157,10 +159,12 @@
 }
 
 .userHubTabs {
-    width: fit-content;
-    height: fit-content;
+    width: 250px;
+    height: 60px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     background-color: whitesmoke;
-    padding: 10px 0px 10px 10px;
     border: 1px solid black;
     border-radius: 15px;
 }
@@ -168,7 +172,6 @@
 .userHubTabs button {
     height: 40px;
     width: 100px;
-    margin-right: 20px;
     background: var(whitesmoke);
 }
 
