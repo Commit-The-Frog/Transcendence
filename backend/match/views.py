@@ -101,7 +101,9 @@ class MatchListView(View):
     def get(self, request, *args, **kwargs):
         try:
             target_id = request.GET.get('id')
-            if target_id is None or not target_id.isdigit():
+            if target_id is None:
+                target_id = request.session.get('api_id')
+            if not target_id.isdigit():
                 return JsonResponse({'error': 'Invalid id'}, status=404)
             target_instance_id = Userdb.objects.get(user_id=target_id).id
             game_list = Game.objects.filter(Q(left_user=target_instance_id) | Q(right_user=target_instance_id))
