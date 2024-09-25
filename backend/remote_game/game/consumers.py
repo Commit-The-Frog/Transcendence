@@ -27,12 +27,12 @@ class GameConsumer(AsyncWebsocketConsumer):
             # match_name과 id 추출
             match_name = query_params.get('match_name', [None])[0]
             user_id = self.scope['session'].get('api_id')
-            cookies = self.scope.get('cookies', {})
-            access_token = cookies.get('access_token')
+            # cookies = self.scope.get('cookies', {})
+            # access_token = cookies.get('access_token')
             await self.accept()
-            if not access_token:
-                raise InvalidToken()
-            UntypedToken(access_token)
+            # if not access_token:
+            #     raise InvalidToken()
+            # UntypedToken(access_token)
             self.player = None
             if match_name and user_id:
                 self.match_group_name = f'versus_{match_name}'
@@ -134,12 +134,12 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             session = self.scope['session']
             session['previous_url'] = '/pingpong/remote' # 정확한 previous_url 설정 필요
             await database_sync_to_async(session.save)()
-            cookies = self.scope.get('cookies', {})
-            access_token = cookies.get('access_token')
+            # cookies = self.scope.get('cookies', {})
+            # access_token = cookies.get('access_token')
             await self.accept()
-            if not access_token:
-                raise InvalidToken()
-            UntypedToken(access_token)
+            # if not access_token:
+            #     raise InvalidToken()
+            # UntypedToken(access_token)
             self.player = None
             if tournament_name and user_id:
                 self.tournament_group_name = f'tournament_{tournament_name}'
