@@ -7,7 +7,7 @@ let UserInterface = class {
 		this.height = this.canvas.height;
 	}
 	drawScheduleScreen = (nicknames, status) => {
-		console.log(`status: ${status}`);
+		//console.log(`status: ${status}`);
 		this.ctx.fillStyle = 'black';
 		this.ctx.beginPath();
 		// 가운데 가로선

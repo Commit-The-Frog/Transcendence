@@ -8,11 +8,7 @@ import LanguageBtn from "./LanguageBtn.js";
 export function Header () {
     const params = window.location.pathname.split("/");
     const clickHeaderMyPageHandler = () => {
-        const id =  localStorage.getItem('user_id');
-        if (!id) {
-            changeUrl(`/user`);
-        }else
-            changeUrl(`/user/${id}`);
+        changeUrl("/user");
     }
     const clickHeaderPingPongHandler = () => {
         changeUrl("/pingpong/local");
