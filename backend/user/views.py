@@ -77,7 +77,7 @@ class UserView(View):
         try:
             host_id = request.session.get('api_id')
             host_db = Userdb.objects.get(user_id=host_id)
-            new_nickname = request.POST.get('nickname')
+            new_nickname = request.POST.get('nickname', '').strip()
             new_profile_image = request.FILES.get('profile_image')
             new_use_2fa = request.POST.get('use_2fa')
             target_data = {}
