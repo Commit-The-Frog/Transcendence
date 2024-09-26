@@ -66,7 +66,7 @@ let Key = class {
 				const ready = {type: 'ready'};
 				let readyData = JSON.stringify(ready);
 				this.ws.send(readyData);
-				console.log('서버에 스베이스바 레디버튼 전송');
+				//console.log('서버에 스베이스바 레디버튼 전송');
 				clearInterval(keyReact);
 			}
 		}, 1);

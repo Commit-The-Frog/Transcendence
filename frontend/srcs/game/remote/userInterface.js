@@ -99,9 +99,10 @@ let UserInterface = class {
 		this.ctx.fillText(`player ${winner} win!`, this.width / 2, this.height * 3/ 5, 1000);
 		this.ctx.fillStyle = `rgba(255, 255, 255, ${Math.sin(opacity)})`;
 		if (!error) {
-			if (type == 1)
-				this.ctx.fillText(`PRESS 'SPACE' TO GO BACK HOME`, this.width / 2, this.height * 4 / 5, 1000);
-			else if (type == 2)
+			// if (type == 1)
+			// 	this.ctx.fillText(`PRESS 'SPACE' TO GO BACK HOME`, this.width / 2, this.height * 4 / 5, 1000);
+			// else 
+			if (type == 2)
 				this.ctx.fillText(`PRESS 'SPACE' TO NEXT GAME`, this.width / 2, this.height * 4 / 5, 1000);
 		} else {
 			this.ctx.fillStyle = 'red';

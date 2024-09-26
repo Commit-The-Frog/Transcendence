@@ -96,15 +96,14 @@ let Game = class {
 		this.interval = setInterval(this.renderGame, 7);
 	}
 	end = (winner) => {
-		this.key.removeKeyEventHandler();
+		if (this.info.type == 1)
+			this.key.removeKeyEventHandler();
+		else if (this.info.type == 2 && this.tourRound == 4)
+			this.key.removeKeyEventHandler();
 		clearInterval(this.interval);
 		this.interval = setInterval(() => {
 			this.renderGameOver(winner.nickname);
 		}, 10);
-	}
-	home = () => {
-		clearInterval(this.interval);
-		window.location.href = `index.html`;
 	}
 }
 
