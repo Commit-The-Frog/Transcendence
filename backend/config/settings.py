@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env_path = BASE_DIR / ".env"
 environ.Env.read_env(env_path)
 
-SECRET_KEY = 'django-insecure-(iy0b)(0c3(799oq^65h+3_85_rv8_(r#wv$ngybi_h8dked9&'
+SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = False
 
@@ -184,7 +184,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    "SIGNING_KEY": "secret-key-for-jwt-AW61Gs^&tdr!~h754!^78dfs@3f'"";[1iu#srld%fg&#o4w72",
+    "SIGNING_KEY": env('SIGNING_KEY'),
 }
 
 REST_FRAMEWORK = {
